@@ -1,0 +1,19 @@
+name: Ambler release readiness
+
+on:
+  workflow_dispatch:
+
+jobs:
+  release-gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install --no-audit --no-fund
+      - run: npx expo install --check
+      - run: npm test
+      - run: npm run typecheck
+      - name: Verify production music licensing ledger
+        run: npm run validate:production-assets
