@@ -3,6 +3,7 @@
 
 import { EngineEvent } from './types';
 import { CuratedContent, ScoredMediaItem, ProcessedRoute, TimelineChapter } from './types';
+import type { StoryPlan } from './storyPlanner';
 
 /**
  * Curate content for all storybook sections.
