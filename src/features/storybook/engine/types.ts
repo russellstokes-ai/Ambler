@@ -1,8 +1,16 @@
 // Storybook Engine — Core Types
 // All pipeline input/output types for the storybook generation engine.
 
-import { EventType, StorybookPage, StorybookQualityScore, ThemeKey } from '../../../types';
-export type { EventType, ThemeKey };
+import {
+  EventType,
+  MusicEmotionalArc,
+  MusicEnergyLevel,
+  MusicSelection,
+  StorybookPage,
+  StorybookQualityScore,
+  ThemeKey,
+} from '../../../types';
+export type { EventType, MusicSelection, ThemeKey };
 
 // ─── Input Types ───────────────────────────────────────────────
 
@@ -209,18 +217,8 @@ export interface QualityScore {
 
 // ─── Music Selection ───────────────────────────────────────────
 
-export type EnergyLevel = 'low' | 'medium' | 'high';
-export type EmotionalArc = 'building' | 'steady' | 'peaking' | 'winding';
-
-export interface MusicSelection {
-  trackId: string;
-  trackName: string;
-  category: string;
-  durationSeconds: number;
-  bpm: number;
-  energyLevel: EnergyLevel;
-  emotionalArc: EmotionalArc;
-}
+export type EnergyLevel = MusicEnergyLevel;
+export type EmotionalArc = MusicEmotionalArc;
 
 // ─── Theme Config (extended for engine) ────────────────────────
 
