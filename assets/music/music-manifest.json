@@ -1,0 +1,5 @@
+{
+  "schemaVersion": 2,
+  "productionPolicy": "Only tracks with productionReady=true and a recorded commercial licence/source may be bundled.",
+  "tracks": []
+}

@@ -1,0 +1,814 @@
+{
+  "eventTypes": [
+    {
+      "key": "birthday",
+      "label": "Birthday",
+      "category": "social",
+      "recommendedThemes": [
+        "confetti",
+        "social_story",
+        "wrapped",
+        "cinematic",
+        "retro_film"
+      ]
+    },
+    {
+      "key": "house_party",
+      "label": "House Party",
+      "category": "social",
+      "recommendedThemes": [
+        "warm_gold",
+        "chaos",
+        "social_story",
+        "wrapped",
+        "retro_film"
+      ]
+    },
+    {
+      "key": "dinner_party",
+      "label": "Dinner Party",
+      "category": "social",
+      "recommendedThemes": [
+        "luxe",
+        "magazine",
+        "minimal",
+        "cinematic"
+      ]
+    },
+    {
+      "key": "night_out",
+      "label": "Night Out",
+      "category": "social",
+      "recommendedThemes": [
+        "neon_pulse",
+        "chaos",
+        "social_story",
+        "wrapped",
+        "retro_film"
+      ]
+    },
+    {
+      "key": "weekend_away",
+      "label": "Weekend Away",
+      "category": "social",
+      "recommendedThemes": [
+        "warm_gold",
+        "cinematic",
+        "wrapped",
+        "route_replay",
+        "social_story"
+      ]
+    },
+    {
+      "key": "festival",
+      "label": "Festival",
+      "category": "social",
+      "recommendedThemes": [
+        "neon_pulse",
+        "social_story",
+        "route_replay",
+        "wrapped",
+        "chaos"
+      ]
+    },
+    {
+      "key": "graduation",
+      "label": "Graduation",
+      "category": "social",
+      "recommendedThemes": [
+        "cinematic",
+        "magazine",
+        "wrapped",
+        "luxe"
+      ]
+    },
+    {
+      "key": "reunion",
+      "label": "Reunion",
+      "category": "social",
+      "recommendedThemes": [
+        "retro_film",
+        "family_keepsake",
+        "cinematic",
+        "magazine"
+      ]
+    },
+    {
+      "key": "work_social",
+      "label": "Work Social",
+      "category": "social",
+      "recommendedThemes": [
+        "minimal",
+        "magazine",
+        "luxe",
+        "cinematic"
+      ]
+    },
+    {
+      "key": "team_event",
+      "label": "Team Event",
+      "category": "social",
+      "recommendedThemes": [
+        "minimal",
+        "magazine",
+        "wrapped",
+        "social_story"
+      ]
+    },
+    {
+      "key": "sports_trip",
+      "label": "Sports Trip",
+      "category": "social",
+      "recommendedThemes": [
+        "route_replay",
+        "wrapped",
+        "social_story",
+        "cinematic"
+      ]
+    },
+    {
+      "key": "private_party",
+      "label": "Private Party",
+      "category": "social",
+      "recommendedThemes": [
+        "luxe",
+        "cinematic",
+        "social_story",
+        "magazine"
+      ]
+    },
+    {
+      "key": "family_gathering",
+      "label": "Family Gathering",
+      "category": "family",
+      "recommendedThemes": [
+        "family_keepsake",
+        "minimal",
+        "retro_film",
+        "cinematic"
+      ]
+    },
+    {
+      "key": "anniversary",
+      "label": "Anniversary",
+      "category": "social",
+      "recommendedThemes": [
+        "luxe",
+        "cinematic",
+        "family_keepsake",
+        "magazine",
+        "retro_film"
+      ]
+    },
+    {
+      "key": "road_trip",
+      "label": "Road Trip",
+      "category": "travel",
+      "recommendedThemes": [
+        "route_replay",
+        "cinematic",
+        "retro_film",
+        "magazine",
+        "wrapped"
+      ]
+    },
+    {
+      "key": "group_holiday",
+      "label": "Group Holiday",
+      "category": "travel",
+      "recommendedThemes": [
+        "cinematic",
+        "route_replay",
+        "wrapped",
+        "retro_film",
+        "magazine"
+      ]
+    },
+    {
+      "key": "city_break",
+      "label": "City Break",
+      "category": "travel",
+      "recommendedThemes": [
+        "magazine",
+        "cinematic",
+        "route_replay",
+        "minimal",
+        "social_story"
+      ]
+    },
+    {
+      "key": "backpacking_trip",
+      "label": "Backpacking Trip",
+      "category": "travel",
+      "recommendedThemes": [
+        "route_replay",
+        "cinematic",
+        "retro_film",
+        "wrapped",
+        "magazine"
+      ]
+    },
+    {
+      "key": "cruise",
+      "label": "Cruise",
+      "category": "travel",
+      "recommendedThemes": [
+        "cinematic",
+        "luxe",
+        "route_replay",
+        "magazine",
+        "wrapped"
+      ]
+    },
+    {
+      "key": "ski_trip",
+      "label": "Ski Trip",
+      "category": "travel",
+      "recommendedThemes": [
+        "cinematic",
+        "route_replay",
+        "wrapped",
+        "retro_film",
+        "social_story"
+      ]
+    },
+    {
+      "key": "camping_trip",
+      "label": "Camping Trip",
+      "category": "travel",
+      "recommendedThemes": [
+        "retro_film",
+        "route_replay",
+        "cinematic",
+        "family_keepsake",
+        "wrapped"
+      ]
+    },
+    {
+      "key": "hiking_day",
+      "label": "Hiking Day",
+      "category": "travel",
+      "recommendedThemes": [
+        "route_replay",
+        "cinematic",
+        "minimal",
+        "wrapped"
+      ]
+    },
+    {
+      "key": "beach_day",
+      "label": "Beach Day",
+      "category": "travel",
+      "recommendedThemes": [
+        "social_story",
+        "cinematic",
+        "wrapped",
+        "retro_film",
+        "minimal"
+      ]
+    },
+    {
+      "key": "theme_park_day",
+      "label": "Theme Park Day",
+      "category": "travel",
+      "recommendedThemes": [
+        "social_story",
+        "wrapped",
+        "chaos",
+        "cinematic"
+      ]
+    },
+    {
+      "key": "match_day",
+      "label": "Match Day",
+      "category": "travel",
+      "recommendedThemes": [
+        "route_replay",
+        "social_story",
+        "wrapped",
+        "cinematic"
+      ]
+    },
+    {
+      "key": "day_trip",
+      "label": "Day Trip",
+      "category": "travel",
+      "recommendedThemes": [
+        "route_replay",
+        "cinematic",
+        "social_story",
+        "minimal",
+        "wrapped"
+      ]
+    },
+    {
+      "key": "sports_event",
+      "label": "Sports Event",
+      "category": "travel",
+      "recommendedThemes": [
+        "wrapped",
+        "social_story",
+        "cinematic",
+        "route_replay"
+      ]
+    },
+    {
+      "key": "group_workout",
+      "label": "Group Workout",
+      "category": "travel",
+      "recommendedThemes": [
+        "wrapped",
+        "route_replay",
+        "minimal",
+        "social_story"
+      ]
+    },
+    {
+      "key": "run_walk",
+      "label": "Run or Walk",
+      "category": "travel",
+      "recommendedThemes": [
+        "route_replay",
+        "wrapped",
+        "minimal",
+        "cinematic"
+      ]
+    },
+    {
+      "key": "cycle_ride",
+      "label": "Cycle Ride",
+      "category": "travel",
+      "recommendedThemes": [
+        "route_replay",
+        "wrapped",
+        "cinematic",
+        "minimal"
+      ]
+    },
+    {
+      "key": "fitness_challenge",
+      "label": "Fitness Challenge",
+      "category": "travel",
+      "recommendedThemes": [
+        "wrapped",
+        "cinematic",
+        "social_story",
+        "minimal"
+      ]
+    },
+    {
+      "key": "proposal",
+      "label": "Proposal",
+      "category": "life_moment",
+      "recommendedThemes": [
+        "cinematic",
+        "luxe",
+        "minimal",
+        "magazine",
+        "retro_film"
+      ]
+    },
+    {
+      "key": "engagement_party",
+      "label": "Engagement Party",
+      "category": "life_moment",
+      "recommendedThemes": [
+        "luxe",
+        "cinematic",
+        "magazine",
+        "social_story",
+        "wrapped"
+      ]
+    },
+    {
+      "key": "wedding",
+      "label": "Wedding",
+      "category": "life_moment",
+      "recommendedThemes": [
+        "luxe",
+        "cinematic",
+        "magazine",
+        "family_keepsake",
+        "minimal"
+      ]
+    },
+    {
+      "key": "stag",
+      "label": "Stag Party",
+      "category": "life_moment",
+      "recommendedThemes": [
+        "chaos",
+        "route_replay",
+        "wrapped",
+        "social_story",
+        "retro_film"
+      ]
+    },
+    {
+      "key": "hen",
+      "label": "Hen Party",
+      "category": "life_moment",
+      "recommendedThemes": [
+        "chaos",
+        "social_story",
+        "wrapped",
+        "route_replay",
+        "retro_film"
+      ]
+    },
+    {
+      "key": "baby_shower",
+      "label": "Baby Shower",
+      "category": "life_moment",
+      "recommendedThemes": [
+        "family_keepsake",
+        "luxe",
+        "minimal",
+        "magazine",
+        "retro_film"
+      ]
+    },
+    {
+      "key": "gender_reveal",
+      "label": "Gender Reveal",
+      "category": "life_moment",
+      "recommendedThemes": [
+        "family_keepsake",
+        "cinematic",
+        "wrapped",
+        "minimal",
+        "social_story"
+      ]
+    },
+    {
+      "key": "christening",
+      "label": "Christening",
+      "category": "life_moment",
+      "recommendedThemes": [
+        "family_keepsake",
+        "luxe",
+        "minimal",
+        "cinematic",
+        "magazine"
+      ]
+    },
+    {
+      "key": "new_home_party",
+      "label": "New Home Party",
+      "category": "life_moment",
+      "recommendedThemes": [
+        "social_story",
+        "minimal",
+        "magazine",
+        "cinematic",
+        "retro_film"
+      ]
+    },
+    {
+      "key": "leaving_party",
+      "label": "Leaving Party",
+      "category": "life_moment",
+      "recommendedThemes": [
+        "social_story",
+        "wrapped",
+        "retro_film",
+        "cinematic",
+        "family_keepsake"
+      ]
+    },
+    {
+      "key": "retirement_party",
+      "label": "Retirement Party",
+      "category": "life_moment",
+      "recommendedThemes": [
+        "family_keepsake",
+        "magazine",
+        "cinematic",
+        "luxe",
+        "retro_film"
+      ]
+    },
+    {
+      "key": "school_event",
+      "label": "School Event",
+      "category": "community",
+      "recommendedThemes": [
+        "minimal",
+        "magazine",
+        "social_story",
+        "wrapped"
+      ]
+    },
+    {
+      "key": "university_event",
+      "label": "University Event",
+      "category": "community",
+      "recommendedThemes": [
+        "social_story",
+        "wrapped",
+        "cinematic",
+        "magazine",
+        "chaos"
+      ]
+    },
+    {
+      "key": "club_event",
+      "label": "Club Event",
+      "category": "community",
+      "recommendedThemes": [
+        "neon_pulse",
+        "social_story",
+        "wrapped",
+        "route_replay",
+        "chaos"
+      ]
+    },
+    {
+      "key": "charity_event",
+      "label": "Charity Event",
+      "category": "community",
+      "recommendedThemes": [
+        "magazine",
+        "minimal",
+        "luxe",
+        "cinematic"
+      ]
+    },
+    {
+      "key": "meetup",
+      "label": "Meetup",
+      "category": "community",
+      "recommendedThemes": [
+        "minimal",
+        "social_story",
+        "magazine"
+      ]
+    },
+    {
+      "key": "conference_social",
+      "label": "Conference Social",
+      "category": "community",
+      "recommendedThemes": [
+        "minimal",
+        "magazine",
+        "cinematic"
+      ]
+    },
+    {
+      "key": "brand_event",
+      "label": "Brand Event",
+      "category": "community",
+      "recommendedThemes": [
+        "luxe",
+        "magazine",
+        "cinematic",
+        "minimal"
+      ]
+    },
+    {
+      "key": "launch_party",
+      "label": "Launch Party",
+      "category": "community",
+      "recommendedThemes": [
+        "luxe",
+        "cinematic",
+        "magazine",
+        "social_story",
+        "wrapped"
+      ]
+    },
+    {
+      "key": "creator_meetup",
+      "label": "Creator Meetup",
+      "category": "community",
+      "recommendedThemes": [
+        "magazine",
+        "social_story",
+        "cinematic",
+        "minimal"
+      ]
+    },
+    {
+      "key": "custom",
+      "label": "Custom Event",
+      "category": "universal",
+      "recommendedThemes": [
+        "warm_gold",
+        "cinematic",
+        "social_story",
+        "minimal",
+        "wrapped"
+      ]
+    }
+  ],
+  "themes": [
+    {
+      "key": "cinematic",
+      "label": "Cinematic",
+      "premium": true,
+      "style": "Full-bleed images, dramatic pacing, emotional captions",
+      "description": "Premium, emotional, full-bleed photos with dramatic covers and minimal text.",
+      "preview": {
+        "backgroundColor": "#0A0420",
+        "primaryColor": "#0F062C",
+        "accentColor": "#EC3FA4",
+        "textColor": "#FFFFFF",
+        "sampleText": "The Story Begins",
+        "layout": "full_bleed",
+        "typography": "serif-large"
+      }
+    },
+    {
+      "key": "social_story",
+      "label": "Social Story",
+      "premium": false,
+      "style": "Vertical, quick, sticker-led, playful",
+      "description": "Snap-style, stickers, reactions, quick captions, vertical swipe energy.",
+      "preview": {
+        "backgroundColor": "#F7F4FF",
+        "primaryColor": "#5B2CFF",
+        "accentColor": "#EC3FA4",
+        "textColor": "#18122B",
+        "sampleText": "That Night Though",
+        "layout": "vertical_card",
+        "typography": "sans-bold"
+      }
+    },
+    {
+      "key": "wrapped",
+      "label": "Wrapped",
+      "premium": true,
+      "style": "Bold stats, recap cards, highly shareable",
+      "description": "Spotify Wrapped-style recap with bold stats, playful cards and shareable insights.",
+      "preview": {
+        "backgroundColor": "#191414",
+        "primaryColor": "#1DB954",
+        "accentColor": "#FFFFFF",
+        "textColor": "#FFFFFF",
+        "sampleText": "Your Year in Numbers",
+        "layout": "stat_cards",
+        "typography": "display-bold"
+      }
+    },
+    {
+      "key": "route_replay",
+      "label": "Route Replay",
+      "premium": false,
+      "style": "Map-first, route lines, photo pins, distance and stops",
+      "description": "Strava-inspired map-first layout with route lines, photo pins, stops, distance and time.",
+      "preview": {
+        "backgroundColor": "#0D1B2A",
+        "primaryColor": "#18C7D5",
+        "accentColor": "#5B2CFF",
+        "textColor": "#FFFFFF",
+        "sampleText": "The Route",
+        "layout": "map_first",
+        "typography": "mono-clean"
+      }
+    },
+    {
+      "key": "luxe",
+      "label": "Luxe",
+      "premium": true,
+      "style": "Premium editorial, black/gold, clean spacing",
+      "description": "Premium black, soft gold, clean editorial pages for weddings, engagements and luxury trips.",
+      "preview": {
+        "backgroundColor": "#0A0A0A",
+        "primaryColor": "#111111",
+        "accentColor": "#D4AF37",
+        "textColor": "#F5F5F5",
+        "sampleText": "An Evening to Remember",
+        "layout": "editorial_spaced",
+        "typography": "serif-elegant"
+      }
+    },
+    {
+      "key": "confetti",
+      "label": "Confetti",
+      "premium": false,
+      "style": "Bright celebration, playful cards, party captions",
+      "description": "Bright celebration pages with playful color, motion, and party-ready captions.",
+      "preview": {
+        "backgroundColor": "#FFF7E8",
+        "primaryColor": "#FF4F8B",
+        "accentColor": "#00C2FF",
+        "textColor": "#24112F",
+        "sampleText": "Best Day Ever",
+        "layout": "collage",
+        "typography": "sans-bold"
+      }
+    },
+    {
+      "key": "neon_pulse",
+      "label": "Neon Pulse",
+      "premium": true,
+      "style": "High-energy neon, music-first, nightlife pacing",
+      "description": "High-energy neon pages for concerts, festivals, clubs, and nights out.",
+      "preview": {
+        "backgroundColor": "#09090F",
+        "primaryColor": "#8338EC",
+        "accentColor": "#00F5D4",
+        "textColor": "#FFFFFF",
+        "sampleText": "Encore Energy",
+        "layout": "explosive_collage",
+        "typography": "display-bold"
+      }
+    },
+    {
+      "key": "warm_gold",
+      "label": "Warm Gold",
+      "premium": false,
+      "style": "Warm social glow, polished highlights, easy sharing",
+      "description": "Warm, polished storybook pages for social gatherings and general events.",
+      "preview": {
+        "backgroundColor": "#FFF8EA",
+        "primaryColor": "#8A4B16",
+        "accentColor": "#D99A2B",
+        "textColor": "#24160B",
+        "sampleText": "Our Night",
+        "layout": "vertical_card",
+        "typography": "serif-large"
+      }
+    },
+    {
+      "key": "retro_film",
+      "label": "Retro Film",
+      "premium": true,
+      "style": "Film grain, date stamps, warm nostalgia",
+      "description": "Disposable camera feel, grain, date stamps, Polaroid frames, warm nostalgia.",
+      "preview": {
+        "backgroundColor": "#2A1F1A",
+        "primaryColor": "#3E2723",
+        "accentColor": "#FFB74D",
+        "textColor": "#FFF3E0",
+        "sampleText": "Summer '26",
+        "layout": "polaroid_grid",
+        "typography": "typewriter"
+      }
+    },
+    {
+      "key": "magazine",
+      "label": "Magazine",
+      "premium": true,
+      "style": "Editorial pages, headlines, quote pulls",
+      "description": "Editorial spreads, big headlines, quote pulls, feature-page style.",
+      "preview": {
+        "backgroundColor": "#F8F6F2",
+        "primaryColor": "#1A1A2E",
+        "accentColor": "#E94560",
+        "textColor": "#1A1A2E",
+        "sampleText": "THE ISSUE",
+        "layout": "editorial_columns",
+        "typography": "headline-serif"
+      }
+    },
+    {
+      "key": "chaos",
+      "label": "Chaos Mode",
+      "premium": true,
+      "style": "Funny, energetic, awards, meme-friendly",
+      "description": "Funny, energetic, meme-ish, what just happened recap for nights out, parties and festivals.",
+      "preview": {
+        "backgroundColor": "#0D0D0D",
+        "primaryColor": "#FF006E",
+        "accentColor": "#8338EC",
+        "textColor": "#FFFFFF",
+        "sampleText": "WHAT HAPPENED",
+        "layout": "explosive_collage",
+        "typography": "impact-bold"
+      }
+    },
+    {
+      "key": "family_keepsake",
+      "label": "Family Keepsake",
+      "premium": true,
+      "style": "Soft, sentimental, messages and keepsake export",
+      "description": "Soft, warm, safe, sentimental, simple captions, good for family and baby events.",
+      "preview": {
+        "backgroundColor": "#FAF6F0",
+        "primaryColor": "#4A6741",
+        "accentColor": "#E8A87C",
+        "textColor": "#3D3522",
+        "sampleText": "Together",
+        "layout": "soft_scrapbook",
+        "typography": "handwritten-warm"
+      }
+    },
+    {
+      "key": "minimal",
+      "label": "Minimal",
+      "premium": false,
+      "style": "Clean, Apple-like, polished and low-noise",
+      "description": "Clean, Apple-like, white space, polished layout, low noise.",
+      "preview": {
+        "backgroundColor": "#FAFAFA",
+        "primaryColor": "#1A1A1A",
+        "accentColor": "#FFFFFF",
+        "textColor": "#1A1A1A",
+        "sampleText": "Moments",
+        "layout": "minimal_grid",
+        "typography": "sans-clean"
+      }
+    }
+  ]
+}

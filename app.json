@@ -1,0 +1,53 @@
+{
+  "expo": {
+    "name": "Ambler",
+    "slug": "ambler",
+    "version": "0.3.0",
+    "orientation": "portrait",
+    "scheme": "ambler",
+    "userInterfaceStyle": "automatic",
+    "entryPoint": "expo-router/entry",
+    "icon": "./assets/brand/ambler-icon.png",
+    "splash": {
+      "backgroundColor": "#5B2CFF",
+      "resizeMode": "contain",
+      "image": "./assets/brand/ambler-mark-transparent.png"
+    },
+    "android": {
+      "package": "com.russellstokes.ambler",
+      "permissions": [
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.INTERNET"
+      ],
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/brand/ambler-mark-transparent.png",
+        "backgroundColor": "#5B2CFF"
+      },
+      "versionCode": 3,
+      "blockedPermissions": [
+        "android.permission.READ_MEDIA_IMAGES",
+        "android.permission.READ_MEDIA_VIDEO",
+        "android.permission.READ_MEDIA_AUDIO",
+        "android.permission.READ_MEDIA_VISUAL_USER_SELECTED",
+        "android.permission.READ_EXTERNAL_STORAGE"
+      ]
+    },
+    "ios": {
+      "bundleIdentifier": "com.russellstokes.ambler",
+      "buildNumber": "3"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      "expo-image-picker",
+      "expo-location",
+      "expo-file-system"
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      }
+    }
+  }
+}
