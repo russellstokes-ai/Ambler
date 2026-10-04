@@ -67,12 +67,16 @@ export async function saveEditableStorybook(
 
   // The story is already saved even if edit-history insertion is unavailable on
   // a database that has not applied migration 008 yet.
-  await supabase.from('storybook_edits').insert({
-    storybook_id: record.id,
-    user_id: userId,
-    edit_type: editType,
-    edit_json: editJson,
-  }).then(() => undefined).catch(() => undefined);
+  try {
+    await supabase.from('storybook_edits').insert({
+      storybook_id: record.id,
+      user_id: userId,
+      edit_type: editType,
+      edit_json: editJson,
+    });
+  } catch {
+    // Edit history is best-effort; the storybook update above is authoritative.
+  }
 }
 
 export function updatePageCopy(storybook: Storybook, pageId: string, title: string, subtitle?: string): Storybook {
