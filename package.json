@@ -19,6 +19,7 @@
     "build:web": "expo export --platform web --output-dir dist-web"
   },
   "dependencies": {
+    "@expo/metro-runtime": "~4.0.1",
     "@expo/vector-icons": "14.0.4",
     "@react-native-async-storage/async-storage": "1.23.1",
     "@supabase/supabase-js": "^2.110.2",
@@ -49,6 +50,7 @@
     "expo-video-thumbnails": "9.0.3",
     "lottie-react-native": "7.1.0",
     "react": "18.3.1",
+    "react-dom": "18.3.1",
     "react-native": "0.76.9",
     "react-native-gesture-handler": "2.20.2",
     "react-native-maps": "1.18.0",
@@ -59,6 +61,7 @@
     "react-native-svg": "15.8.0",
     "react-native-url-polyfill": "^2.0.0",
     "react-native-view-shot": "4.0.3",
+    "react-native-web": "~0.19.13",
     "zustand": "^5.0.1"
   },
   "devDependencies": {
