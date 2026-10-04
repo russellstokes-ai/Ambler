@@ -46,7 +46,7 @@ Apply migrations in order and deploy the public story Edge Function:
 supabase functions deploy public-story --no-verify-jwt
 ```
 
-Start with [`docs/CURRENT_STATE.md`](docs/CURRENT_STATE.md) and [`docs/HANDOFF.md`](docs/HANDOFF.md) when resuming the project. The approved final Route Replay experience is specified in [`docs/ROUTE_REPLAY_V2.md`](docs/ROUTE_REPLAY_V2.md).
+Start with [`docs/CURRENT_STATE.md`](docs/CURRENT_STATE.md), [`docs/PRODUCT_DIRECTION.md`](docs/PRODUCT_DIRECTION.md) and [`docs/HANDOFF.md`](docs/HANDOFF.md) when resuming the project. The approved final Route Replay experience is specified in [`docs/ROUTE_REPLAY_V2.md`](docs/ROUTE_REPLAY_V2.md).
 
 See [`docs/RELEASE_CHECKLIST.md`](docs/RELEASE_CHECKLIST.md) for the current production gate. The completed jobs 6–15 source work is summarized in [`docs/AMBLER_JOBS_6_15.md`](docs/AMBLER_JOBS_6_15.md).
 
