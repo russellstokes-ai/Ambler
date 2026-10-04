@@ -1,50 +1,56 @@
-You are improving the Ambler v2 Android scaffold.
+You are resuming development of Ambler, a private-first shared event and journey storytelling app.
 
-Read these first:
-- README.md
-- docs/STORYBOOK_QUALITY_STANDARD.md
-- docs/ANDROID_COMMERCIAL_ROADMAP.md
-- src/features/storybook/storybookEngine.ts
-- src/components/storybook/StorybookPager.tsx
-- src/features/auth/authService.ts
-- supabase/migrations/001_initial_schema.sql
+Repository:
+- russellstokes-ai/Ambler
 
-Core instruction:
-The storybook quality is the key selling point. Improve the app as a premium storybook product first. Auth, events, media upload and route capture exist to support the storybook.
+Read these first, in order:
+1. README.md
+2. docs/CURRENT_STATE.md
+3. docs/PRODUCT_DIRECTION.md
+4. docs/PRODUCT_ACCEPTANCE_CRITERIA.md
+5. docs/ROUTE_REPLAY_V2.md
+6. docs/RELEASE_CHECKLIST.md
+7. docs/HANDOFF.md
 
-Next task:
-1. Improve the StorybookPager into a more commercial-grade swipeable experience.
-2. Add separate reusable page components for:
-   - Cover
-   - Cinematic Opening
-   - Timeline
-   - Route Replay
-   - Hero Gallery
-   - Story Insights
-   - Friend Captions
-   - Share
-3. Add animation using Reanimated where appropriate.
-4. Keep the first demo event as “Your Weekend Loop”.
-5. Keep the UI language focused on storybooks, memories and route replay.
-6. Add quality score display for internal/debug use only, not as a consumer-facing headline.
-7. Preserve Android-first assumptions.
-8. Keep Google, Facebook and Apple ID auth requirements.
+Then inspect:
+- git status / latest commits
+- CI/workflow state
+- package.json and dependency lock state
+- current Route Replay implementation
+- story generation path
+- Supabase migrations/RLS
 
-After finishing:
-- List files changed.
-- Explain how to run the app.
-- Explain how the storybook quality improved.
-- Recommend the next 3 milestones.
+Core product:
+Capture → Build → Relive.
 
+The finished story is the product. The shared album is supporting infrastructure.
 
-Additional positioning rule:
-Ambler is for all events. Do not make the UI, data model or onboarding feel specific to birthdays, trips, weddings, stag/hen parties, festivals or nights out. Those should be selectable templates only. The core product is: any event becomes a premium storybook.
+Current priority:
+1. prove the repository baseline builds on a networked environment
+2. re-verify the fine-tooth audit items in CURRENT_STATE.md
+3. implement the approved Route Replay V2 experience
+4. perform visual/interaction QA before producing the first owner-test build
 
+Route Replay V2 is a headline requirement:
+- adaptive treatment for terrain, city, town, road trip and venue contexts
+- rich 3D renderer direction (Mapbox preferred subject to verified compatibility)
+- polished 2D fallback
+- route-linked group photos and videos
+- clustering
+- tap-to-view photos
+- playable videos with poster frames
+- resume replay at the same progress point
+- route drawing/camera animation
+- story-theme-driven styling
+- privacy redaction only in rendered/shared output
+- rich web renderer plus fallback
 
-Additional event/theme requirement:
-Expand the create-event and storybook generation flow around the new event/theme matrix. Cover road trips, gender reveals, baby showers, proposals and engagement parties as first-class event templates, alongside birthdays, weddings, stag/hen, festivals, group holidays, family gatherings and custom events.
+Do not:
+- restart the project from scratch
+- turn Ambler into a generic album/chat/event-planning app
+- make generative AI a dependency
+- invent memories, quotes, locations, scores or health/activity data
+- mark a feature complete merely because a screen exists
+- perform a blind native/dependency migration without build verification
 
-Important:
-Every event type must have multiple recommended themes.
-Themes must be interchangeable and reusable.
-Do not build separate hard-coded storybook engines per event type.
+Work in small, reviewable sprints. Keep tests and documentation aligned with code. At each checkpoint, report exactly what is verified, what is implemented but unverified, and what remains.
