@@ -10,7 +10,13 @@ Ambler is a private-first shared event and journey storytelling app built around
 
 The finished story — not the shared album — is the product.
 
-## What is already in the recovered release-candidate baseline
+## Canonical source
+
+The GitHub repository `russellstokes-ai/Ambler` now contains the application source and documentation and should be treated as the source of truth.
+
+Do not resume from an old VPS copy or an old chat ZIP unless recovery from GitHub is impossible.
+
+## What is already represented in the repository baseline
 
 - Expo Router / React Native / TypeScript application
 - Supabase authentication, database, storage, realtime and Edge Functions
@@ -19,9 +25,9 @@ The finished story — not the shared album — is the product.
 - browser guest joining by QR/link
 - guest photo/video contribution and notes
 - private event media gallery
-- optional foreground route capture
+- optional route capture
 - deterministic story engine and storybook generation
-- story-ready reveal
+- Story Ready reveal
 - story editing and private token sharing
 - browser-safe public story route
 - activity/story metrics from real captured data
@@ -29,17 +35,43 @@ The finished story — not the shared album — is the product.
 - privacy and deletion controls
 - source, backend and deterministic story-engine test scripts
 
-## Important truth about Route Replay
+## Approved final product direction
 
-The recovered build does **not** yet implement the final approved Route Replay experience.
+The latest product direction is captured in:
 
-Current native Route Replay uses `react-native-maps`. Current public-web Route Replay uses a simplified SVG route renderer.
+- `docs/PRODUCT_DIRECTION.md`
+- `docs/PRODUCT_ACCEPTANCE_CRITERIA.md`
+- `docs/ROUTE_REPLAY_V2.md`
 
-The final accepted experience is specified in `ROUTE_REPLAY_V2.md` and is a release requirement, not a future idea.
+These are requirements for the final product, not optional inspiration.
 
-## Audit items that must be re-verified/re-applied
+### Route Replay headline experience
 
-A later fine-tooth-comb audit found issues after the last packaged release candidate. The transient audit workspace was not preserved, so these items must be checked against source and re-applied deliberately:
+The finished Route Replay should not look like an embedded navigation map.
+
+It should adapt to context:
+
+- mountains / hiking: 3D terrain, elevation, cinematic camera
+- city: 3D buildings / landmarks, lower oblique camera, themed lighting
+- town / village: simplified urban treatment with route/media emphasis
+- road trip: wider progression between places
+- venue / festival / theme park: tighter route and media clustering
+
+Preferred direction is a Mapbox-based rich renderer for the Relive experience, subject to a verified compatibility/native migration plan. Live capture/navigation can continue to use the most practical native map implementation.
+
+All group members' geotagged photos and videos should appear as route moments where appropriate, including clustering, thumbnails/posters, tap-to-view playback and preservation of replay progress.
+
+## Important truth about the current Route Replay
+
+The current source does **not** yet prove the complete final Route Replay V2 experience.
+
+The final accepted experience is specified in `ROUTE_REPLAY_V2.md` and remains a release requirement.
+
+Do not mark it complete until the 3D/adaptive renderer, group media moments, clustering, playback and physical-device verification have all passed.
+
+## Fine-tooth audit items to verify before first owner test
+
+A previous audit identified issues that should be re-verified against the current source rather than assumed fixed:
 
 - event creation / participant RLS correctness
 - invalid date/time input must never crash creation
@@ -62,8 +94,20 @@ A later fine-tooth-comb audit found issues after the last packaged release candi
 - event/profile everyday editing controls must be present
 - public web share must not import native-only APIs
 - share links must be revocable/reused appropriately
-- Android production mapping configuration must be explicit
+- Android/iOS production mapping configuration must be explicit
+- zero-media, one-photo, video-only, route-only and mixed-media stories must degrade gracefully
+- no dead controls, placeholder labels or consumer-facing unfinished surfaces
 
 ## Release philosophy
 
-Do not mark a capability complete because a screen exists. A feature is complete only when the user can discover it, use it, recover from errors, and get the expected persisted result end-to-end.
+Do not mark a capability complete because a screen exists.
+
+A feature is complete only when the user can:
+1. discover it,
+2. understand it,
+3. use it,
+4. recover from failure,
+5. return later and find the state persisted,
+6. get the expected end-to-end result.
+
+The first owner test should feel like a product, not a scaffold.
