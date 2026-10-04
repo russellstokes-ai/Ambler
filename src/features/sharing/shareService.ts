@@ -6,6 +6,7 @@ import { captureRef } from 'react-native-view-shot';
 import { Storybook } from '../../types';
 import { supabase } from '../../lib/supabase';
 import { storyShareUrl } from '../../config/links';
+import { getPublicSharedStory as fetchPublicSharedStory } from './publicShareService';
 
 const SHARE_EXPIRY_DAYS = 30;
 
@@ -85,8 +86,7 @@ export async function createPrivateShareLink(storybookId: string): Promise<Share
 export { getPublicSharedStory } from './publicShareService';
 
 export async function getShareLink(token: string): Promise<ShareLinkRecord | null> {
-  const { getPublicSharedStory } = await import('./publicShareService');
-  return getPublicSharedStory(token);
+  return fetchPublicSharedStory(token);
 }
 
 export async function revokeShareLink(token: string): Promise<void> {
