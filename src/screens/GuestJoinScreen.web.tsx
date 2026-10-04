@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
   codeText: { color: 'white', fontSize: 15, letterSpacing: 2.5, fontWeight: '900' },
   card: { width: '100%', maxWidth: 620, backgroundColor: 'white', borderRadius: 28, padding: 24, borderWidth: 1, borderColor: '#E9E2F7', marginTop: 18 },
   label: { color: '#18122B', fontSize: 13, fontWeight: '900', marginBottom: 8 },
-  input: { backgroundColor: '#F6F2FC', borderRadius: 16, paddingHorizontal: 15, paddingVertical: 15, fontSize: 16, color: '#18122B', outlineStyle: 'none' as any },
+  input: { backgroundColor: '#F6F2FC', borderRadius: 16, paddingHorizontal: 15, paddingVertical: 15, fontSize: 16, color: '#18122B' },
   noteInput: { minHeight: 108, textAlignVertical: 'top', marginTop: 14 },
   primary: { minHeight: 56, borderRadius: 18, paddingHorizontal: 18, backgroundColor: '#5B2CFF', flexDirection: 'row', gap: 10, alignItems: 'center', justifyContent: 'center', marginTop: 16 },
   primaryText: { color: 'white', fontSize: 15, fontWeight: '900' },
