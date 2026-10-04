@@ -1,14 +1,14 @@
 // Music Selector — Music selection based on theme, event energy, and event type
 // Maps theme → music category, detects energy, refines by event type.
 
-import { EventType, ThemeKey } from '../../../types';
+import { EventType, MusicCategory, ThemeKey } from '../../../types';
 import { EnergyLevel, EmotionalArc, MusicSelection, ScoredMediaItem, TimelineChapter } from './types';
 
 // Music track catalog
 interface Track {
   trackId: string;
   trackName: string;
-  category: string;
+  category: MusicCategory;
   durationSeconds: number;
   bpm: number;
   energyLevel: EnergyLevel;
@@ -34,7 +34,7 @@ const TRACK_CATALOG: Track[] = [
 ];
 
 // Theme → preferred music categories
-const THEME_CATEGORIES: Record<ThemeKey, string[]> = {
+const THEME_CATEGORIES: Record<ThemeKey, MusicCategory[]> = {
   cinematic: ['cinematic', 'chilled'],
   social_story: ['playful'],
   wrapped: ['playful'],
@@ -51,7 +51,7 @@ const THEME_CATEGORIES: Record<ThemeKey, string[]> = {
 };
 
 // Event type → preferred categories (refines within theme)
-const EVENT_TYPE_PREFERENCES: Partial<Record<string, string[]>> = {
+const EVENT_TYPE_PREFERENCES: Partial<Record<string, MusicCategory[]>> = {
   wedding: ['sentimental', 'luxe'],
   festival: ['upbeat', 'playful'],
   road_trip: ['cinematic', 'chilled'],
