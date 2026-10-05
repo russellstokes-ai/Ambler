@@ -121,3 +121,33 @@ Route Replay V2 is not complete until:
 - [ ] private-route vs shared-route redaction is tested
 - [ ] web story has rich renderer plus graceful fallback
 - [ ] route works with sparse, dense and media-free events
+
+## Motion reference — Map Animator
+
+Reference: https://mapanimator.baldinger.se/
+
+Map Animator is a useful benchmark for the **motion language** of Route Replay, not a UI to copy.
+
+Relevant ideas to learn from:
+- progressive route drawing rather than revealing the whole journey at once
+- camera movement that follows meaningful journey legs
+- 3D terrain/mountain treatment where geography benefits from depth
+- distinct visual treatments for different travel legs
+- signs/labels placed at meaningful points rather than constant map clutter
+- smooth transitions between route segments and destinations
+- map styles that can reflect the character of the trip
+- cinematic pacing suitable for travel/event recap
+- export-quality visual composition as a quality benchmark
+
+Ambler should go beyond this reference by integrating:
+- real group photos and videos at their actual GPS positions
+- tappable media clusters during replay
+- event/story context rather than a standalone animation editor
+- adaptive city/town/terrain/venue treatments
+- private route redaction for shared stories
+- live interactive playback, not only rendered video
+- seamless return from a media moment to the exact replay position
+- story insights/captions that appear only when they strengthen the narrative
+
+The goal is **documentary-style journey storytelling**, not a decorative moving-line effect.
+
