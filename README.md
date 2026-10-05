@@ -44,8 +44,9 @@ When resuming work, start with:
 2. [`docs/PRODUCT_PLAN.md`](docs/PRODUCT_PLAN.md) — canonical product plan
 3. [`docs/ROADMAP.md`](docs/ROADMAP.md) — canonical forward roadmap
 4. [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — code/system structure and responsibilities
-5. [`docs/PRODUCT_DIRECTION.md`](docs/PRODUCT_DIRECTION.md) — approved product guardrails
-6. [`docs/HANDOFF.md`](docs/HANDOFF.md) — resume procedure
+5. [`docs/LESSONS_FROM_ARCHIVIST.md`](docs/LESSONS_FROM_ARCHIVIST.md) — required lessons and known regression patterns
+6. [`docs/PRODUCT_DIRECTION.md`](docs/PRODUCT_DIRECTION.md) — approved product guardrails
+7. [`docs/HANDOFF.md`](docs/HANDOFF.md) — resume procedure
 
 The approved final Route Replay experience is specified in [`docs/ROUTE_REPLAY_V2.md`](docs/ROUTE_REPLAY_V2.md).
 
