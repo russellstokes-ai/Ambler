@@ -13,11 +13,12 @@ GitHub is the source of truth. Do not restart from an old VPS copy or old chat Z
 1. `docs/CURRENT_STATE.md`
 2. `docs/PRODUCT_PLAN.md`
 3. `docs/ROADMAP.md`
-4. `docs/PRODUCT_DIRECTION.md`
-5. `docs/PRODUCT_ACCEPTANCE_CRITERIA.md`
-6. `docs/ROUTE_REPLAY_V2.md`
-7. `docs/RELEASE_CHECKLIST.md`
-8. latest git log / CI state
+4. `docs/ARCHITECTURE.md`
+5. `docs/PRODUCT_DIRECTION.md`
+6. `docs/PRODUCT_ACCEPTANCE_CRITERIA.md`
+7. `docs/ROUTE_REPLAY_V2.md`
+8. `docs/RELEASE_CHECKLIST.md`
+9. latest git log / CI state
 
 ## Product principle
 
@@ -37,6 +38,7 @@ For every sprint:
 - update tests where practical
 - update docs when a decision changes
 - update `ROADMAP.md` when status materially changes
+- update `ARCHITECTURE.md` when responsibilities or major technical structure changes
 - do not mark native/build/backend behaviour complete without verification
 
 Use the status meanings in `ROADMAP.md`:
@@ -84,3 +86,9 @@ The final visual direction is defined in `ROUTE_REPLAY_V2.md`.
 - UI must feel finished; hide incomplete features rather than advertising placeholders
 - errors must be recoverable and clearly explained
 - release builds must be tested, not inferred from source
+
+## Future-resume rule
+
+A future developer or agent should be able to continue from GitHub alone.
+
+If a future session does not have prior chat context, the canonical documents above plus the current source tree and git history are sufficient to recover the intended product, technical structure, remaining work and verification standard.
