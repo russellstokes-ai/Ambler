@@ -11,11 +11,13 @@ GitHub is the source of truth. Do not restart from an old VPS copy or old chat Z
 ## Read in this order
 
 1. `docs/CURRENT_STATE.md`
-2. `docs/PRODUCT_DIRECTION.md`
-3. `docs/PRODUCT_ACCEPTANCE_CRITERIA.md`
-4. `docs/ROUTE_REPLAY_V2.md`
-5. `docs/RELEASE_CHECKLIST.md`
-6. latest git log / working tree status
+2. `docs/PRODUCT_PLAN.md`
+3. `docs/ROADMAP.md`
+4. `docs/PRODUCT_DIRECTION.md`
+5. `docs/PRODUCT_ACCEPTANCE_CRITERIA.md`
+6. `docs/ROUTE_REPLAY_V2.md`
+7. `docs/RELEASE_CHECKLIST.md`
+8. latest git log / CI state
 
 ## Product principle
 
@@ -34,19 +36,25 @@ For every sprint:
 - wire the complete end-to-end behaviour, not just the screen
 - update tests where practical
 - update docs when a decision changes
+- update `ROADMAP.md` when status materially changes
 - do not mark native/build/backend behaviour complete without verification
+
+Use the status meanings in `ROADMAP.md`:
+- **Implemented** — source path exists and is wired
+- **Verified** — tests/build/runtime behaviour confirm it
+- **Accepted** — it passes the intended end-to-end product acceptance criteria
 
 ## Immediate resume sequence
 
-1. inspect latest commit and CI state
-2. run the existing source/backend/story-engine test suites
-3. install dependencies on a networked machine and commit a verified lockfile
-4. run TypeScript/typecheck and web export
-5. re-audit the fine-tooth items in `CURRENT_STATE.md`
-6. implement Route Replay V2 as a deliberate mapping/native sprint
-7. run Android + iOS/web release builds
-8. perform physical-device and logged-out-browser end-to-end testing
-9. only then produce the first owner-test build
+Follow `ROADMAP.md` in order:
+
+1. prove the repository builds cleanly from a fresh networked checkout
+2. re-run source/backend/story-engine/type/build verification
+3. re-audit the fine-tooth items in `CURRENT_STATE.md`
+4. complete Route Replay V2 deliberately
+5. polish the whole first-run and Relive experience
+6. run physical-device and logged-out-browser end-to-end testing
+7. only then produce the first owner-test build
 
 ## Route Replay implementation rule
 
