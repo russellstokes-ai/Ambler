@@ -48,6 +48,11 @@ Historical sprint implementation checkpoints remain in `AMBLER_JOBS_1_5.md` and 
 - privacy and deletion controls
 - source, backend and deterministic story-engine test scripts
 
+## Recent integrity fixes
+
+- 2026-10-05: added a canonical architecture map so future work can resume from GitHub alone.
+- 2026-10-05: fixed the server-side story generator to carry `media_assets.gps_lat/gps_lng` into the deterministic story engine, preserving the Route Replay V2 requirement that geotagged group photos/videos can become real route moments.
+
 ## Sprint-status truth
 
 The repository contains the source work recorded for Jobs 1–15, but that does **not** mean the product is 15/15 accepted.
