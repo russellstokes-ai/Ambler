@@ -43,8 +43,9 @@ When resuming work, start with:
 1. [`docs/CURRENT_STATE.md`](docs/CURRENT_STATE.md) — current truth and verification gaps
 2. [`docs/PRODUCT_PLAN.md`](docs/PRODUCT_PLAN.md) — canonical product plan
 3. [`docs/ROADMAP.md`](docs/ROADMAP.md) — canonical forward roadmap
-4. [`docs/PRODUCT_DIRECTION.md`](docs/PRODUCT_DIRECTION.md) — approved product guardrails
-5. [`docs/HANDOFF.md`](docs/HANDOFF.md) — resume procedure
+4. [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — code/system structure and responsibilities
+5. [`docs/PRODUCT_DIRECTION.md`](docs/PRODUCT_DIRECTION.md) — approved product guardrails
+6. [`docs/HANDOFF.md`](docs/HANDOFF.md) — resume procedure
 
 The approved final Route Replay experience is specified in [`docs/ROUTE_REPLAY_V2.md`](docs/ROUTE_REPLAY_V2.md).
 
@@ -85,7 +86,9 @@ eas build --platform android --profile preview
 - `src/styles/` — design tokens and story themes
 - `supabase/migrations/` — database schema and RLS
 - `supabase/functions/` — server-side story generation and token-gated public story delivery
-- `docs/` — product, roadmap, quality, privacy and release documentation
+- `docs/` — product, roadmap, architecture, quality, privacy and release documentation
+
+For the detailed architecture map, see [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
 ## Build status
 
