@@ -375,6 +375,8 @@ async function fetchEventData(supabaseUrl: string, supabaseKey: string, eventId:
         mediaType: (m.media_type as string) === 'video' ? 'video' : 'photo',
         sharpnessScore: m.quality_score as number | undefined,
         reactions: Array.isArray(m.media_reactions) ? m.media_reactions.length : 0,
+        gpsLat: m.gps_lat == null ? undefined : Number(m.gps_lat),
+        gpsLng: m.gps_lng == null ? undefined : Number(m.gps_lng),
       };
     }));
 
