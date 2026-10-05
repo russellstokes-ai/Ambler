@@ -1,6 +1,6 @@
 # Ambler — Current State
 
-Updated: 2026-10-04
+Updated: 2026-10-05
 
 This file is the canonical short status for returning to Ambler after a break.
 
@@ -12,9 +12,22 @@ The finished story — not the shared album — is the product.
 
 ## Canonical source
 
-The GitHub repository `russellstokes-ai/Ambler` now contains the application source and documentation and should be treated as the source of truth.
+The GitHub repository `russellstokes-ai/Ambler` contains the application source and documentation and should be treated as the source of truth.
 
 Do not resume from an old VPS copy or an old chat ZIP unless recovery from GitHub is impossible.
+
+## Canonical planning set
+
+Use these documents together:
+
+- `docs/PRODUCT_PLAN.md` — what Ambler is and what the first owner-test product must contain
+- `docs/ROADMAP.md` — forward execution and verification sequence
+- `docs/PRODUCT_DIRECTION.md` — approved product direction and non-negotiables
+- `docs/PRODUCT_ACCEPTANCE_CRITERIA.md` — owner-test gates
+- `docs/ROUTE_REPLAY_V2.md` — final headline Route Replay requirement
+- `docs/RELEASE_CHECKLIST.md` — release/deployment gates
+
+Historical sprint implementation checkpoints remain in `AMBLER_JOBS_1_5.md` and `AMBLER_JOBS_6_15.md`.
 
 ## What is already represented in the repository baseline
 
@@ -35,10 +48,22 @@ Do not resume from an old VPS copy or an old chat ZIP unless recovery from GitHu
 - privacy and deletion controls
 - source, backend and deterministic story-engine test scripts
 
+## Sprint-status truth
+
+The repository contains the source work recorded for Jobs 1–15, but that does **not** mean the product is 15/15 accepted.
+
+Treat status as:
+- **Implemented** when the source path exists and is wired
+- **Verified** when tests/build/runtime behaviour confirm it
+- **Accepted** only when the intended end-to-end user flow passes
+
+The remaining sequence is maintained in `docs/ROADMAP.md`.
+
 ## Approved final product direction
 
 The latest product direction is captured in:
 
+- `docs/PRODUCT_PLAN.md`
 - `docs/PRODUCT_DIRECTION.md`
 - `docs/PRODUCT_ACCEPTANCE_CRITERIA.md`
 - `docs/ROUTE_REPLAY_V2.md`
