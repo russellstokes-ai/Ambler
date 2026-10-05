@@ -14,11 +14,12 @@ GitHub is the source of truth. Do not restart from an old VPS copy or old chat Z
 2. `docs/PRODUCT_PLAN.md`
 3. `docs/ROADMAP.md`
 4. `docs/ARCHITECTURE.md`
-5. `docs/PRODUCT_DIRECTION.md`
-6. `docs/PRODUCT_ACCEPTANCE_CRITERIA.md`
-7. `docs/ROUTE_REPLAY_V2.md`
-8. `docs/RELEASE_CHECKLIST.md`
-9. latest git log / CI state
+5. `docs/LESSONS_FROM_ARCHIVIST.md`
+6. `docs/PRODUCT_DIRECTION.md`
+7. `docs/PRODUCT_ACCEPTANCE_CRITERIA.md`
+8. `docs/ROUTE_REPLAY_V2.md`
+9. `docs/RELEASE_CHECKLIST.md`
+10. latest git log / CI state
 
 ## Product principle
 
@@ -33,6 +34,7 @@ Guest contribution should feel nearly frictionless. Story generation should work
 Work in small, reviewable sprints.
 
 For every sprint:
+- read and apply `docs/LESSONS_FROM_ARCHIVIST.md`
 - preserve the approved product/UI direction
 - wire the complete end-to-end behaviour, not just the screen
 - update tests where practical
