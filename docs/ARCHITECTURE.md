@@ -236,7 +236,8 @@ When there is ambiguity, use this order:
 5. `PRODUCT_ACCEPTANCE_CRITERIA.md` — acceptance gates
 6. `ROUTE_REPLAY_V2.md` — headline route specification
 7. `ARCHITECTURE.md` — code/system structure
-8. specialist documents such as story/content, events, copy, deployment and release docs
+8. `LESSONS_FROM_ARCHIVIST.md` — required engineering/product lessons and regression patterns
+9. specialist documents such as story/content, events, copy, deployment and release docs
 
 Historical sprint documents are useful implementation records but should not override newer canonical planning documents.
 
@@ -250,6 +251,7 @@ Start by reading:
 - `docs/PRODUCT_PLAN.md`
 - `docs/ROADMAP.md`
 - `docs/ARCHITECTURE.md`
+- `docs/LESSONS_FROM_ARCHIVIST.md`
 - `docs/HANDOFF.md`
 
 Then inspect the latest commit and CI status before changing code.
