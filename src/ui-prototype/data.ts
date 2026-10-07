@@ -111,13 +111,13 @@ export const mockEvents = [
 ];
 
 export const mockStories = [
-  { title: 'Snowdon Weekend', kicker: 'A summit worth replaying', storage: 'Home Server', theme: 'terrain', icon: 'mountain-outline' },
-  { title: 'Barcelona', kicker: '48 hours, one city, five viewpoints', storage: 'Cloud', theme: 'city', icon: 'business-outline' },
-  { title: 'Thorpe Park Day', kicker: 'The fast bits, the wet bits, the best bits', storage: 'Device', theme: 'venue', icon: 'ticket-outline' },
-  { title: "Sophie's 40th", kicker: 'Everyone brought a different angle', storage: 'Cloud', theme: 'party', icon: 'balloon-outline' },
-  { title: 'One Quiet Afternoon', kicker: 'One photo. One small memory worth keeping.', storage: 'Device', theme: 'sparse', icon: 'sunny-outline' },
-  { title: 'Five-a-side Final', kicker: 'Video-first match story', storage: 'Cloud', theme: 'sport', icon: 'football-outline' },
-  { title: 'Walking the Thames', kicker: 'A route-led story with very little media', storage: 'Home Server', theme: 'route', icon: 'walk-outline' },
+  { title: 'Snowdon Weekend', kicker: 'A summit worth replaying', storage: 'Home Server', theme: 'terrain', category: 'Activities', icon: 'mountain-outline' },
+  { title: 'Barcelona', kicker: '48 hours, one city, five viewpoints', storage: 'Cloud', theme: 'city', category: 'Trips', icon: 'business-outline' },
+  { title: 'Thorpe Park Day', kicker: 'The fast bits, the wet bits, the best bits', storage: 'Device', theme: 'venue', category: 'Activities', icon: 'ticket-outline' },
+  { title: "Sophie's 40th", kicker: 'Everyone brought a different angle', storage: 'Cloud', theme: 'party', category: 'Celebrations', icon: 'balloon-outline' },
+  { title: 'One Quiet Afternoon', kicker: 'One photo. One small memory worth keeping.', storage: 'Device', theme: 'sparse', category: 'Activities', icon: 'sunny-outline' },
+  { title: 'Five-a-side Final', kicker: 'Video-first match story', storage: 'Cloud', theme: 'sport', category: 'Activities', icon: 'football-outline' },
+  { title: 'Walking the Thames', kicker: 'A route-led story with very little media', storage: 'Home Server', theme: 'route', category: 'Activities', icon: 'walk-outline' },
 ];
 
 export const eventCategories = [
@@ -131,12 +131,16 @@ export const eventCategories = [
 ] as const;
 
 export const popularEventTypes = [
-  ['Road trip', 'car-sport-outline', 'Journey-first story'],
-  ['Weekend away', 'bed-outline', 'Shared trip'],
-  ['Birthday', 'gift-outline', 'Celebration'],
-  ['Hiking day', 'trail-sign-outline', 'Route + elevation'],
-  ['City break', 'business-outline', 'Urban story'],
-  ['Theme park day', 'ticket-outline', 'Venue journey'],
+  ['Road trip', 'car-sport-outline', 'Journey-first story', 'Travel'],
+  ['Weekend away', 'bed-outline', 'Shared trip', 'Travel'],
+  ['Birthday', 'gift-outline', 'Celebration', 'Celebrations'],
+  ['Hiking day', 'trail-sign-outline', 'Route + elevation', 'Activities'],
+  ['City break', 'business-outline', 'Urban story', 'Travel'],
+  ['Theme park day', 'ticket-outline', 'Venue journey', 'Activities'],
+  ['Family reunion', 'people-outline', 'Shared family memories', 'Family & life'],
+  ['Wedding', 'heart-outline', 'Milestone celebration', 'Celebrations'],
+  ['Sports match', 'football-outline', 'Action-led event', 'Activities'],
+  ['School trip', 'bus-outline', 'Group day out', 'Family & life'],
 ];
 
 export const storyThemes = [
