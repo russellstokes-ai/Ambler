@@ -104,10 +104,43 @@ test('event and story discovery controls update rendered content', async ({ page
   await expect(page.getByText("Sophie's 40th Birthday Celebration at The Orangery", { exact: true })).toBeVisible();
 
   await open(page, 'stories');
+  await page.getByText('Celebrations', { exact: true }).click();
+  await expect(page.getByText("Sophie's 40th", { exact: true })).toBeVisible();
+  await expect(page.getByText('Snowdon Weekend', { exact: true })).toHaveCount(0);
+  await page.getByText('All', { exact: true }).click();
   const search = page.getByPlaceholder('Search stories, places or people');
   await search.fill('Barcelona');
   await expect(page.getByText('Barcelona', { exact: true })).toBeVisible();
   await expect(page.getByText('Snowdon Weekend', { exact: true })).toHaveCount(0);
+});
+
+test('event type categories and search change the available choices', async ({ page }) => {
+  await open(page, 'event-type');
+  await page.getByText('Family & life', { exact: true }).click();
+  await expect(page.getByText('Family reunion', { exact: true })).toBeVisible();
+  await expect(page.getByText('School trip', { exact: true })).toBeVisible();
+  await expect(page.getByText('Road trip', { exact: true })).toHaveCount(0);
+
+  const search = page.getByPlaceholder('Search 52 event types');
+  await search.fill('school');
+  await expect(page.getByText('School trip', { exact: true })).toBeVisible();
+  await expect(page.getByText('Family reunion', { exact: true })).toHaveCount(0);
+});
+
+test('Moments filters and viewer reflect the selected media set', async ({ page }) => {
+  await open(page, 'moments');
+  await expect(page.getByText('10 moments', { exact: true })).toBeVisible();
+  await page.getByText('Videos', { exact: true }).click();
+  await expect(page.getByText('3 videos', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Open video moment by RS' }).first().click();
+  await expect(page.getByText('Moment details', { exact: true })).toBeVisible();
+  await page.getByText('Close moment', { exact: true }).click();
+  await expect(page.getByText('Moment details', { exact: true })).toHaveCount(0);
+
+  await page.getByText('Photos', { exact: true }).click();
+  await expect(page.getByText('7 photos', { exact: true })).toBeVisible();
+  await page.getByText('Mine', { exact: true }).click();
+  await expect(page.getByText('3 mine', { exact: true })).toBeVisible();
 });
 
 test('event creation choices persist visibly through the prototype', async ({ page }) => {
