@@ -963,7 +963,7 @@ function Relive() {
       <View style={styles.storyChrome}>
         <ScreenBackDark/>
         <View style={styles.storyProgressTrack}><View style={[styles.storyProgressFill,{width:'42%'}]}/></View>
-        <Pressable accessibilityRole="button" style={styles.circleButtonDark} onPress={() => setMenuOpen(!menuOpen)}><Ionicons name="ellipsis-horizontal" size={20} color="#FFFFFF"/></Pressable>
+        <Pressable accessibilityRole="button" accessibilityLabel="Story options" style={styles.circleButtonDark} onPress={() => setMenuOpen(!menuOpen)}><Ionicons name="ellipsis-horizontal" size={20} color="#FFFFFF"/></Pressable>
       </View>
       {menuOpen ? <View style={styles.storyMenu}><Pressable onPress={() => go('story-editor')}><Text style={styles.storyMenuItem}>Edit story</Text></Pressable><Pressable onPress={() => go('share-export')}><Text style={styles.storyMenuItem}>Share story</Text></Pressable></View> : null}
       <LinearGradient colors={['#04161C','#0D3D43','#10253E','#0B041F']} locations={[0,0.38,0.72,1]} style={styles.reliveCanvas}>
@@ -1035,7 +1035,7 @@ function RouteMoment() {
   const [details, setDetails] = useState(false);
   return (
     <PrototypePage dark scroll={false}>
-      <View style={styles.storyChrome}><ScreenBackDark/><Text style={styles.routeViewerTitle}>Halfway ridge · 6 moments</Text><Pressable accessibilityRole="button" style={styles.circleButtonDark} onPress={() => setDetails(!details)}><Ionicons name="information-circle-outline" size={20} color="#FFFFFF"/></Pressable></View>
+      <View style={styles.storyChrome}><ScreenBackDark/><Text style={styles.routeViewerTitle}>Halfway ridge · 6 moments</Text><Pressable accessibilityRole="button" accessibilityLabel={details ? "Hide moment details" : "Show moment details"} style={styles.circleButtonDark} onPress={() => setDetails(!details)}><Ionicons name="information-circle-outline" size={20} color="#FFFFFF"/></Pressable></View>
       <ScenicMedia scene="mountain" style={styles.viewerMedia}>
         <View style={styles.viewerPlay}><Ionicons name="play" size={27} color="#FFFFFF"/></View>
         <View style={styles.viewerContributor}><View style={styles.avatarTiny}><Text style={styles.avatarTinyText}>GA</Text></View><View><Text style={styles.viewerName}>Gabriella</Text><Text style={styles.viewerMeta}>10:42 · Halfway ridge</Text></View></View>
@@ -1107,7 +1107,7 @@ function ThemeMusic() {
         <View style={styles.inlineBetween}>
           <View style={styles.musicIcon}><Ionicons name="musical-notes" size={22} color={ui.violet}/></View>
           <View style={{flex:1}}><Text style={styles.rowTitle}>Open Skies</Text><Text style={styles.rowMeta}>Cinematic · uplifting · licensed</Text></View>
-          <Pressable accessibilityRole="button" style={styles.playButton} onPress={() => setPlaying(!playing)}><Ionicons name={playing ? "pause" : "play"} size={18} color="#FFFFFF"/></Pressable>
+          <Pressable accessibilityRole="button" accessibilityLabel={playing ? "Pause soundtrack preview" : "Play soundtrack preview"} style={styles.playButton} onPress={() => setPlaying(!playing)}><Ionicons name={playing ? "pause" : "play"} size={18} color="#FFFFFF"/></Pressable>
         </View>
       </Surface>
       <Surface tone="tint"><Text style={styles.body}>Only tracks with confirmed production rights are available in release builds.</Text></Surface>
