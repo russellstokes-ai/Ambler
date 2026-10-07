@@ -21,6 +21,7 @@ Important status distinction:
 6. [Build + Relive](06_BUILD_RELIVE.md)
 7. [Route Replay V2 + Edit + Share](07_ROUTE_EDIT_SHARE.md)
 8. [Self-Hosting + Settings + UI Test Checkpoint](08_HOSTING_POLISH_TEST.md)
+9. [Draftbit Implementation + Test Checklist](09_DRAFTBIT_IMPLEMENTATION_CHECKLIST.md)
 
 ## Target checkpoint
 
