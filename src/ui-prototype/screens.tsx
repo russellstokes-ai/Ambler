@@ -338,6 +338,16 @@ function Onboarding() {
 }
 
 function Auth() {
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const continueWithEmail = () => {
+    if (!email.trim() || !email.includes('@')) {
+      setEmailError('Enter a valid email address.');
+      return;
+    }
+    setEmailError('');
+    go('profile-setup');
+  };
   return (
     <PrototypePage>
       <PrototypeHeader eyebrow="Welcome back" title="Your stories are waiting." subtitle="Sign in to create, contribute and relive private shared events." right={<ScreenBack />} />
@@ -346,8 +356,9 @@ function Auth() {
       </View>
       <View style={styles.formGap}>
         <Text style={styles.fieldLabel}>Email</Text>
-        <TextInput placeholder="you@example.com" placeholderTextColor={ui.muted} style={styles.input} keyboardType="email-address" />
-        <PrimaryButton label="Continue with email" onPress={() => go('profile-setup')} icon="mail-outline" />
+        <TextInput value={email} onChangeText={(value) => { setEmail(value); if (emailError) setEmailError(''); }} placeholder="you@example.com" placeholderTextColor={ui.muted} style={[styles.input, emailError ? styles.inputError : null]} keyboardType="email-address" autoCapitalize="none" />
+        {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+        <PrimaryButton label="Continue with email" onPress={continueWithEmail} icon="mail-outline" />
         <View style={styles.orRow}><View style={styles.orLine}/><Text style={styles.orText}>or</Text><View style={styles.orLine}/></View>
         <SecondaryButton label="Continue with Google" icon="logo-google" onPress={() => go('profile-setup')} />
         <SecondaryButton label="Continue with Apple" icon="logo-apple" onPress={() => go('profile-setup')} />
@@ -358,16 +369,21 @@ function Auth() {
 }
 
 function ProfileSetup() {
+  const [displayName, setDisplayName] = useState('Russell');
+  const [photoSelected, setPhotoSelected] = useState(false);
   return (
     <PrototypePage>
       <PrototypeHeader eyebrow="Almost there" title="How should people see you?" subtitle="This is shown to people inside shared Ambler events." right={<ScreenBack />} />
-      <View style={styles.avatarLarge}><Ionicons name="person-outline" size={42} color={ui.violet}/><View style={styles.avatarEdit}><Ionicons name="camera" size={14} color="#FFFFFF"/></View></View>
+      <Pressable accessibilityRole="button" accessibilityLabel="Choose profile photo" onPress={() => setPhotoSelected(!photoSelected)} style={styles.avatarLarge}>
+        {photoSelected ? <Text style={styles.avatarSelectedText}>RS</Text> : <Ionicons name="person-outline" size={42} color={ui.violet}/>}
+        <View style={styles.avatarEdit}><Ionicons name={photoSelected ? "checkmark" : "camera"} size={14} color="#FFFFFF"/></View>
+      </Pressable>
       <View style={styles.formGap}>
         <Text style={styles.fieldLabel}>Display name</Text>
-        <TextInput value="Russell" editable={false} style={styles.input} />
-        <Text style={styles.helper}>You can change this later.</Text>
+        <TextInput value={displayName} onChangeText={setDisplayName} placeholder="Your name" placeholderTextColor={ui.muted} style={styles.input} />
+        <Text style={styles.helper}>{photoSelected ? 'Profile photo selected · you can change both later.' : 'You can change this later.'}</Text>
       </View>
-      <PrimaryButton label="Start using Ambler" onPress={() => go('home')} />
+      <PrimaryButton label="Start using Ambler" onPress={() => displayName.trim() && go('home')} />
     </PrototypePage>
   );
 }
@@ -520,19 +536,28 @@ function Archive() {
 }
 
 function CreateBasics() {
+  const [eventName, setEventName] = useState('Snowdon Weekend');
+  const [location, setLocation] = useState('Snowdonia, Wales');
+  const [dateChoice, setDateChoice] = useState('17–19 October 2026');
+  const [dateOpen, setDateOpen] = useState(false);
   return (
     <PrototypePage>
       <PrototypeHeader eyebrow="Create event · 1 of 4" title="What are we capturing?" subtitle="Start with the basics. You can edit them later." right={<ScreenBack />} />
       <ProgressSteps current={0} labels={['Basics','Type','Style','Privacy']} />
       <View style={styles.formGap}>
         <Text style={styles.fieldLabel}>Event name</Text>
-        <TextInput value="Snowdon Weekend" editable={false} style={styles.input}/>
+        <TextInput value={eventName} onChangeText={setEventName} placeholder="Name your event" placeholderTextColor={ui.muted} style={styles.input}/>
         <Text style={styles.fieldLabel}>When</Text>
-        <Surface style={styles.fieldSurface}><IconRow icon="calendar-outline" title="17–19 October 2026" subtitle="Friday evening to Sunday afternoon"/></Surface>
+        <Pressable accessibilityRole="button" onPress={() => setDateOpen(!dateOpen)}>
+          <Surface style={styles.fieldSurface}><IconRow icon="calendar-outline" title={dateChoice} subtitle="Tap to change" chevron/></Surface>
+        </Pressable>
+        {dateOpen ? <View style={styles.chipRow}>
+          {['17–19 October 2026','24–25 October 2026'].map((option) => <Pressable key={option} onPress={() => { setDateChoice(option); setDateOpen(false); }}><Chip label={option} active={dateChoice===option}/></Pressable>)}
+        </View> : null}
         <Text style={styles.fieldLabel}>Where <Text style={styles.optional}>optional</Text></Text>
-        <TextInput value="Snowdonia, Wales" editable={false} style={styles.input}/>
+        <TextInput value={location} onChangeText={setLocation} placeholder="Add a place" placeholderTextColor={ui.muted} style={styles.input}/>
       </View>
-      <PrimaryButton label="Choose event type" onPress={() => go('event-type')} />
+      <PrimaryButton label="Choose event type" onPress={() => eventName.trim() && go('event-type')} />
     </PrototypePage>
   );
 }
@@ -1093,14 +1118,15 @@ function ThemeMusic() {
 
 function ShareExport() {
   const [linkActive, setLinkActive] = useState(true);
+  const [linkCopied, setLinkCopied] = useState(false);
   const [savedTo, setSavedTo] = useState<string | null>(null);
   return (
     <PrototypePage>
       <PrototypeHeader title="Share & save" subtitle="Private by default. You decide where the finished story goes." right={<ScreenBack />} />
       <Surface>
         <View style={styles.inlineBetween}><View style={{flex:1}}><Text style={styles.cardTitle}>Private story link</Text><Text style={styles.rowMeta}>{linkActive ? 'Anyone with this link can view until you revoke it.' : 'This link no longer opens the story.'}</Text></View><StatusBadge label={linkActive ? "ACTIVE" : "REVOKED"} tone={linkActive ? "green" : "gray"}/></View>
-        <View style={[styles.linkBox,!linkActive&&{opacity:0.5}]}><Text style={styles.privateLink}>{linkActive ? 'ambler.app/s/7KM4…' : 'Link revoked'}</Text><Ionicons name={linkActive ? "copy-outline" : "close-circle-outline"} size={18} color={linkActive ? ui.violet : ui.muted}/></View>
-        <View style={styles.twoButtons}><SecondaryButton style={styles.flexButton} label={linkActive ? "Revoke" : "Create new link"} onPress={() => setLinkActive(!linkActive)}/><PrimaryButton style={styles.flexButton} label="Share" icon="share-outline" onPress={() => linkActive && go('shared-web')}/></View>
+        <Pressable accessibilityRole="button" accessibilityLabel="Copy private story link" disabled={!linkActive} onPress={() => linkActive && setLinkCopied(true)} style={[styles.linkBox,!linkActive&&{opacity:0.5}]}><Text style={styles.privateLink}>{linkActive ? (linkCopied ? 'Private link copied' : 'ambler.app/s/7KM4…') : 'Link revoked'}</Text><Ionicons name={linkActive ? (linkCopied ? "checkmark-circle-outline" : "copy-outline") : "close-circle-outline"} size={18} color={linkActive ? ui.violet : ui.muted}/></Pressable>
+        <View style={styles.twoButtons}><SecondaryButton style={styles.flexButton} label={linkActive ? "Revoke" : "Create new link"} onPress={() => { setLinkActive(!linkActive); setLinkCopied(false); }}/><PrimaryButton style={styles.flexButton} label="Share" icon="share-outline" onPress={() => linkActive && go('shared-web')}/></View>
       </Surface>
       <SectionTitle title="Save a copy" />
       <Surface>
@@ -1151,30 +1177,45 @@ function Profile() {
 }
 
 function Settings() {
+  const [panel, setPanel] = useState<'appearance'|'notifications'|'story'|'accessibility'|'about'|null>(null);
+  const [appearance, setAppearance] = useState('System');
+  const [notificationsOn, setNotificationsOn] = useState(true);
+  const [storyLength, setStoryLength] = useState('Standard');
+  const [autoplay, setAutoplay] = useState(true);
+  const [reducedMotionPref, setReducedMotionPref] = useState(false);
+  const [largerText, setLargerText] = useState(false);
+  const togglePanel = (next: typeof panel) => setPanel(panel === next ? null : next);
   return (
     <PrototypePage>
       <PrototypeHeader title="Settings" subtitle="Keep everyday controls simple." right={<ScreenBack />} />
       <Surface>
-        <IconRow icon="contrast-outline" title="Appearance" subtitle="System · dark/light"/>
+        <Pressable onPress={() => togglePanel('appearance')}><IconRow icon="contrast-outline" title="Appearance" subtitle={appearance + ' · dark/light'} chevron/></Pressable>
         <View style={styles.divider}/>
-        <IconRow icon="notifications-outline" title="Notifications" subtitle="Invites, contributions and story ready" tone="pink"/>
+        <Pressable onPress={() => togglePanel('notifications')}><IconRow icon="notifications-outline" title="Notifications" subtitle={notificationsOn ? 'Invites, contributions and story ready' : 'Paused'} tone="pink" chevron/></Pressable>
         <View style={styles.divider}/>
-        <IconRow icon="sparkles-outline" title="Story preferences" subtitle="Default length and autoplay"/>
+        <Pressable onPress={() => togglePanel('story')}><IconRow icon="sparkles-outline" title="Story preferences" subtitle={storyLength + ' · ' + (autoplay ? 'autoplay on' : 'autoplay off')} chevron/></Pressable>
         <View style={styles.divider}/>
         <Pressable onPress={() => go('storage-hosting')}><IconRow icon="server-outline" title="Storage & Hosting" subtitle="Home Server + default storage" tone="aqua" chevron/></Pressable>
         <View style={styles.divider}/>
         <Pressable onPress={() => go('privacy-data')}><IconRow icon="shield-outline" title="Privacy & Data" subtitle="Default privacy and account data" chevron/></Pressable>
         <View style={styles.divider}/>
-        <IconRow icon="accessibility-outline" title="Accessibility" subtitle="Reduced motion and text"/>
+        <Pressable onPress={() => togglePanel('accessibility')}><IconRow icon="accessibility-outline" title="Accessibility" subtitle={reducedMotionPref || largerText ? 'Custom preferences' : 'Reduced motion and text'} chevron/></Pressable>
         <View style={styles.divider}/>
-        <IconRow icon="information-circle-outline" title="About Ambler" subtitle="Version, policies and acknowledgements"/>
+        <Pressable onPress={() => togglePanel('about')}><IconRow icon="information-circle-outline" title="About Ambler" subtitle="Version, policies and acknowledgements" chevron/></Pressable>
       </Surface>
+      {panel === 'appearance' ? <Surface tone="tint"><SectionTitle title="Appearance"/><View style={styles.chipRow}>{['System','Light','Dark'].map((item)=><Pressable key={item} onPress={() => setAppearance(item)}><Chip label={item} active={appearance===item}/></Pressable>)}</View></Surface> : null}
+      {panel === 'notifications' ? <Surface tone="tint"><ToggleRow title="Ambler notifications" subtitle="Invites, contributions and Story Ready alerts" value={notificationsOn} onChange={setNotificationsOn}/></Surface> : null}
+      {panel === 'story' ? <Surface tone="tint"><SectionTitle title="Default story length"/><View style={styles.chipRow}>{['Short','Standard','Epic'].map((item)=><Pressable key={item} onPress={() => setStoryLength(item)}><Chip label={item} active={storyLength===item}/></Pressable>)}</View><View style={styles.divider}/><ToggleRow title="Autoplay Relive" subtitle="Move through story pages automatically" value={autoplay} onChange={setAutoplay}/></Surface> : null}
+      {panel === 'accessibility' ? <Surface tone="tint"><ToggleRow title="Prefer reduced motion" subtitle="Use calmer transitions in Ambler" value={reducedMotionPref} onChange={setReducedMotionPref}/><View style={styles.divider}/><ToggleRow title="Larger text" subtitle="Increase reading size where supported" value={largerText} onChange={setLargerText}/></Surface> : null}
+      {panel === 'about' ? <Surface tone="tint"><Text style={styles.cardTitle}>Ambler 0.3.0</Text><Text style={styles.body}>Private shared event and journey storytelling. Policies and acknowledgements remain available from the production About screen.</Text></Surface> : null}
     </PrototypePage>
   );
 }
 
 function PrivacyData() {
   const [redact, setRedact] = useState(true);
+  const [defaultPrivacy, setDefaultPrivacy] = useState<'Invited people only'|'Private link'>('Invited people only');
+  const [exportStatus, setExportStatus] = useState('');
   const [deletionReview, setDeletionReview] = useState(false);
   return (
     <PrototypePage>
@@ -1182,9 +1223,9 @@ function PrivacyData() {
       <Surface>
         <View style={styles.inlineBetween}><View style={{flex:1}}><Text style={styles.rowTitle}>Hide sensitive route ends</Text><Text style={styles.rowMeta}>Redact precise start/end locations in shared stories.</Text></View><Switch value={redact} onValueChange={setRedact} trackColor={{true:ui.violet}}/></View>
         <View style={styles.divider}/>
-        <IconRow icon="lock-closed-outline" title="Default event privacy" subtitle="Invited people only"/>
+        <Pressable onPress={() => setDefaultPrivacy(defaultPrivacy === 'Invited people only' ? 'Private link' : 'Invited people only')}><IconRow icon="lock-closed-outline" title="Default event privacy" subtitle={defaultPrivacy} trailing={<Text style={styles.rowAction}>Change</Text>}/></Pressable>
         <View style={styles.divider}/>
-        <IconRow icon="download-outline" title="Export my data" subtitle="Prepare an account data export" tone="aqua"/>
+        <Pressable onPress={() => setExportStatus('Export preparation started')}><IconRow icon="download-outline" title="Export my data" subtitle={exportStatus || 'Prepare an account data export'} tone="aqua" trailing={exportStatus ? <Ionicons name="checkmark-circle-outline" size={20} color={ui.success}/> : <Text style={styles.rowAction}>Prepare</Text>}/></Pressable>
       </Surface>
       <Surface style={styles.dangerSurface}>
         <Text style={styles.dangerTitle}>Delete account</Text>
@@ -1227,6 +1268,7 @@ function StorageHosting() {
 
 function AddServer() {
   const [method, setMethod] = useState<'discover' | 'qr' | 'manual'>('discover');
+  const [manualAddress, setManualAddress] = useState('http://ambler-home.local');
   return (
     <PrototypePage>
       <PrototypeHeader eyebrow="Ambler Home Server" title="Connect your own storage." subtitle="We’ll try local discovery first. QR and manual address are always available." right={<ScreenBack />} />
@@ -1245,7 +1287,8 @@ function AddServer() {
         <PrimaryButton label="Connect securely" onPress={() => go('server-detail')}/>
       </Surface>
       <View style={styles.twoButtons}><SecondaryButton style={styles.flexButton} label={method==='qr' ? "QR ready" : "Scan QR"} icon="qr-code-outline" onPress={() => setMethod('qr')}/><SecondaryButton style={styles.flexButton} label={method==='manual' ? "Address entry" : "Enter address"} icon="create-outline" onPress={() => setMethod('manual')}/></View>
-      {method !== 'discover' ? <Surface tone="tint"><Text style={styles.cardTitle}>{method==='qr' ? 'Scan the QR shown by your Ambler Server' : 'Enter your Ambler Server address'}</Text><Text style={styles.body}>{method==='qr' ? 'The server QR contains the connection details without exposing a raw token.' : 'Manual setup is available for advanced/network configurations.'}</Text></Surface> : null}
+      {method === 'qr' ? <Surface tone="tint"><Text style={styles.cardTitle}>Scan the QR shown by your Ambler Server</Text><Text style={styles.body}>The server QR contains the connection details without exposing a raw token.</Text><View style={styles.qrPlaceholder}><Ionicons name="qr-code-outline" size={58} color={ui.violet}/></View></Surface> : null}
+      {method === 'manual' ? <Surface tone="tint"><Text style={styles.cardTitle}>Enter your Ambler Server address</Text><Text style={styles.body}>Manual setup is available for advanced/network configurations.</Text><TextInput value={manualAddress} onChangeText={setManualAddress} autoCapitalize="none" style={styles.input}/><PrimaryButton label="Connect address" onPress={() => manualAddress.trim() && go('server-detail')}/></Surface> : null}
     </PrototypePage>
   );
 }
@@ -1276,9 +1319,14 @@ function ServerDetail() {
   );
 }
 
-function ToggleRow({title,subtitle,value}:{title:string;subtitle:string;value:boolean}) {
-  const [on,setOn]=useState(value);
-  return <View style={styles.inlineBetween}><View style={{flex:1}}><Text style={styles.rowTitle}>{title}</Text><Text style={styles.rowMeta}>{subtitle}</Text></View><Switch value={on} onValueChange={setOn} trackColor={{true:ui.violet}}/></View>;
+function ToggleRow({title,subtitle,value,onChange}:{title:string;subtitle:string;value:boolean;onChange?:(value:boolean)=>void}) {
+  const [internal,setInternal]=useState(value);
+  const on = onChange ? value : internal;
+  const update = (next:boolean) => {
+    if (onChange) onChange(next);
+    else setInternal(next);
+  };
+  return <View style={styles.inlineBetween}><View style={{flex:1}}><Text style={styles.rowTitle}>{title}</Text><Text style={styles.rowMeta}>{subtitle}</Text></View><Switch value={on} onValueChange={update} trackColor={{true:ui.violet}}/></View>;
 }
 
 const styles = StyleSheet.create({
@@ -1349,6 +1397,8 @@ const styles = StyleSheet.create({
   fieldLabel: { color: ui.ink, fontSize: 13, fontWeight: '900' },
   optional: { color: ui.muted, fontWeight: '600' },
   input: { minHeight: 54, borderRadius: 18, paddingHorizontal: 16, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E4DDED', color: ui.ink, fontSize: 15, fontWeight: '700', shadowColor:ui.shadow,shadowOpacity:0.03,shadowRadius:10,shadowOffset:{width:0,height:4},elevation:1 },
+  inputError: { borderColor: ui.danger, backgroundColor: '#FFF8FA' },
+  errorText: { color: ui.danger, fontSize: 11, fontWeight: '700', marginTop: -4 },
   helper: { color: ui.muted, fontSize: 11, fontWeight: '600' },
   legal: { color: ui.muted, fontSize: 10, lineHeight: 15, textAlign: 'center', fontWeight: '600' },
   orRow: { flexDirection: 'row', gap: 10, alignItems: 'center' },
