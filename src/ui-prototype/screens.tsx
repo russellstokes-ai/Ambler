@@ -18,6 +18,7 @@ import {
   IconRow,
   PrimaryButton,
   ProgressSteps,
+  PulseDot,
   PrototypeHeader,
   PrototypePage,
   SecondaryButton,
@@ -327,7 +328,7 @@ function Home() {
             <View style={styles.heroGlowA}/><View style={styles.heroGlowB}/>
             <View style={styles.heroRouteOne}/><View style={styles.heroRouteTwo}/><View style={styles.heroRouteDot}/>
             <View style={styles.inlineBetween}>
-              <View style={styles.livePill}><View style={styles.livePulse}/><Text style={styles.livePillText}>LIVE NOW</Text></View>
+              <View style={styles.livePill}><PulseDot /><Text style={styles.livePillText}>LIVE NOW</Text></View>
               <Pressable hitSlop={8}><Ionicons name="ellipsis-horizontal" size={22} color="rgba(255,255,255,0.72)"/></Pressable>
             </View>
             <View style={styles.heroMiddle}>
@@ -575,7 +576,7 @@ function EventHub() {
           <LinearGradient colors={['#071D26','#124851','#34218A']} style={styles.eventHero}>
             <View style={styles.eventHeroGlow}/><View style={styles.eventRouteOne}/><View style={styles.eventRouteTwo}/><View style={styles.eventRoutePoint}/>
             <View style={styles.inlineBetween}>
-              <View style={styles.livePill}><View style={styles.livePulse}/><Text style={styles.livePillText}>ROUTE LIVE</Text></View>
+              <View style={styles.livePill}><PulseDot /><Text style={styles.livePillText}>ROUTE LIVE</Text></View>
               <Ionicons name="shield-checkmark-outline" size={21} color="rgba(255,255,255,0.72)"/>
             </View>
             <View>
@@ -860,7 +861,7 @@ function RouteReplay() {
         <View style={styles.mapCompass}><Ionicons name="navigate" size={14} color="#FFFFFF"/><Text style={styles.mapCompassText}>NW</Text></View>
         <View style={styles.replayRouteShadowA}/><View style={styles.replayRouteShadowB}/><View style={styles.replayRouteShadowC}/>
         <View style={styles.replayRouteA}/><View style={styles.replayRouteB}/><View style={styles.replayRouteC}/>
-        <View style={styles.routeTravelDot}/>
+        <PulseDot color="#F97316" size={16} style={styles.routeTravelDot}/>
         {routeMoments.map((moment) => (
           <Pressable key={moment.id} onPress={() => go('route-moment')} style={[styles.routeMoment,{left:moment.x as any,top:moment.y as any}]}>
             <View style={styles.routeMomentThumb}><Ionicons name={moment.icon as any} size={18} color="#FFFFFF"/></View>
@@ -1223,7 +1224,6 @@ const styles = StyleSheet.create({
   heroRouteTwo: { position:'absolute',width:120,height:3,borderRadius:2,right:64,top:166,backgroundColor:'rgba(24,199,213,0.75)',transform:[{rotate:'18deg'}] },
   heroRouteDot: { position:'absolute',right:82,top:143,width:14,height:14,borderRadius:7,backgroundColor:'#FFFFFF',borderWidth:4,borderColor:ui.aqua },
   livePill: { flexDirection:'row',alignItems:'center',gap:7,paddingHorizontal:10,paddingVertical:7,borderRadius:14,backgroundColor:'rgba(6,255,150,0.12)',borderWidth:1,borderColor:'rgba(92,255,174,0.18)' },
-  livePulse: { width:7,height:7,borderRadius:4,backgroundColor:'#53E69C',shadowColor:'#53E69C',shadowOpacity:0.8,shadowRadius:8,elevation:3 },
   livePillText: { color:'#D8FFE9',fontSize:9,fontWeight:'900',letterSpacing:1.1 },
   heroMiddle: { flexDirection:'row',alignItems:'center',justifyContent:'space-between' },
   liveHeroIcon: { width:70,height:70,borderRadius:24,backgroundColor:'rgba(255,255,255,0.11)',borderWidth:1,borderColor:'rgba(255,255,255,0.16)',alignItems:'center',justifyContent:'center' },
