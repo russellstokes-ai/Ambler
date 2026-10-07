@@ -200,12 +200,16 @@ function PrototypeNav({ active }: { active: 'home' | 'events' | 'stories' | 'pro
       {items.map(([target, icon, label], index) => (
         <React.Fragment key={target}>
           {index === 2 ? (
-            <Pressable style={styles.createFab} onPress={() => go('create-basics')}>
-              <Ionicons name="add" size={26} color="#FFFFFF" />
-            </Pressable>
+            <View style={styles.createFabHalo}>
+              <Pressable accessibilityRole="button" accessibilityLabel="Create event" style={styles.createFab} onPress={() => go('create-basics')}>
+                <LinearGradient colors={['#7A55FF','#5B2CFF','#A32FD1']} style={styles.createFabGradient}>
+                  <Ionicons name="add" size={27} color="#FFFFFF" />
+                </LinearGradient>
+              </Pressable>
+            </View>
           ) : null}
-          <Pressable style={styles.navItem} onPress={() => go(target)}>
-            <Ionicons name={icon} size={21} color={active === target ? ui.violet : ui.muted} />
+          <Pressable accessibilityRole="button" style={[styles.navItem, active === target && styles.navItemActive]} onPress={() => go(target)}>
+            <Ionicons name={icon} size={20} color={active === target ? ui.violet : '#8D849D'} />
             <Text style={[styles.navLabel, active === target && styles.navLabelActive]}>{label}</Text>
           </Pressable>
         </React.Fragment>
@@ -319,17 +323,25 @@ function Home() {
       />
       <TwoPane
         primary={
-          <LinearGradient colors={['#0F062C', '#34218A', '#5B2CFF']} style={styles.liveHero}>
+          <LinearGradient colors={['#0B041F', '#24105C', '#5B2CFF']} locations={[0,0.48,1]} style={styles.liveHero}>
+            <View style={styles.heroGlowA}/><View style={styles.heroGlowB}/>
+            <View style={styles.heroRouteOne}/><View style={styles.heroRouteTwo}/><View style={styles.heroRouteDot}/>
             <View style={styles.inlineBetween}>
-              <StatusBadge label="LIVE NOW" tone="green" />
-              <Ionicons name="ellipsis-horizontal" size={22} color="rgba(255,255,255,0.75)"/>
+              <View style={styles.livePill}><View style={styles.livePulse}/><Text style={styles.livePillText}>LIVE NOW</Text></View>
+              <Pressable hitSlop={8}><Ionicons name="ellipsis-horizontal" size={22} color="rgba(255,255,255,0.72)"/></Pressable>
             </View>
-            <View style={styles.liveHeroIcon}><Ionicons name="trail-sign-outline" size={38} color="#FFFFFF"/></View>
+            <View style={styles.heroMiddle}>
+              <View style={styles.liveHeroIcon}><Ionicons name="trail-sign-outline" size={34} color="#FFFFFF"/></View>
+              <View style={styles.contributorStack}>
+                {['RS','GA','AT','+5'].map((name,index)=><View key={name} style={[styles.contributorBubble,{marginLeft:index===0?0:-8,zIndex:4-index}]}><Text style={styles.contributorBubbleText}>{name}</Text></View>)}
+              </View>
+            </View>
             <View>
+              <Text style={styles.liveHeroEyebrow}>SATURDAY · SNOWDONIA</Text>
               <Text style={styles.liveHeroTitle}>Snowdon Weekend</Text>
-              <Text style={styles.liveHeroMeta}>8 people · 99 moments · Route recording</Text>
+              <Text style={styles.liveHeroMeta}>99 shared moments · Route recording · 2h 14m</Text>
             </View>
-            <PrimaryButton label="Open live event" inverse onPress={() => go('event-hub')} />
+            <PrimaryButton label="Open live event" inverse icon="arrow-forward" onPress={() => go('event-hub')} />
           </LinearGradient>
         }
         secondary={
@@ -560,10 +572,24 @@ function EventHub() {
       <PrototypeHeader title="Snowdon Weekend" subtitle="Saturday · Snowdonia, Wales" right={<StatusBadge label="LIVE" tone="green" />} />
       <TwoPane
         primary={
-          <LinearGradient colors={['#10243B','#1F6F68','#5B2CFF']} style={styles.eventHero}>
-            <Ionicons name="trail-sign-outline" size={46} color="#FFFFFF"/>
-            <View><Text style={styles.eventHeroTitle}>The route is recording</Text><Text style={styles.eventHeroMeta}>2h 14m · 7.8 km · 8 contributors</Text></View>
-            <PrimaryButton label="Add moment" inverse icon="add-circle-outline" onPress={() => go('add-moment')}/>
+          <LinearGradient colors={['#071D26','#124851','#34218A']} style={styles.eventHero}>
+            <View style={styles.eventHeroGlow}/><View style={styles.eventRouteOne}/><View style={styles.eventRouteTwo}/><View style={styles.eventRoutePoint}/>
+            <View style={styles.inlineBetween}>
+              <View style={styles.livePill}><View style={styles.livePulse}/><Text style={styles.livePillText}>ROUTE LIVE</Text></View>
+              <Ionicons name="shield-checkmark-outline" size={21} color="rgba(255,255,255,0.72)"/>
+            </View>
+            <View>
+              <Text style={styles.eventHeroEyebrow}>THE JOURNEY SO FAR</Text>
+              <Text style={styles.eventHeroTitle}>The route is recording</Text>
+              <Text style={styles.eventHeroMeta}>2h 14m · 7.8 km · 642 m climb</Text>
+            </View>
+            <View style={styles.eventHeroFooter}>
+              <View style={styles.contributorStack}>
+                {['RS','GA','AT','JM','+4'].map((name,index)=><View key={name} style={[styles.contributorBubble,{marginLeft:index===0?0:-8,zIndex:5-index}]}><Text style={styles.contributorBubbleText}>{name}</Text></View>)}
+              </View>
+              <Text style={styles.eventHeroPeople}>8 contributing</Text>
+            </View>
+            <PrimaryButton label="Add a moment" inverse icon="add-circle-outline" onPress={() => go('add-moment')}/>
           </LinearGradient>
         }
         secondary={
@@ -769,13 +795,18 @@ function GenerationStep({label,done,active}:{label:string;done?:boolean;active?:
 function StoryReady() {
   return (
     <PrototypePage dark scroll={false}>
-      <LinearGradient colors={['#0F062C','#27106E','#EC3FA4']} style={styles.readyBackdrop}>
-        <View style={styles.readyHalo}/>
-        <Text style={styles.readyEyebrow}>AMBler presents</Text>
-        <View style={styles.readyArt}><Ionicons name="trail-sign-outline" size={62} color="#FFFFFF"/></View>
-        <Text style={styles.readyTitle}>Snowdon Weekend</Text>
-        <Text style={styles.readySubtitle}>Your story is ready.</Text>
-        <View style={styles.readyStats}><Stat value="12" label="Story pages" dark/><Stat value="99" label="Moments considered" dark/><Stat value="1" label="Route Replay" dark/></View>
+      <LinearGradient colors={['#070217','#21105B','#5B2CFF','#B32B92']} locations={[0,0.38,0.72,1]} style={styles.readyBackdrop}>
+        <View style={styles.readyHalo}/><View style={styles.readyHaloTwo}/>
+        <View style={styles.readyRouteOne}/><View style={styles.readyRouteTwo}/><View style={styles.readyRouteDot}/>
+        <View style={styles.readyTopline}><Text style={styles.readyEyebrow}>AMBLER PRESENTS</Text><Text style={styles.readyDate}>17–19 OCT 2026</Text></View>
+        <View style={styles.readyArt}><Ionicons name="trail-sign-outline" size={52} color="#FFFFFF"/><View style={styles.readyArtRing}/></View>
+        <View style={styles.readyCopy}>
+          <Text style={styles.readyTitle}>Snowdon Weekend</Text>
+          <Text style={styles.readySubtitle}>Eight people. Ninety-nine moments. One story.</Text>
+        </View>
+        <View style={styles.readyDivider}/>
+        <View style={styles.readyStats}><Stat value="12" label="Story pages" dark/><Stat value="99" label="Moments" dark/><Stat value="7.8 km" label="Journey" dark/></View>
+        <View style={styles.readyStoryPill}><Ionicons name="sparkles" size={14} color={ui.aqua}/><Text style={styles.readyStoryPillText}>YOUR STORY IS READY</Text></View>
       </LinearGradient>
       <PrimaryButton label="Relive story" inverse onPress={() => go('relive')}/>
       <SecondaryButton label="Edit first" dark onPress={() => go('story-editor')}/>
@@ -793,14 +824,19 @@ function Relive() {
         <Pressable accessibilityRole="button" style={styles.circleButtonDark} onPress={() => setMenuOpen(!menuOpen)}><Ionicons name="ellipsis-horizontal" size={20} color="#FFFFFF"/></Pressable>
       </View>
       {menuOpen ? <View style={styles.storyMenu}><Pressable onPress={() => go('story-editor')}><Text style={styles.storyMenuItem}>Edit story</Text></Pressable><Pressable onPress={() => go('share-export')}><Text style={styles.storyMenuItem}>Share story</Text></Pressable></View> : null}
-      <LinearGradient colors={['#061822','#174C56','#0F062C']} style={styles.reliveCanvas}>
-        <Text style={styles.reliveChapter}>CHAPTER 4</Text>
+      <LinearGradient colors={['#04161C','#0D3D43','#10253E','#0B041F']} locations={[0,0.38,0.72,1]} style={styles.reliveCanvas}>
+        <View style={styles.reliveGlow}/>
+        <View style={styles.inlineBetween}><Text style={styles.reliveChapter}>CHAPTER 4 · THE RIDGE</Text><Text style={styles.reliveTime}>10:42</Text></View>
         <Text style={styles.reliveTitle}>The ridge changed the whole day.</Text>
-        <View style={styles.reliveMedia}>
-          <Ionicons name="images-outline" size={56} color="rgba(255,255,255,0.9)"/>
-          <View style={styles.mediaCountPill}><Text style={styles.mediaCountText}>6 moments</Text></View>
+        <View style={styles.reliveMediaStage}>
+          <View style={styles.reliveMainPhoto}><LinearGradient colors={['#195A5B','#0F766E','#102A34']} style={StyleSheet.absoluteFill}/><Ionicons name="image-outline" size={50} color="rgba(255,255,255,0.84)"/><View style={styles.mediaCountPill}><Text style={styles.mediaCountText}>6 moments</Text></View></View>
+          <View style={styles.reliveSideStrip}>
+            <View style={styles.reliveSidePhoto}><LinearGradient colors={['#27106E','#5B2CFF']} style={StyleSheet.absoluteFill}/><Ionicons name="image-outline" size={24} color="#FFFFFF"/></View>
+            <View style={styles.reliveSidePhoto}><LinearGradient colors={['#5A173F','#EC3FA4']} style={StyleSheet.absoluteFill}/><Ionicons name="play" size={24} color="#FFFFFF"/></View>
+          </View>
         </View>
-        <Text style={styles.reliveCaption}>Everyone stopped here. Different cameras, same view.</Text>
+        <View style={styles.reliveQuoteRow}><View style={styles.quoteBar}/><Text style={styles.reliveCaption}>Everyone stopped here. Different cameras, same view.</Text></View>
+        <View style={styles.reliveByline}><View style={styles.contributorBubble}><Text style={styles.contributorBubbleText}>GA</Text></View><Text style={styles.reliveBylineText}>Moment led by Gabriella · 6 contributors</Text></View>
       </LinearGradient>
       <View style={styles.reliveFooter}>
         <Text style={styles.storyPosition}>5 / 12</Text>
@@ -820,14 +856,19 @@ function RouteReplay() {
       <View style={styles.replayMap}>
         <LinearGradient colors={['#0B1E29','#143744','#1C5A59']} style={StyleSheet.absoluteFill}/>
         <View style={styles.terrainA}/><View style={styles.terrainB}/><View style={styles.terrainC}/>
+        <View style={styles.contourReplayOne}/><View style={styles.contourReplayTwo}/><View style={styles.contourReplayThree}/>
+        <View style={styles.mapCompass}><Ionicons name="navigate" size={14} color="#FFFFFF"/><Text style={styles.mapCompassText}>NW</Text></View>
+        <View style={styles.replayRouteShadowA}/><View style={styles.replayRouteShadowB}/><View style={styles.replayRouteShadowC}/>
         <View style={styles.replayRouteA}/><View style={styles.replayRouteB}/><View style={styles.replayRouteC}/>
+        <View style={styles.routeTravelDot}/>
         {routeMoments.map((moment) => (
           <Pressable key={moment.id} onPress={() => go('route-moment')} style={[styles.routeMoment,{left:moment.x as any,top:moment.y as any}]}>
             <View style={styles.routeMomentThumb}><Ionicons name={moment.icon as any} size={18} color="#FFFFFF"/></View>
             {moment.count>1?<View style={styles.clusterCount}><Text style={styles.clusterCountText}>{moment.count}</Text></View>:null}
           </Pressable>
         ))}
-        <View style={styles.routeLabel}><Text style={styles.routeLabelTitle}>Halfway ridge</Text><Text style={styles.routeLabelMeta}>6 moments · 10:42</Text></View>
+        <View style={styles.routeLabel}><View style={styles.routeLabelTop}><Text style={styles.routeLabelTitle}>Halfway ridge</Text><Ionicons name="images-outline" size={12} color={ui.aqua}/></View><Text style={styles.routeLabelMeta}>6 moments · 10:42 · 4.6 km</Text></View>
+        <View style={styles.mapAttributionPill}><Text style={styles.mapAttributionText}>TERRAIN · STORY MODE</Text></View>
       </View>
       {!expanded ? <View style={styles.replayInfo}>
         <View><Text style={styles.replayTitle}>Snowdon Weekend</Text><Text style={styles.replaySubtitle}>{explore ? 'Explore mode · camera released' : paused ? 'Paused · summit ahead' : 'Terrain replay · summit ahead'}</Text></View>
@@ -1037,12 +1078,17 @@ function StorageHosting() {
   return (
     <PrototypePage>
       <PrototypeHeader title="Storage & Hosting" subtitle="Use Ambler normally, or keep your stories on your own server." right={<ScreenBack />} />
-      <Surface tone="success">
-        <View style={styles.inlineBetween}><View><Text style={styles.cardTitle}>Home Server connected</Text><Text style={styles.rowMeta}>Ambler Home · online · last sync 4 min ago</Text></View><StatusBadge label="ONLINE" tone="green"/></View>
+      <LinearGradient colors={['#E9FFF4','#F5FFFB','#EAF9FF']} style={styles.serverHero}>
+        <View style={styles.serverHeroGlow}/>
+        <View style={styles.inlineBetween}>
+          <View style={styles.serverHeroIcon}><Ionicons name="server-outline" size={24} color="#087B86"/></View>
+          <StatusBadge label="ONLINE" tone="green"/>
+        </View>
+        <View><Text style={styles.serverHeroEyebrow}>YOUR PRIVATE LIBRARY</Text><Text style={styles.serverHeroTitle}>Ambler Home</Text><Text style={styles.rowMeta}>Last sync 4 minutes ago · local + remote access</Text></View>
         <View style={styles.storageBar}><View style={[styles.storageFill,{width:'38%'}]}/></View>
-        <Text style={styles.rowMeta}>386 GB used of 1 TB</Text>
-        <PrimaryButton label="Manage server" onPress={() => go('server-detail')}/>
-      </Surface>
+        <View style={styles.inlineBetween}><Text style={styles.rowMeta}>386 GB used</Text><Text style={styles.rowMeta}>614 GB free</Text></View>
+        <PrimaryButton label="Manage server" icon="arrow-forward" onPress={() => go('server-detail')}/>
+      </LinearGradient>
       <SectionTitle title="Default story destination" />
       <Surface>
         <Pressable style={styles.radioRow} onPress={() => setDestination('server')}><View style={destination==='server'?styles.radioActive:styles.radio}>{destination==='server'?<View style={styles.radioInner}/>:null}</View><View style={{flex:1}}><Text style={styles.rowTitle}>My Ambler Server</Text><Text style={styles.rowMeta}>Full story + selected original media</Text></View><Ionicons name="server-outline" size={20} color={ui.aqua}/></Pressable>
@@ -1129,7 +1175,7 @@ const styles = StyleSheet.create({
   resilienceCard: { flexGrow: 1, flexBasis: 250, minHeight: 170 },
   stateIcon: { width: 40, height: 40, borderRadius: 14, alignItems: 'center', justifyContent: 'center' },
   stateAction: { color: ui.violet, fontSize: 11, fontWeight: '900', marginTop: 'auto' },
-  journeyCard: { width: '48%', minHeight: 116, backgroundColor: '#FFFFFF', borderRadius: 20, borderWidth: 1, borderColor: ui.line, padding: 13, gap: 6 },
+  journeyCard: { width: '48%', minHeight: 122, backgroundColor: '#FFFFFF', borderRadius: 22, borderWidth: 1, borderColor: '#E7E0F1', padding: 14, gap: 7, shadowColor: ui.shadow, shadowOpacity: 0.05, shadowRadius: 14, shadowOffset: {width:0,height:6}, elevation: 2 },
   journeyIcon: { width: 38, height: 38, borderRadius: 13, alignItems: 'center', justifyContent: 'center' },
   journeyTitle: { color: ui.ink, fontSize: 13, fontWeight: '900' },
   journeyMeta: { color: ui.muted, fontSize: 10, lineHeight: 14, fontWeight: '600' },
@@ -1170,19 +1216,35 @@ const styles = StyleSheet.create({
   avatarEdit: { position: 'absolute', right: -3, bottom: -3, width: 34, height: 34, borderRadius: 17, backgroundColor: ui.violet, alignItems: 'center', justifyContent: 'center', borderWidth: 3, borderColor: ui.soft },
   avatarSmall: { width: 42, height: 42, borderRadius: 15, backgroundColor: ui.violet, alignItems: 'center', justifyContent: 'center' },
   avatarInitial: { color: '#FFFFFF', fontWeight: '900', fontSize: 15 },
-  liveHero: { minHeight: 330, borderRadius: 30, padding: 20, justifyContent: 'space-between', overflow: 'hidden' },
-  liveHeroIcon: { width: 76, height: 76, borderRadius: 26, backgroundColor: 'rgba(255,255,255,0.12)', alignItems: 'center', justifyContent: 'center' },
-  liveHeroTitle: { color: '#FFFFFF', fontSize: 28, lineHeight: 31, fontWeight: '900' },
-  liveHeroMeta: { color: 'rgba(255,255,255,0.70)', fontSize: 12, fontWeight: '700', marginTop: 5 },
+  liveHero: { minHeight: 354, borderRadius: 32, padding: 21, justifyContent: 'space-between', overflow: 'hidden', shadowColor: '#25105C', shadowOpacity: 0.32, shadowRadius: 26, shadowOffset: {width:0,height:14}, elevation: 8 },
+  heroGlowA: { position:'absolute', width:230,height:230,borderRadius:115,right:-70,top:-80,backgroundColor:'rgba(24,199,213,0.16)' },
+  heroGlowB: { position:'absolute', width:180,height:180,borderRadius:90,left:-60,bottom:-80,backgroundColor:'rgba(236,63,164,0.13)' },
+  heroRouteOne: { position:'absolute',width:170,height:3,borderRadius:2,right:18,top:120,backgroundColor:'rgba(255,255,255,0.16)',transform:[{rotate:'-24deg'}] },
+  heroRouteTwo: { position:'absolute',width:120,height:3,borderRadius:2,right:64,top:166,backgroundColor:'rgba(24,199,213,0.75)',transform:[{rotate:'18deg'}] },
+  heroRouteDot: { position:'absolute',right:82,top:143,width:14,height:14,borderRadius:7,backgroundColor:'#FFFFFF',borderWidth:4,borderColor:ui.aqua },
+  livePill: { flexDirection:'row',alignItems:'center',gap:7,paddingHorizontal:10,paddingVertical:7,borderRadius:14,backgroundColor:'rgba(6,255,150,0.12)',borderWidth:1,borderColor:'rgba(92,255,174,0.18)' },
+  livePulse: { width:7,height:7,borderRadius:4,backgroundColor:'#53E69C',shadowColor:'#53E69C',shadowOpacity:0.8,shadowRadius:8,elevation:3 },
+  livePillText: { color:'#D8FFE9',fontSize:9,fontWeight:'900',letterSpacing:1.1 },
+  heroMiddle: { flexDirection:'row',alignItems:'center',justifyContent:'space-between' },
+  liveHeroIcon: { width:70,height:70,borderRadius:24,backgroundColor:'rgba(255,255,255,0.11)',borderWidth:1,borderColor:'rgba(255,255,255,0.16)',alignItems:'center',justifyContent:'center' },
+  contributorStack: { flexDirection:'row',alignItems:'center' },
+  contributorBubble: { width:34,height:34,borderRadius:13,backgroundColor:'#5B2CFF',borderWidth:2,borderColor:'rgba(255,255,255,0.92)',alignItems:'center',justifyContent:'center' },
+  contributorBubbleText: { color:'#FFFFFF',fontSize:8,fontWeight:'900' },
+  liveHeroEyebrow: { color:'rgba(255,255,255,0.50)',fontSize:9,fontWeight:'900',letterSpacing:1.4,marginBottom:5 },
+  liveHeroTitle: { color: '#FFFFFF', fontSize: 30, lineHeight: 33, fontWeight: '900', letterSpacing:-0.8 },
+  liveHeroMeta: { color: 'rgba(255,255,255,0.68)', fontSize: 12, fontWeight: '700', marginTop: 6 },
   storyGrid: { gap: 14 },
   storyGridWide: { flexDirection: 'row', flexWrap: 'wrap', gap: 16 },
   storyGridItem: { gap: 8, flexGrow: 1, flexBasis: 220 },
   storageMeta: { color: ui.muted, fontSize: 10, fontWeight: '800' },
-  navBar: { minHeight: 66, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: ui.line, borderRadius: 24, paddingHorizontal: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', marginTop: 4, position: 'relative' },
-  navItem: { alignItems: 'center', justifyContent: 'center', gap: 3, minWidth: 50 },
-  navLabel: { color: ui.muted, fontSize: 9, fontWeight: '800' },
+  navBar: { minHeight: 70, backgroundColor: 'rgba(255,255,255,0.97)', borderWidth: 1, borderColor: '#E8E1F2', borderRadius: 27, paddingHorizontal: 9, paddingVertical:7, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', marginTop: 6, position: 'relative', shadowColor:ui.shadow,shadowOpacity:0.09,shadowRadius:20,shadowOffset:{width:0,height:10},elevation:5 },
+  navItem: { alignItems: 'center', justifyContent: 'center', gap: 3, minWidth: 54, minHeight:48, borderRadius:17,paddingHorizontal:8 },
+  navItemActive: { backgroundColor:'#F0EBFF' },
+  navLabel: { color: '#8D849D', fontSize: 9, fontWeight: '800' },
   navLabelActive: { color: ui.violet },
-  createFab: { width: 48, height: 48, borderRadius: 18, backgroundColor: ui.violet, alignItems: 'center', justifyContent: 'center', marginHorizontal: 2 },
+  createFabHalo: { width:56,height:56,borderRadius:21,backgroundColor:'rgba(91,44,255,0.12)',alignItems:'center',justifyContent:'center',marginHorizontal:2 },
+  createFab: { width:50,height:50,borderRadius:19,overflow:'hidden',shadowColor:ui.violet,shadowOpacity:0.35,shadowRadius:12,shadowOffset:{width:0,height:6},elevation:7 },
+  createFabGradient: { flex:1,alignItems:'center',justifyContent:'center' },
   chipRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   searchBox: { minHeight: 46, borderRadius: 16, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: ui.line, flexDirection: 'row', alignItems: 'center', gap: 9, paddingHorizontal: 14 },
   searchPlaceholder: { color: ui.muted, fontSize: 13, fontWeight: '600' },
@@ -1209,9 +1271,16 @@ const styles = StyleSheet.create({
   qrMock: { width: 190, height: 190, padding: 16, borderRadius: 22, backgroundColor: '#FFFFFF', flexDirection: 'row', flexWrap: 'wrap', gap: 3, justifyContent: 'center', alignContent: 'center' },
   qrCell: { width: 17, height: 17, backgroundColor: '#FFFFFF' },
   qrCellDark: { backgroundColor: ui.ink },
-  eventHero: { minHeight: 290, borderRadius: 30, padding: 20, justifyContent: 'space-between' },
-  eventHeroTitle: { color: '#FFFFFF', fontSize: 25, fontWeight: '900' },
-  eventHeroMeta: { color: 'rgba(255,255,255,0.72)', fontSize: 12, fontWeight: '700', marginTop: 4 },
+  eventHero: { minHeight: 326, borderRadius: 32, padding: 20, justifyContent: 'space-between', overflow:'hidden',shadowColor:'#0D3D43',shadowOpacity:0.28,shadowRadius:24,shadowOffset:{width:0,height:12},elevation:7 },
+  eventHeroGlow: { position:'absolute',width:220,height:220,borderRadius:110,right:-70,top:-80,backgroundColor:'rgba(24,199,213,0.17)' },
+  eventRouteOne: { position:'absolute',left:30,top:130,width:150,height:4,borderRadius:2,backgroundColor:'rgba(24,199,213,0.78)',transform:[{rotate:'-22deg'}] },
+  eventRouteTwo: { position:'absolute',left:150,top:102,width:120,height:4,borderRadius:2,backgroundColor:'rgba(255,255,255,0.22)',transform:[{rotate:'16deg'}] },
+  eventRoutePoint: { position:'absolute',left:155,top:106,width:16,height:16,borderRadius:8,backgroundColor:'#FFFFFF',borderWidth:4,borderColor:ui.aqua },
+  eventHeroEyebrow: { color:'rgba(255,255,255,0.52)',fontSize:9,fontWeight:'900',letterSpacing:1.4,marginBottom:5 },
+  eventHeroTitle: { color: '#FFFFFF', fontSize: 27, fontWeight: '900', letterSpacing:-0.6 },
+  eventHeroMeta: { color: 'rgba(255,255,255,0.70)', fontSize: 12, fontWeight: '700', marginTop: 5 },
+  eventHeroFooter: { flexDirection:'row',alignItems:'center',gap:10 },
+  eventHeroPeople: { color:'rgba(255,255,255,0.64)',fontSize:10,fontWeight:'800' },
   statRow: { flexDirection: 'row', gap: 10 },
   mediaGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 7 },
   mediaTile: { width: '31%', aspectRatio: 1, borderRadius: 15, overflow: 'hidden', alignItems: 'center', justifyContent: 'center' },
@@ -1255,25 +1324,45 @@ const styles = StyleSheet.create({
   generationDotActive: { backgroundColor: ui.violet },
   pulseDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: '#FFFFFF' },
   generationStepText: { color: 'rgba(255,255,255,0.36)', fontSize: 13, fontWeight: '800' },
-  readyBackdrop: { flex: 1, borderRadius: 32, padding: 24, justifyContent: 'center', alignItems: 'center', gap: 12, overflow: 'hidden' },
-  readyHalo: { position: 'absolute', width: 320, height: 320, borderRadius: 160, backgroundColor: 'rgba(24,199,213,0.16)', top: -80, right: -100 },
-  readyEyebrow: { color: 'rgba(255,255,255,0.58)', fontSize: 10, fontWeight: '900', letterSpacing: 1.8, textTransform: 'uppercase' },
-  readyArt: { width: 138, height: 138, borderRadius: 46, borderWidth: 1, borderColor: 'rgba(255,255,255,0.20)', backgroundColor: 'rgba(255,255,255,0.10)', alignItems: 'center', justifyContent: 'center', marginVertical: 8 },
-  readyTitle: { color: '#FFFFFF', fontSize: 34, fontWeight: '900', textAlign: 'center', letterSpacing: -1 },
-  readySubtitle: { color: 'rgba(255,255,255,0.72)', fontSize: 16, fontWeight: '700' },
-  readyStats: { flexDirection: 'row', gap: 12, marginTop: 14, alignSelf: 'stretch' },
+  readyBackdrop: { flex: 1, borderRadius: 34, padding: 24, justifyContent: 'space-between', alignItems: 'center', gap: 12, overflow: 'hidden',shadowColor:'#5B2CFF',shadowOpacity:0.30,shadowRadius:28,shadowOffset:{width:0,height:14},elevation:8 },
+  readyHalo: { position: 'absolute', width: 340, height: 340, borderRadius: 170, backgroundColor: 'rgba(24,199,213,0.15)', top: -100, right: -120 },
+  readyHaloTwo: { position:'absolute',width:240,height:240,borderRadius:120,left:-90,bottom:-100,backgroundColor:'rgba(236,63,164,0.15)' },
+  readyRouteOne: { position:'absolute',width:190,height:3,borderRadius:2,right:18,top:150,backgroundColor:'rgba(255,255,255,0.16)',transform:[{rotate:'-24deg'}] },
+  readyRouteTwo: { position:'absolute',width:120,height:3,borderRadius:2,right:80,top:196,backgroundColor:'rgba(24,199,213,0.72)',transform:[{rotate:'17deg'}] },
+  readyRouteDot: { position:'absolute',right:94,top:175,width:14,height:14,borderRadius:7,backgroundColor:'#FFFFFF',borderWidth:4,borderColor:ui.aqua },
+  readyTopline: { width:'100%',flexDirection:'row',alignItems:'center',justifyContent:'space-between' },
+  readyDate: { color:'rgba(255,255,255,0.44)',fontSize:8,fontWeight:'900',letterSpacing:1.1 },
+  readyEyebrow: { color: 'rgba(255,255,255,0.58)', fontSize: 9, fontWeight: '900', letterSpacing: 1.8, textTransform: 'uppercase' },
+  readyArt: { width: 126, height: 126, borderRadius: 42, borderWidth: 1, borderColor: 'rgba(255,255,255,0.20)', backgroundColor: 'rgba(255,255,255,0.10)', alignItems: 'center', justifyContent: 'center', marginVertical: 4 },
+  readyArtRing: { position:'absolute',width:98,height:98,borderRadius:49,borderWidth:1,borderColor:'rgba(255,255,255,0.16)' },
+  readyCopy: { alignItems:'center',gap:7 },
+  readyTitle: { color: '#FFFFFF', fontSize: 36, lineHeight:39,fontWeight: '900', textAlign: 'center', letterSpacing: -1.2 },
+  readySubtitle: { color: 'rgba(255,255,255,0.68)', fontSize: 13, lineHeight:19,fontWeight: '700',textAlign:'center' },
+  readyDivider: { width:44,height:2,borderRadius:1,backgroundColor:'rgba(255,255,255,0.36)' },
+  readyStats: { flexDirection: 'row', gap: 12, alignSelf: 'stretch' },
+  readyStoryPill: { flexDirection:'row',alignItems:'center',gap:7,paddingHorizontal:11,paddingVertical:7,borderRadius:14,backgroundColor:'rgba(24,199,213,0.10)',borderWidth:1,borderColor:'rgba(24,199,213,0.22)' },
+  readyStoryPillText: { color:'#CCFBFF',fontSize:9,fontWeight:'900',letterSpacing:1.2 },
   storyChrome: { flexDirection: 'row', gap: 10, alignItems: 'center', zIndex: 5 },
   storyMenu: { position: 'absolute', right: 20, top: 76, zIndex: 20, minWidth: 150, borderRadius: 16, padding: 10, gap: 4, backgroundColor: '#21163E', borderWidth: 1, borderColor: 'rgba(255,255,255,0.14)' },
   storyMenuItem: { color: '#FFFFFF', fontSize: 12, fontWeight: '800', paddingVertical: 9, paddingHorizontal: 8 },
   storyProgressTrack: { flex: 1, height: 4, borderRadius: 2, backgroundColor: 'rgba(255,255,255,0.14)', overflow: 'hidden' },
   storyProgressFill: { height: '100%', backgroundColor: '#FFFFFF' },
-  reliveCanvas: { flex: 1, minHeight: 520, borderRadius: 30, padding: 24, justifyContent: 'space-between', overflow: 'hidden' },
-  reliveChapter: { color: ui.aqua, fontSize: 10, fontWeight: '900', letterSpacing: 1.6 },
-  reliveTitle: { color: '#FFFFFF', fontSize: 34, lineHeight: 38, fontWeight: '900', letterSpacing: -1 },
-  reliveMedia: { height: 230, borderRadius: 24, backgroundColor: 'rgba(255,255,255,0.10)', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: 'rgba(255,255,255,0.12)' },
-  mediaCountPill: { position: 'absolute', right: 12, bottom: 12, backgroundColor: 'rgba(15,6,44,0.70)', paddingHorizontal: 10, paddingVertical: 6, borderRadius: 12 },
-  mediaCountText: { color: '#FFFFFF', fontSize: 10, fontWeight: '900' },
-  reliveCaption: { color: 'rgba(255,255,255,0.72)', fontSize: 14, lineHeight: 20, fontWeight: '700' },
+  reliveCanvas: { flex: 1, minHeight: 540, borderRadius: 32, padding: 22, justifyContent: 'space-between', overflow: 'hidden',shadowColor:'#0D3D43',shadowOpacity:0.28,shadowRadius:24,shadowOffset:{width:0,height:12},elevation:7 },
+  reliveGlow: { position:'absolute',width:260,height:260,borderRadius:130,right:-100,top:-100,backgroundColor:'rgba(24,199,213,0.12)' },
+  reliveChapter: { color: ui.aqua, fontSize: 9, fontWeight: '900', letterSpacing: 1.6 },
+  reliveTime: { color:'rgba(255,255,255,0.42)',fontSize:9,fontWeight:'800' },
+  reliveTitle: { color: '#FFFFFF', fontSize: 34, lineHeight: 38, fontWeight: '900', letterSpacing: -1.05,maxWidth:520 },
+  reliveMediaStage: { flexDirection:'row',height:230,gap:8 },
+  reliveMainPhoto: { flex:1,borderRadius:24,overflow:'hidden',alignItems:'center',justifyContent:'center',borderWidth:1,borderColor:'rgba(255,255,255,0.11)' },
+  reliveSideStrip: { width:86,gap:8 },
+  reliveSidePhoto: { flex:1,borderRadius:18,overflow:'hidden',alignItems:'center',justifyContent:'center',borderWidth:1,borderColor:'rgba(255,255,255,0.10)' },
+  mediaCountPill: { position: 'absolute', right: 12, bottom: 12, backgroundColor: 'rgba(15,6,44,0.74)', paddingHorizontal: 10, paddingVertical: 6, borderRadius: 12,borderWidth:1,borderColor:'rgba(255,255,255,0.12)' },
+  mediaCountText: { color: '#FFFFFF', fontSize: 9, fontWeight: '900' },
+  reliveQuoteRow: { flexDirection:'row',gap:11,alignItems:'stretch' },
+  quoteBar: { width:3,borderRadius:2,backgroundColor:ui.aqua },
+  reliveCaption: { flex:1,color: 'rgba(255,255,255,0.76)', fontSize: 14, lineHeight: 20, fontWeight: '700' },
+  reliveByline: { flexDirection:'row',alignItems:'center',gap:9 },
+  reliveBylineText: { color:'rgba(255,255,255,0.50)',fontSize:9,fontWeight:'800' },
   reliveFooter: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   storyPosition: { color: 'rgba(255,255,255,0.54)', fontSize: 11, fontWeight: '800' },
   routeNext: { flexDirection: 'row', alignItems: 'center', gap: 7 },
@@ -1282,6 +1371,15 @@ const styles = StyleSheet.create({
   terrainA: { position: 'absolute', width: 300, height: 160, borderRadius: 150, backgroundColor: 'rgba(67,120,90,0.50)', left: -70, bottom: -50, transform: [{rotate:'10deg'}] },
   terrainB: { position: 'absolute', width: 300, height: 210, borderRadius: 150, backgroundColor: 'rgba(54,92,91,0.55)', right: -90, bottom: -60, transform: [{rotate:'-8deg'}] },
   terrainC: { position: 'absolute', width: 170, height: 130, borderRadius: 85, backgroundColor: 'rgba(98,137,105,0.32)', right: 40, top: 80 },
+  contourReplayOne: { position:'absolute',width:260,height:170,borderRadius:130,borderWidth:1,borderColor:'rgba(255,255,255,0.08)',left:-30,top:95,transform:[{rotate:'16deg'}] },
+  contourReplayTwo: { position:'absolute',width:210,height:145,borderRadius:105,borderWidth:1,borderColor:'rgba(24,199,213,0.11)',right:-30,top:165,transform:[{rotate:'-18deg'}] },
+  contourReplayThree: { position:'absolute',width:140,height:110,borderRadius:70,borderWidth:1,borderColor:'rgba(255,255,255,0.07)',right:62,top:54 },
+  mapCompass: { position:'absolute',right:14,top:14,width:42,height:42,borderRadius:15,backgroundColor:'rgba(6,24,34,0.68)',borderWidth:1,borderColor:'rgba(255,255,255,0.12)',alignItems:'center',justifyContent:'center' },
+  mapCompassText: { color:'rgba(255,255,255,0.60)',fontSize:7,fontWeight:'900',marginTop:-2 },
+  replayRouteShadowA: { position:'absolute',left:'9%',top:'72%',width:'36%',height:12,borderRadius:6,backgroundColor:'rgba(14,165,233,0.18)',transform:[{rotate:'-27deg'}] },
+  replayRouteShadowB: { position:'absolute',left:'37%',top:'52%',width:'30%',height:12,borderRadius:6,backgroundColor:'rgba(14,165,233,0.18)',transform:[{rotate:'-38deg'}] },
+  replayRouteShadowC: { position:'absolute',left:'58%',top:'31%',width:'28%',height:12,borderRadius:6,backgroundColor:'rgba(14,165,233,0.18)',transform:[{rotate:'-25deg'}] },
+  routeTravelDot: { position:'absolute',left:'54%',top:'42%',width:16,height:16,borderRadius:8,backgroundColor:'#FFFFFF',borderWidth:4,borderColor:'#F97316',shadowColor:'#F97316',shadowOpacity:0.75,shadowRadius:10,elevation:4 },
   replayRouteA: { position: 'absolute', left: '9%', top: '72%', width: '36%', height: 6, borderRadius: 3, backgroundColor: '#F97316', transform: [{rotate:'-27deg'}] },
   replayRouteB: { position: 'absolute', left: '37%', top: '52%', width: '30%', height: 6, borderRadius: 3, backgroundColor: '#F97316', transform: [{rotate:'-38deg'}] },
   replayRouteC: { position: 'absolute', left: '58%', top: '31%', width: '28%', height: 6, borderRadius: 3, backgroundColor: '#F97316', transform: [{rotate:'-25deg'}] },
@@ -1289,9 +1387,12 @@ const styles = StyleSheet.create({
   routeMomentThumb: { width: 42, height: 42, borderRadius: 15, backgroundColor: ui.violet, borderWidth: 3, borderColor: '#FFFFFF', alignItems: 'center', justifyContent: 'center' },
   clusterCount: { position: 'absolute', right: -4, top: -5, minWidth: 20, height: 20, borderRadius: 10, backgroundColor: ui.pink, paddingHorizontal: 5, alignItems: 'center', justifyContent: 'center' },
   clusterCountText: { color: '#FFFFFF', fontSize: 9, fontWeight: '900' },
-  routeLabel: { position: 'absolute', left: '30%', top: '61%', paddingHorizontal: 11, paddingVertical: 8, borderRadius: 13, backgroundColor: 'rgba(15,6,44,0.76)' },
+  routeLabel: { position: 'absolute', left: '27%', top: '61%', paddingHorizontal: 11, paddingVertical: 8, borderRadius: 14, backgroundColor: 'rgba(11,4,31,0.80)',borderWidth:1,borderColor:'rgba(255,255,255,0.12)',shadowColor:'#000',shadowOpacity:0.25,shadowRadius:10,elevation:4 },
+  routeLabelTop: { flexDirection:'row',alignItems:'center',gap:6 },
   routeLabelTitle: { color: '#FFFFFF', fontSize: 10, fontWeight: '900' },
-  routeLabelMeta: { color: 'rgba(255,255,255,0.62)', fontSize: 8, fontWeight: '700' },
+  routeLabelMeta: { color: 'rgba(255,255,255,0.58)', fontSize: 8, fontWeight: '700',marginTop:2 },
+  mapAttributionPill: { position:'absolute',left:12,bottom:12,paddingHorizontal:9,paddingVertical:6,borderRadius:11,backgroundColor:'rgba(6,24,34,0.66)',borderWidth:1,borderColor:'rgba(255,255,255,0.08)' },
+  mapAttributionText: { color:'rgba(255,255,255,0.56)',fontSize:7,fontWeight:'900',letterSpacing:1.1 },
   replayInfo: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 12 },
   replayTitle: { color: '#FFFFFF', fontSize: 17, fontWeight: '900' },
   replaySubtitle: { color: 'rgba(255,255,255,0.54)', fontSize: 10, fontWeight: '700' },
@@ -1345,5 +1446,10 @@ const styles = StyleSheet.create({
   radarMiddle: { width: 108, height: 108, borderRadius: 54, backgroundColor: '#D6F3F6', alignItems: 'center', justifyContent: 'center' },
   radarCore: { width: 62, height: 62, borderRadius: 24, backgroundColor: ui.aqua, alignItems: 'center', justifyContent: 'center' },
   serverFound: { borderColor: '#BFEAF0', backgroundColor: '#F4FEFF' },
+  serverHero: { borderRadius:28,padding:18,gap:14,overflow:'hidden',borderWidth:1,borderColor:'#CBEFE0',shadowColor:'#0F766E',shadowOpacity:0.09,shadowRadius:18,shadowOffset:{width:0,height:8},elevation:3 },
+  serverHeroGlow: { position:'absolute',width:180,height:180,borderRadius:90,right:-60,top:-70,backgroundColor:'rgba(24,199,213,0.10)' },
+  serverHeroIcon: { width:50,height:50,borderRadius:18,backgroundColor:'rgba(24,199,213,0.12)',alignItems:'center',justifyContent:'center' },
+  serverHeroEyebrow: { color:'#147A4D',fontSize:9,fontWeight:'900',letterSpacing:1.3,marginBottom:4 },
+  serverHeroTitle: { color:ui.ink,fontSize:25,fontWeight:'900',letterSpacing:-0.6 },
 });
 
