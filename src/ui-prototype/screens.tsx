@@ -21,6 +21,9 @@ import {
   PrimaryButton,
   ProgressSteps,
   PulseDot,
+  MotionDrift,
+  MotionReveal,
+  RouteTraceSegment,
   PrototypeHeader,
   PrototypePage,
   SecondaryButton,
@@ -312,21 +315,21 @@ function Onboarding() {
         <Pressable accessibilityRole="button" hitSlop={10} onPress={() => go('auth')}><Text style={styles.linkText}>Skip</Text></Pressable>
       </View>
       <LinearGradient colors={['#0F062C', '#5B2CFF', page === 2 ? '#0F766E' : '#EC3FA4']} style={styles.onboardVisual}>
-        <View style={[styles.floatPhoto, { left: '9%', top: '20%', transform: [{ rotate: '-8deg' }] }]}>
+        <MotionReveal resetKey={page} delay={40} distance={8} style={[styles.floatPhoto, { left: '9%', top: '20%', transform: [{ rotate: '-8deg' }] }]}>
           <Ionicons name={page === 0 ? 'image-outline' : page === 1 ? 'albums-outline' : 'location-outline'} size={30} color="#FFFFFF" />
-        </View>
-        <View style={[styles.floatPhoto, { right: '9%', top: '34%', transform: [{ rotate: '9deg' }] }]}>
+        </MotionReveal>
+        <MotionReveal resetKey={page} delay={150} distance={10} style={[styles.floatPhoto, { right: '9%', top: '34%', transform: [{ rotate: '9deg' }] }]}>
           <Ionicons name={page === 0 ? 'videocam-outline' : page === 1 ? 'sparkles-outline' : 'play-outline'} size={30} color="#FFFFFF" />
-        </View>
-        <View style={[styles.routeLine, { backgroundColor: slide.accent }]} />
-        <View style={[styles.routeDot, { borderColor: slide.accent }]} />
-        <View style={styles.onboardHeroIcon}><Ionicons name={slide.icon} size={34} color="#FFFFFF"/></View>
+        </MotionReveal>
+        <RouteTraceSegment style={[styles.routeLine, { backgroundColor: slide.accent }]} rotate="-18deg" delay={160} duration={680} />
+        <MotionReveal resetKey={page} delay={620} distance={0} scaleFrom={0.72} style={[styles.routeDot, { borderColor: slide.accent }]} />
+        <MotionReveal resetKey={page} delay={250} distance={6} scaleFrom={0.92} style={styles.onboardHeroIcon}><Ionicons name={slide.icon} size={34} color="#FFFFFF"/></MotionReveal>
       </LinearGradient>
-      <View style={styles.copyBlock}>
+      <MotionReveal resetKey={page} delay={120} distance={10} style={styles.copyBlock}>
         <Text style={styles.stepKicker}>{slide.step}</Text>
         <Text style={styles.heroTitle}>{slide.title}</Text>
         <Text style={styles.heroSubtitle}>{slide.subtitle}</Text>
-      </View>
+      </MotionReveal>
       <View style={styles.pagerDots}>{slides.map((_, index) => <View key={index} style={index === page ? styles.pagerDotActive : styles.pagerDot}/>)}</View>
       <PrimaryButton label={page === slides.length - 1 ? 'Get started' : 'Continue'} onPress={() => page === slides.length - 1 ? go('auth') : setPage(page + 1)} />
     </PrototypePage>
@@ -381,7 +384,9 @@ function Home() {
         primary={
           <LinearGradient colors={['#0B041F', '#24105C', '#5B2CFF']} locations={[0,0.48,1]} style={styles.liveHero}>
             <View style={styles.heroGlowA}/><View style={styles.heroGlowB}/>
-            <View style={styles.heroRouteOne}/><View style={styles.heroRouteTwo}/><View style={styles.heroRouteDot}/>
+            <RouteTraceSegment style={styles.heroRouteOne} rotate="-24deg" delay={180} duration={620}/>
+            <RouteTraceSegment style={styles.heroRouteTwo} rotate="18deg" delay={600} duration={560}/>
+            <MotionReveal delay={980} distance={0} scaleFrom={0.72} style={styles.heroRouteDot}/>
             <View style={styles.inlineBetween}>
               <View style={styles.livePill}><PulseDot /><Text style={styles.livePillText}>LIVE NOW</Text></View>
               <Pressable hitSlop={8}><Ionicons name="ellipsis-horizontal" size={22} color="rgba(255,255,255,0.72)"/></Pressable>
@@ -629,7 +634,10 @@ function EventHub() {
       <TwoPane
         primary={
           <LinearGradient colors={['#071D26','#124851','#34218A']} style={styles.eventHero}>
-            <View style={styles.eventHeroGlow}/><View style={styles.eventRouteOne}/><View style={styles.eventRouteTwo}/><View style={styles.eventRoutePoint}/>
+            <View style={styles.eventHeroGlow}/>
+            <RouteTraceSegment style={styles.eventRouteOne} rotate="-22deg" delay={120} duration={620}/>
+            <RouteTraceSegment style={styles.eventRouteTwo} rotate="16deg" delay={560} duration={560}/>
+            <MotionReveal delay={930} distance={0} scaleFrom={0.72} style={styles.eventRoutePoint}/>
             <View style={styles.inlineBetween}>
               <View style={styles.livePill}><PulseDot /><Text style={styles.livePillText}>ROUTE LIVE</Text></View>
               <Ionicons name="shield-checkmark-outline" size={21} color="rgba(255,255,255,0.72)"/>
@@ -853,16 +861,18 @@ function StoryReady() {
     <PrototypePage dark scroll={false}>
       <LinearGradient colors={['#070217','#21105B','#5B2CFF','#B32B92']} locations={[0,0.38,0.72,1]} style={styles.readyBackdrop}>
         <View style={styles.readyHalo}/><View style={styles.readyHaloTwo}/>
-        <View style={styles.readyRouteOne}/><View style={styles.readyRouteTwo}/><View style={styles.readyRouteDot}/>
-        <View style={styles.readyTopline}><Text style={styles.readyEyebrow}>AMBLER PRESENTS</Text><Text style={styles.readyDate}>17–19 OCT 2026</Text></View>
-        <View style={styles.readyArt}><Ionicons name="trail-sign-outline" size={52} color="#FFFFFF"/><View style={styles.readyArtRing}/></View>
-        <View style={styles.readyCopy}>
+        <RouteTraceSegment style={styles.readyRouteOne} rotate="-24deg" delay={120} duration={760}/>
+        <RouteTraceSegment style={styles.readyRouteTwo} rotate="17deg" delay={620} duration={620}/>
+        <MotionReveal delay={1080} distance={0} scaleFrom={0.72} style={styles.readyRouteDot}/>
+        <MotionReveal delay={80} distance={8} style={styles.readyTopline}><Text style={styles.readyEyebrow}>AMBLER PRESENTS</Text><Text style={styles.readyDate}>17–19 OCT 2026</Text></MotionReveal>
+        <MotionReveal delay={260} distance={12} scaleFrom={0.90} style={styles.readyArt}><Ionicons name="trail-sign-outline" size={52} color="#FFFFFF"/><View style={styles.readyArtRing}/></MotionReveal>
+        <MotionReveal delay={500} distance={12} style={styles.readyCopy}>
           <Text style={styles.readyTitle}>Snowdon Weekend</Text>
           <Text style={styles.readySubtitle}>Eight people. Ninety-nine moments. One story.</Text>
-        </View>
-        <View style={styles.readyDivider}/>
-        <View style={styles.readyStats}><Stat value="12" label="Story pages" dark/><Stat value="99" label="Moments" dark/><Stat value="7.8 km" label="Journey" dark/></View>
-        <View style={styles.readyStoryPill}><Ionicons name="sparkles" size={14} color={ui.aqua}/><Text style={styles.readyStoryPillText}>YOUR STORY IS READY</Text></View>
+        </MotionReveal>
+        <MotionReveal delay={680} distance={6} style={styles.readyDivider}/>
+        <MotionReveal delay={760} distance={9} style={styles.readyStats}><Stat value="12" label="Story pages" dark/><Stat value="99" label="Moments" dark/><Stat value="7.8 km" label="Journey" dark/></MotionReveal>
+        <MotionReveal delay={980} distance={8} scaleFrom={0.94} style={styles.readyStoryPill}><Ionicons name="sparkles" size={14} color={ui.aqua}/><Text style={styles.readyStoryPillText}>YOUR STORY IS READY</Text></MotionReveal>
       </LinearGradient>
       <PrimaryButton label="Relive story" inverse onPress={() => go('relive')}/>
       <SecondaryButton label="Edit first" dark onPress={() => go('story-editor')}/>
@@ -882,17 +892,17 @@ function Relive() {
       {menuOpen ? <View style={styles.storyMenu}><Pressable onPress={() => go('story-editor')}><Text style={styles.storyMenuItem}>Edit story</Text></Pressable><Pressable onPress={() => go('share-export')}><Text style={styles.storyMenuItem}>Share story</Text></Pressable></View> : null}
       <LinearGradient colors={['#04161C','#0D3D43','#10253E','#0B041F']} locations={[0,0.38,0.72,1]} style={styles.reliveCanvas}>
         <View style={styles.reliveGlow}/>
-        <View style={styles.inlineBetween}><Text style={styles.reliveChapter}>CHAPTER 4 · THE RIDGE</Text><Text style={styles.reliveTime}>10:42</Text></View>
-        <Text style={styles.reliveTitle}>The ridge changed the whole day.</Text>
-        <View style={styles.reliveMediaStage}>
+        <MotionReveal delay={60} distance={8} style={styles.inlineBetween}><Text style={styles.reliveChapter}>CHAPTER 4 · THE RIDGE</Text><Text style={styles.reliveTime}>10:42</Text></MotionReveal>
+        <MotionReveal delay={170} distance={12}><Text style={styles.reliveTitle}>The ridge changed the whole day.</Text></MotionReveal>
+        <MotionReveal delay={340} distance={14} scaleFrom={0.975} style={styles.reliveMediaStage}>
           <ScenicMedia scene="mountain" style={styles.reliveMainPhoto}><View style={styles.mediaCountPill}><Text style={styles.mediaCountText}>6 moments</Text></View></ScenicMedia>
           <View style={styles.reliveSideStrip}>
             <ScenicMedia scene="mountain" style={styles.reliveSidePhoto}/>
             <ScenicMedia scene="city" style={styles.reliveSidePhoto}><View style={styles.videoPlayBadge}><Ionicons name="play" size={14} color="#FFFFFF"/></View></ScenicMedia>
           </View>
-        </View>
-        <View style={styles.reliveQuoteRow}><View style={styles.quoteBar}/><Text style={styles.reliveCaption}>Everyone stopped here. Different cameras, same view.</Text></View>
-        <View style={styles.reliveByline}><View style={styles.contributorBubble}><Text style={styles.contributorBubbleText}>GA</Text></View><Text style={styles.reliveBylineText}>Moment led by Gabriella · 6 contributors</Text></View>
+        </MotionReveal>
+        <MotionReveal delay={560} distance={10} style={styles.reliveQuoteRow}><View style={styles.quoteBar}/><Text style={styles.reliveCaption}>Everyone stopped here. Different cameras, same view.</Text></MotionReveal>
+        <MotionReveal delay={700} distance={8} style={styles.reliveByline}><View style={styles.contributorBubble}><Text style={styles.contributorBubbleText}>GA</Text></View><Text style={styles.reliveBylineText}>Moment led by Gabriella · 6 contributors</Text></MotionReveal>
       </LinearGradient>
       <View style={styles.reliveFooter}>
         <Text style={styles.storyPosition}>5 / 12</Text>
@@ -911,19 +921,25 @@ function RouteReplay() {
       <View style={styles.storyChrome}><ScreenBackDark/><StatusBadge label={expanded ? "FULL ROUTE" : "ROUTE REPLAY"} tone="aqua"/><Pressable accessibilityRole="button" style={styles.circleButtonDark} onPress={() => setExpanded(!expanded)}><Ionicons name={expanded ? "contract-outline" : "expand-outline"} size={19} color="#FFFFFF"/></Pressable></View>
       <View style={styles.replayMap}>
         <LinearGradient colors={['#0B1E29','#143744','#1C5A59']} style={StyleSheet.absoluteFill}/>
-        <View style={styles.terrainA}/><View style={styles.terrainB}/><View style={styles.terrainC}/>
-        <View style={styles.contourReplayOne}/><View style={styles.contourReplayTwo}/><View style={styles.contourReplayThree}/>
+        <MotionDrift>
+          <View style={styles.terrainA}/><View style={styles.terrainB}/><View style={styles.terrainC}/>
+          <View style={styles.contourReplayOne}/><View style={styles.contourReplayTwo}/><View style={styles.contourReplayThree}/>
+        </MotionDrift>
         <View style={styles.mapCompass}><Ionicons name="navigate" size={14} color="#FFFFFF"/><Text style={styles.mapCompassText}>NW</Text></View>
         <View style={styles.replayRouteShadowA}/><View style={styles.replayRouteShadowB}/><View style={styles.replayRouteShadowC}/>
-        <View style={styles.replayRouteA}/><View style={styles.replayRouteB}/><View style={styles.replayRouteC}/>
-        <PulseDot color="#F97316" size={16} style={styles.routeTravelDot}/>
-        {routeMoments.map((moment) => (
-          <Pressable key={moment.id} onPress={() => go('route-moment')} style={[styles.routeMoment,{left:moment.x as any,top:moment.y as any}]}>
-            <View style={styles.routeMomentThumb}><Ionicons name={moment.icon as any} size={18} color="#FFFFFF"/></View>
-            {moment.count>1?<View style={styles.clusterCount}><Text style={styles.clusterCountText}>{moment.count}</Text></View>:null}
-          </Pressable>
+        <RouteTraceSegment style={styles.replayRouteA} rotate="-27deg" delay={160} duration={720}/>
+        <RouteTraceSegment style={styles.replayRouteB} rotate="-38deg" delay={700} duration={680}/>
+        <RouteTraceSegment style={styles.replayRouteC} rotate="-25deg" delay={1220} duration={620}/>
+        <MotionReveal delay={1380} distance={0} scaleFrom={0.74} style={styles.routeTravelDot}><PulseDot color="#F97316" size={16}/></MotionReveal>
+        {routeMoments.map((moment, index) => (
+          <MotionReveal key={moment.id} delay={760 + index * 180} distance={8} scaleFrom={0.82} style={[styles.routeMoment,{left:moment.x as any,top:moment.y as any}]}>
+            <Pressable onPress={() => go('route-moment')} style={styles.routeMomentPressable}>
+              <View style={styles.routeMomentThumb}><Ionicons name={moment.icon as any} size={18} color="#FFFFFF"/></View>
+              {moment.count>1?<View style={styles.clusterCount}><Text style={styles.clusterCountText}>{moment.count}</Text></View>:null}
+            </Pressable>
+          </MotionReveal>
         ))}
-        <View style={styles.routeLabel}><View style={styles.routeLabelTop}><Text style={styles.routeLabelTitle}>Halfway ridge</Text><Ionicons name="images-outline" size={12} color={ui.aqua}/></View><Text style={styles.routeLabelMeta}>6 moments · 10:42 · 4.6 km</Text></View>
+        <MotionReveal delay={1540} distance={8} scaleFrom={0.96} style={styles.routeLabel}><View style={styles.routeLabelTop}><Text style={styles.routeLabelTitle}>Halfway ridge</Text><Ionicons name="images-outline" size={12} color={ui.aqua}/></View><Text style={styles.routeLabelMeta}>6 moments · 10:42 · 4.6 km</Text></MotionReveal>
         <View style={styles.mapAttributionPill}><Text style={styles.mapAttributionText}>TERRAIN · STORY MODE</Text></View>
       </View>
       {!expanded ? <View style={styles.replayInfo}>
@@ -1291,8 +1307,8 @@ const styles = StyleSheet.create({
   liveHero: { minHeight: 354, borderRadius: 32, padding: 21, justifyContent: 'space-between', overflow: 'hidden', shadowColor: '#25105C', shadowOpacity: 0.32, shadowRadius: 26, shadowOffset: {width:0,height:14}, elevation: 8 },
   heroGlowA: { position:'absolute', width:230,height:230,borderRadius:115,right:-70,top:-80,backgroundColor:'rgba(24,199,213,0.16)' },
   heroGlowB: { position:'absolute', width:180,height:180,borderRadius:90,left:-60,bottom:-80,backgroundColor:'rgba(236,63,164,0.13)' },
-  heroRouteOne: { position:'absolute',width:170,height:3,borderRadius:2,right:18,top:120,backgroundColor:'rgba(255,255,255,0.16)',transform:[{rotate:'-24deg'}] },
-  heroRouteTwo: { position:'absolute',width:120,height:3,borderRadius:2,right:64,top:166,backgroundColor:'rgba(24,199,213,0.75)',transform:[{rotate:'18deg'}] },
+  heroRouteOne: { position:'absolute',width:170,height:3,borderRadius:2,right:18,top:120,backgroundColor:'rgba(255,255,255,0.16)' },
+  heroRouteTwo: { position:'absolute',width:120,height:3,borderRadius:2,right:64,top:166,backgroundColor:'rgba(24,199,213,0.75)' },
   heroRouteDot: { position:'absolute',right:82,top:143,width:14,height:14,borderRadius:7,backgroundColor:'#FFFFFF',borderWidth:4,borderColor:ui.aqua },
   livePill: { flexDirection:'row',alignItems:'center',gap:7,paddingHorizontal:10,paddingVertical:7,borderRadius:14,backgroundColor:'rgba(6,255,150,0.12)',borderWidth:1,borderColor:'rgba(92,255,174,0.18)' },
   livePillText: { color:'#D8FFE9',fontSize:9,fontWeight:'900',letterSpacing:1.1 },
@@ -1344,8 +1360,8 @@ const styles = StyleSheet.create({
   qrCellDark: { backgroundColor: ui.ink },
   eventHero: { minHeight: 326, borderRadius: 32, padding: 20, justifyContent: 'space-between', overflow:'hidden',shadowColor:'#0D3D43',shadowOpacity:0.28,shadowRadius:24,shadowOffset:{width:0,height:12},elevation:7 },
   eventHeroGlow: { position:'absolute',width:220,height:220,borderRadius:110,right:-70,top:-80,backgroundColor:'rgba(24,199,213,0.17)' },
-  eventRouteOne: { position:'absolute',left:30,top:130,width:150,height:4,borderRadius:2,backgroundColor:'rgba(24,199,213,0.78)',transform:[{rotate:'-22deg'}] },
-  eventRouteTwo: { position:'absolute',left:150,top:102,width:120,height:4,borderRadius:2,backgroundColor:'rgba(255,255,255,0.22)',transform:[{rotate:'16deg'}] },
+  eventRouteOne: { position:'absolute',left:30,top:130,width:150,height:4,borderRadius:2,backgroundColor:'rgba(24,199,213,0.78)' },
+  eventRouteTwo: { position:'absolute',left:150,top:102,width:120,height:4,borderRadius:2,backgroundColor:'rgba(255,255,255,0.22)' },
   eventRoutePoint: { position:'absolute',left:155,top:106,width:16,height:16,borderRadius:8,backgroundColor:'#FFFFFF',borderWidth:4,borderColor:ui.aqua },
   eventHeroEyebrow: { color:'rgba(255,255,255,0.52)',fontSize:9,fontWeight:'900',letterSpacing:1.4,marginBottom:5 },
   eventHeroTitle: { color: '#FFFFFF', fontSize: 27, fontWeight: '900', letterSpacing:-0.6 },
@@ -1398,8 +1414,8 @@ const styles = StyleSheet.create({
   readyBackdrop: { flex: 1, borderRadius: 34, padding: 24, justifyContent: 'space-between', alignItems: 'center', gap: 12, overflow: 'hidden',shadowColor:'#5B2CFF',shadowOpacity:0.30,shadowRadius:28,shadowOffset:{width:0,height:14},elevation:8 },
   readyHalo: { position: 'absolute', width: 340, height: 340, borderRadius: 170, backgroundColor: 'rgba(24,199,213,0.15)', top: -100, right: -120 },
   readyHaloTwo: { position:'absolute',width:240,height:240,borderRadius:120,left:-90,bottom:-100,backgroundColor:'rgba(236,63,164,0.15)' },
-  readyRouteOne: { position:'absolute',width:190,height:3,borderRadius:2,right:18,top:150,backgroundColor:'rgba(255,255,255,0.16)',transform:[{rotate:'-24deg'}] },
-  readyRouteTwo: { position:'absolute',width:120,height:3,borderRadius:2,right:80,top:196,backgroundColor:'rgba(24,199,213,0.72)',transform:[{rotate:'17deg'}] },
+  readyRouteOne: { position:'absolute',width:190,height:3,borderRadius:2,right:18,top:150,backgroundColor:'rgba(255,255,255,0.16)' },
+  readyRouteTwo: { position:'absolute',width:120,height:3,borderRadius:2,right:80,top:196,backgroundColor:'rgba(24,199,213,0.72)' },
   readyRouteDot: { position:'absolute',right:94,top:175,width:14,height:14,borderRadius:7,backgroundColor:'#FFFFFF',borderWidth:4,borderColor:ui.aqua },
   readyTopline: { width:'100%',flexDirection:'row',alignItems:'center',justifyContent:'space-between' },
   readyDate: { color:'rgba(255,255,255,0.44)',fontSize:8,fontWeight:'900',letterSpacing:1.1 },
@@ -1451,10 +1467,11 @@ const styles = StyleSheet.create({
   replayRouteShadowB: { position:'absolute',left:'37%',top:'52%',width:'30%',height:12,borderRadius:6,backgroundColor:'rgba(14,165,233,0.18)',transform:[{rotate:'-38deg'}] },
   replayRouteShadowC: { position:'absolute',left:'58%',top:'31%',width:'28%',height:12,borderRadius:6,backgroundColor:'rgba(14,165,233,0.18)',transform:[{rotate:'-25deg'}] },
   routeTravelDot: { position:'absolute',left:'54%',top:'42%',width:16,height:16,borderRadius:8,backgroundColor:'#FFFFFF',borderWidth:4,borderColor:'#F97316',shadowColor:'#F97316',shadowOpacity:0.75,shadowRadius:10,elevation:4 },
-  replayRouteA: { position: 'absolute', left: '9%', top: '72%', width: '36%', height: 6, borderRadius: 3, backgroundColor: '#F97316', transform: [{rotate:'-27deg'}] },
-  replayRouteB: { position: 'absolute', left: '37%', top: '52%', width: '30%', height: 6, borderRadius: 3, backgroundColor: '#F97316', transform: [{rotate:'-38deg'}] },
-  replayRouteC: { position: 'absolute', left: '58%', top: '31%', width: '28%', height: 6, borderRadius: 3, backgroundColor: '#F97316', transform: [{rotate:'-25deg'}] },
+  replayRouteA: { position: 'absolute', left: '9%', top: '72%', width: '36%', height: 6, borderRadius: 3, backgroundColor: '#F97316' },
+  replayRouteB: { position: 'absolute', left: '37%', top: '52%', width: '30%', height: 6, borderRadius: 3, backgroundColor: '#F97316' },
+  replayRouteC: { position: 'absolute', left: '58%', top: '31%', width: '28%', height: 6, borderRadius: 3, backgroundColor: '#F97316' },
   routeMoment: { position: 'absolute', width: 46, height: 46 },
+  routeMomentPressable: { width: 46, height: 46 },
   routeMomentThumb: { width: 42, height: 42, borderRadius: 15, backgroundColor: ui.violet, borderWidth: 3, borderColor: '#FFFFFF', alignItems: 'center', justifyContent: 'center' },
   clusterCount: { position: 'absolute', right: -4, top: -5, minWidth: 20, height: 20, borderRadius: 10, backgroundColor: ui.pink, paddingHorizontal: 5, alignItems: 'center', justifyContent: 'center' },
   clusterCountText: { color: '#FFFFFF', fontSize: 9, fontWeight: '900' },
