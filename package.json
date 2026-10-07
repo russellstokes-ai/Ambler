@@ -2,7 +2,7 @@
   "name": "ambler-app",
   "version": "0.3.0",
   "private": true,
-  "description": "Ambler \u2014 private shared event, journey and activity storytelling.",
+  "description": "Ambler — private shared event, journey and activity storytelling.",
   "main": "expo-router/entry",
   "scripts": {
     "start": "expo start",
@@ -49,6 +49,7 @@
     "expo-system-ui": "4.0.9",
     "expo-video-thumbnails": "9.0.3",
     "lottie-react-native": "7.1.0",
+    "query-string": "7.1.3",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-native": "0.76.9",
