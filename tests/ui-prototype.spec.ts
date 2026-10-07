@@ -85,6 +85,15 @@ test.describe('all 36 Ambler screens', () => {
           .map((node) => (node as HTMLElement).outerHTML.slice(0, 220)),
       );
       expect(unnamedSwitches, 'unnamed switches on ' + id).toEqual([]);
+      const clippedInteractive = await page.locator('[role="button"],[role="switch"],input').evaluateAll((nodes) =>
+        nodes
+          .filter((node) => {
+            const rect = (node as HTMLElement).getBoundingClientRect();
+            return rect.width > 0 && (rect.left < -2 || rect.right > window.innerWidth + 2);
+          })
+          .map((node) => (node as HTMLElement).outerHTML.slice(0, 220)),
+      );
+      expect(clippedInteractive, 'horizontally clipped controls on ' + id).toEqual([]);
       await page.screenshot({ path: 'test-results/screens/' + testInfo.project.name + '/' + id + '.png', fullPage: true });
       expect(errors, 'browser/runtime errors on ' + id).toEqual([]);
     });
@@ -369,4 +378,46 @@ test('temporary stress population renders every awkward state without overflow',
 
   await assertNoHorizontalOverflow(page);
   await page.screenshot({ path: 'test-results/screens/' + testInfo.project.name + '/stress.png', fullPage: true });
+});
+
+test('short-height form simulation remains usable', async ({ browser }, testInfo) => {
+  test.skip(testInfo.project.name !== 'standard-phone');
+  const context = await browser.newContext({
+    baseURL: 'http://127.0.0.1:4173',
+    viewport: { width: 430, height: 520 },
+  });
+  const page = await context.newPage();
+  await page.goto('/ui-preview/create-basics');
+  await expect(page.getByTestId('ui-screen-create-basics')).toBeVisible();
+  const location = page.getByDisplayValue('Snowdonia, Wales');
+  await location.focus();
+  await location.fill('An intentionally long place name for compact keyboard testing');
+  await page.getByText('Choose event type', { exact: true }).scrollIntoViewIfNeeded();
+  await expect(page.getByText('Choose event type', { exact: true })).toBeVisible();
+  await assertNoHorizontalOverflow(page);
+  await page.screenshot({ path: 'test-results/screens/targeted/short-height-create.png', fullPage: true });
+  await context.close();
+});
+
+test('landscape cinematic screens keep essential controls reachable', async ({ browser }, testInfo) => {
+  test.skip(testInfo.project.name !== 'standard-phone');
+  const context = await browser.newContext({
+    baseURL: 'http://127.0.0.1:4173',
+    viewport: { width: 800, height: 360 },
+  });
+  const page = await context.newPage();
+
+  await page.goto('/ui-preview/route-replay');
+  await expect(page.getByRole('button', { name: 'Pause replay' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Expand route' })).toBeVisible();
+  await assertNoHorizontalOverflow(page);
+  await page.screenshot({ path: 'test-results/screens/targeted/landscape-route-replay.png', fullPage: true });
+
+  await page.goto('/ui-preview/story-ready');
+  await expect(page.getByText('Relive story', { exact: true })).toBeVisible();
+  await expect(page.getByText('Edit first', { exact: true })).toBeVisible();
+  await assertNoHorizontalOverflow(page);
+  await page.screenshot({ path: 'test-results/screens/targeted/landscape-story-ready.png', fullPage: true });
+
+  await context.close();
 });
