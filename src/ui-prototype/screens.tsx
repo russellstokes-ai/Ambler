@@ -256,8 +256,8 @@ function Auth() {
         <TextInput placeholder="you@example.com" placeholderTextColor={ui.muted} style={styles.input} keyboardType="email-address" />
         <PrimaryButton label="Continue with email" onPress={() => go('profile-setup')} icon="mail-outline" />
         <View style={styles.orRow}><View style={styles.orLine}/><Text style={styles.orText}>or</Text><View style={styles.orLine}/></View>
-        <SecondaryButton label="Continue with Google" icon="logo-google" />
-        <SecondaryButton label="Continue with Apple" icon="logo-apple" />
+        <SecondaryButton label="Continue with Google" icon="logo-google" onPress={() => go('profile-setup')} />
+        <SecondaryButton label="Continue with Apple" icon="logo-apple" onPress={() => go('profile-setup')} />
       </View>
       <Text style={styles.legal}>Private by default. By continuing you agree to Ambler’s Terms and Privacy Policy.</Text>
     </PrototypePage>
@@ -507,6 +507,7 @@ function PrivacyRoute() {
 }
 
 function Invite() {
+  const [copied, setCopied] = useState(false);
   return (
     <PrototypePage>
       <PrototypeHeader eyebrow="Event created" title="Bring your people in." subtitle="They can join from a link or scan the code. No generic Ambler onboarding first." />
@@ -518,7 +519,7 @@ function Invite() {
         <Text style={styles.cardTitle}>Scan to join Snowdon Weekend</Text>
         <Text style={styles.rowMeta}>Private invite · expires when the event closes</Text>
       </Surface>
-      <View style={styles.twoButtons}><SecondaryButton style={styles.flexButton} label="Copy link" icon="link-outline"/><SecondaryButton style={styles.flexButton} label="Share" icon="share-outline" onPress={() => go('event-hub')}/></View>
+      <View style={styles.twoButtons}><SecondaryButton style={styles.flexButton} label={copied ? "Link copied" : "Copy link"} icon={copied ? "checkmark-circle-outline" : "link-outline"} onPress={() => setCopied(true)}/><SecondaryButton style={styles.flexButton} label="Share" icon="share-outline" onPress={() => go('event-hub')}/></View>
       <PrimaryButton label="Open live event" onPress={() => go('event-hub')} />
     </PrototypePage>
   );
@@ -581,19 +582,21 @@ function Moments() {
 }
 
 function AddMoment() {
+  const [mode, setMode] = useState<'photo' | 'video' | 'library' | 'note'>('photo');
   return (
     <PrototypePage>
       <PrototypeHeader title="Add a moment" subtitle="Keep it quick. Ambler handles the organising later." right={<ScreenBack />} />
       <View style={styles.captureGrid}>
-        <Pressable style={styles.captureChoice}><Ionicons name="camera-outline" size={32} color={ui.violet}/><Text style={styles.captureTitle}>Take photo</Text></Pressable>
-        <Pressable style={styles.captureChoice}><Ionicons name="videocam-outline" size={32} color={ui.pink}/><Text style={styles.captureTitle}>Record video</Text></Pressable>
-        <Pressable style={styles.captureChoice}><Ionicons name="images-outline" size={32} color={ui.aqua}/><Text style={styles.captureTitle}>Choose media</Text></Pressable>
-        <Pressable style={styles.captureChoice}><Ionicons name="chatbubble-ellipses-outline" size={32} color={ui.warning}/><Text style={styles.captureTitle}>Add note</Text></Pressable>
+        <Pressable onPress={() => setMode('photo')} style={[styles.captureChoice, mode==='photo'&&styles.captureChoiceActive]}><Ionicons name="camera-outline" size={32} color={ui.violet}/><Text style={styles.captureTitle}>Take photo</Text></Pressable>
+        <Pressable onPress={() => setMode('video')} style={[styles.captureChoice, mode==='video'&&styles.captureChoiceActive]}><Ionicons name="videocam-outline" size={32} color={ui.pink}/><Text style={styles.captureTitle}>Record video</Text></Pressable>
+        <Pressable onPress={() => setMode('library')} style={[styles.captureChoice, mode==='library'&&styles.captureChoiceActive]}><Ionicons name="images-outline" size={32} color={ui.aqua}/><Text style={styles.captureTitle}>Choose media</Text></Pressable>
+        <Pressable onPress={() => setMode('note')} style={[styles.captureChoice, mode==='note'&&styles.captureChoiceActive]}><Ionicons name="chatbubble-ellipses-outline" size={32} color={ui.warning}/><Text style={styles.captureTitle}>Add note</Text></Pressable>
       </View>
       <Surface>
         <View style={styles.uploadPreview}>
-          <LinearGradient colors={['#0F766E','#18C7D5']} style={StyleSheet.absoluteFill}/>
-          <Ionicons name="image-outline" size={38} color="#FFFFFF"/>
+          <LinearGradient colors={mode==='video' ? ['#27106E','#EC3FA4'] : mode==='note' ? ['#6D4A00','#FFB020'] : ['#0F766E','#18C7D5']} style={StyleSheet.absoluteFill}/>
+          <Ionicons name={mode==='video' ? 'videocam-outline' : mode==='note' ? 'chatbubble-ellipses-outline' : 'image-outline'} size={38} color="#FFFFFF"/>
+          <Text style={styles.previewModeLabel}>{mode==='photo' ? 'Camera preview' : mode==='video' ? 'Video preview' : mode==='library' ? 'Selected media' : 'Note moment'}</Text>
         </View>
         <TextInput placeholder="Add a caption… optional" placeholderTextColor={ui.muted} style={styles.input}/>
         <View style={styles.privacyNote}><Ionicons name="location-outline" size={18} color={ui.violet}/><Text style={styles.privacyText}>Location available · include with this moment</Text></View>
@@ -643,6 +646,7 @@ function GuestJoin() {
 }
 
 function GuestContribution() {
+  const [kind, setKind] = useState<'photos' | 'video'>('photos');
   return (
     <PrototypePage>
       <PrototypeHeader eyebrow="Snowdon Weekend" title="Add your moments" subtitle="Anything you add can help shape the finished story." />
@@ -650,8 +654,8 @@ function GuestContribution() {
         <View style={styles.inlineBetween}><View><Text style={styles.cardTitle}>You’re contributing as Alex</Text><Text style={styles.rowMeta}>No full account setup required</Text></View><StatusBadge label="GUEST" tone="aqua"/></View>
       </Surface>
       <View style={styles.captureGrid}>
-        <Pressable style={styles.captureChoice}><Ionicons name="images-outline" size={32} color={ui.violet}/><Text style={styles.captureTitle}>Photos</Text></Pressable>
-        <Pressable style={styles.captureChoice}><Ionicons name="videocam-outline" size={32} color={ui.pink}/><Text style={styles.captureTitle}>Video</Text></Pressable>
+        <Pressable onPress={() => setKind('photos')} style={[styles.captureChoice, kind==='photos'&&styles.captureChoiceActive]}><Ionicons name="images-outline" size={32} color={ui.violet}/><Text style={styles.captureTitle}>Photos</Text></Pressable>
+        <Pressable onPress={() => setKind('video')} style={[styles.captureChoice, kind==='video'&&styles.captureChoiceActive]}><Ionicons name="videocam-outline" size={32} color={ui.pink}/><Text style={styles.captureTitle}>Video</Text></Pressable>
       </View>
       <Text style={styles.fieldLabel}>Add a note</Text>
       <TextInput multiline placeholder="The view from the ridge was unreal…" placeholderTextColor={ui.muted} style={[styles.input,{minHeight:110,textAlignVertical:'top'}]}/>
@@ -751,13 +755,15 @@ function StoryReady() {
 }
 
 function Relive() {
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
     <PrototypePage dark scroll={false}>
       <View style={styles.storyChrome}>
         <ScreenBackDark/>
         <View style={styles.storyProgressTrack}><View style={[styles.storyProgressFill,{width:'42%'}]}/></View>
-        <Pressable style={styles.circleButtonDark}><Ionicons name="ellipsis-horizontal" size={20} color="#FFFFFF"/></Pressable>
+        <Pressable accessibilityRole="button" style={styles.circleButtonDark} onPress={() => setMenuOpen(!menuOpen)}><Ionicons name="ellipsis-horizontal" size={20} color="#FFFFFF"/></Pressable>
       </View>
+      {menuOpen ? <View style={styles.storyMenu}><Pressable onPress={() => go('story-editor')}><Text style={styles.storyMenuItem}>Edit story</Text></Pressable><Pressable onPress={() => go('share-export')}><Text style={styles.storyMenuItem}>Share story</Text></Pressable></View> : null}
       <LinearGradient colors={['#061822','#174C56','#0F062C']} style={styles.reliveCanvas}>
         <Text style={styles.reliveChapter}>CHAPTER 4</Text>
         <Text style={styles.reliveTitle}>The ridge changed the whole day.</Text>
@@ -778,9 +784,10 @@ function Relive() {
 function RouteReplay() {
   const [paused, setPaused] = useState(false);
   const [explore, setExplore] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   return (
     <PrototypePage dark scroll={false}>
-      <View style={styles.storyChrome}><ScreenBackDark/><StatusBadge label="ROUTE REPLAY" tone="aqua"/><Pressable style={styles.circleButtonDark}><Ionicons name="expand-outline" size={19} color="#FFFFFF"/></Pressable></View>
+      <View style={styles.storyChrome}><ScreenBackDark/><StatusBadge label={expanded ? "FULL ROUTE" : "ROUTE REPLAY"} tone="aqua"/><Pressable accessibilityRole="button" style={styles.circleButtonDark} onPress={() => setExpanded(!expanded)}><Ionicons name={expanded ? "contract-outline" : "expand-outline"} size={19} color="#FFFFFF"/></Pressable></View>
       <View style={styles.replayMap}>
         <LinearGradient colors={['#0B1E29','#143744','#1C5A59']} style={StyleSheet.absoluteFill}/>
         <View style={styles.terrainA}/><View style={styles.terrainB}/><View style={styles.terrainC}/>
@@ -793,10 +800,10 @@ function RouteReplay() {
         ))}
         <View style={styles.routeLabel}><Text style={styles.routeLabelTitle}>Halfway ridge</Text><Text style={styles.routeLabelMeta}>6 moments · 10:42</Text></View>
       </View>
-      <View style={styles.replayInfo}>
+      {!expanded ? <View style={styles.replayInfo}>
         <View><Text style={styles.replayTitle}>Snowdon Weekend</Text><Text style={styles.replaySubtitle}>{explore ? 'Explore mode · camera released' : paused ? 'Paused · summit ahead' : 'Terrain replay · summit ahead'}</Text></View>
         <View style={styles.inline}><Stat value="7.8 km" label="Distance" dark/><Stat value="642 m" label="Gain" dark/></View>
-      </View>
+      </View> : null}
       <View style={styles.replayControls}>
         <Pressable accessibilityRole="button" style={styles.replayControl} onPress={() => setPaused(!paused)}><Ionicons name={paused ? "play" : "pause"} size={22} color="#FFFFFF"/></Pressable>
         <View style={styles.scrubTrack}><View style={[styles.scrubFill,{width: explore ? '57%' : '57%'}]}/><View style={[styles.scrubKnob,{left:'55%'}]}/></View>
@@ -807,14 +814,16 @@ function RouteReplay() {
 }
 
 function RouteMoment() {
+  const [details, setDetails] = useState(false);
   return (
     <PrototypePage dark scroll={false}>
-      <View style={styles.storyChrome}><ScreenBackDark/><Text style={styles.routeViewerTitle}>Halfway ridge · 6 moments</Text><Pressable style={styles.circleButtonDark}><Ionicons name="ellipsis-horizontal" size={20} color="#FFFFFF"/></Pressable></View>
+      <View style={styles.storyChrome}><ScreenBackDark/><Text style={styles.routeViewerTitle}>Halfway ridge · 6 moments</Text><Pressable accessibilityRole="button" style={styles.circleButtonDark} onPress={() => setDetails(!details)}><Ionicons name="information-circle-outline" size={20} color="#FFFFFF"/></Pressable></View>
       <LinearGradient colors={['#123B45','#0F766E','#0F062C']} style={styles.viewerMedia}>
         <Ionicons name="play-circle-outline" size={74} color="#FFFFFF"/>
         <View style={styles.viewerContributor}><View style={styles.avatarTiny}><Text style={styles.avatarTinyText}>GA</Text></View><View><Text style={styles.viewerName}>Gabriella</Text><Text style={styles.viewerMeta}>10:42 · Halfway ridge</Text></View></View>
       </LinearGradient>
       <Text style={styles.viewerCaption}>“Worth stopping for this view.”</Text>
+      {details ? <Text style={styles.routeCaptionDark}>Captured by Gabriella · 10:42 · GPS attached · shared only inside this private event</Text> : null}
       <View style={styles.viewerDots}>{Array.from({length:6}).map((_,i)=><View key={i} style={[styles.viewerDot,i===2&&styles.viewerDotActive]}/>)}</View>
       <PrimaryButton label="Return to replay" inverse onPress={() => go('route-replay')}/>
     </PrototypePage>
@@ -963,6 +972,7 @@ function Settings() {
 
 function PrivacyData() {
   const [redact, setRedact] = useState(true);
+  const [deletionReview, setDeletionReview] = useState(false);
   return (
     <PrototypePage>
       <PrototypeHeader title="Privacy & Data" subtitle="Private-first defaults, with clear exceptions." right={<ScreenBack />} />
@@ -976,7 +986,8 @@ function PrivacyData() {
       <Surface style={styles.dangerSurface}>
         <Text style={styles.dangerTitle}>Delete account</Text>
         <Text style={styles.body}>Ambler will explain the effect on owned events, cloud media, links and any Home Server copies it can manage before deletion.</Text>
-        <SecondaryButton label="Review deletion" icon="trash-outline"/>
+        <SecondaryButton label={deletionReview ? "Review opened" : "Review deletion"} icon="trash-outline" onPress={() => setDeletionReview(true)}/>
+        {deletionReview ? <Text style={styles.dangerNote}>Deleting your account would remove Ambler-managed cloud data and revoke private links. Home Server copies are handled separately and are never silently erased.</Text> : null}
       </Surface>
     </PrototypePage>
   );
@@ -1007,6 +1018,7 @@ function StorageHosting() {
 }
 
 function AddServer() {
+  const [method, setMethod] = useState<'discover' | 'qr' | 'manual'>('discover');
   return (
     <PrototypePage>
       <PrototypeHeader eyebrow="Ambler Home Server" title="Connect your own storage." subtitle="We’ll try local discovery first. QR and manual address are always available." right={<ScreenBack />} />
@@ -1021,7 +1033,8 @@ function AddServer() {
         <View style={styles.inlineBetween}><View><Text style={styles.cardTitle}>Ambler Home</Text><Text style={styles.rowMeta}>192.168.1.44 · local network</Text></View><StatusBadge label="FOUND" tone="aqua"/></View>
         <PrimaryButton label="Connect securely" onPress={() => go('server-detail')}/>
       </Surface>
-      <View style={styles.twoButtons}><SecondaryButton style={styles.flexButton} label="Scan QR" icon="qr-code-outline"/><SecondaryButton style={styles.flexButton} label="Enter address" icon="create-outline"/></View>
+      <View style={styles.twoButtons}><SecondaryButton style={styles.flexButton} label={method==='qr' ? "QR ready" : "Scan QR"} icon="qr-code-outline" onPress={() => setMethod('qr')}/><SecondaryButton style={styles.flexButton} label={method==='manual' ? "Address entry" : "Enter address"} icon="create-outline" onPress={() => setMethod('manual')}/></View>
+      {method !== 'discover' ? <Surface tone="tint"><Text style={styles.cardTitle}>{method==='qr' ? 'Scan the QR shown by your Ambler Server' : 'Enter your Ambler Server address'}</Text><Text style={styles.body}>{method==='qr' ? 'The server QR contains the connection details without exposing a raw token.' : 'Manual setup is available for advanced/network configurations.'}</Text></Surface> : null}
     </PrototypePage>
   );
 }
@@ -1164,8 +1177,10 @@ const styles = StyleSheet.create({
   mediaContributorText: { color: '#FFFFFF', fontSize: 8, fontWeight: '900' },
   captureGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
   captureChoice: { width: '48%', minHeight: 132, borderRadius: 22, borderWidth: 1, borderColor: ui.line, backgroundColor: '#FFFFFF', alignItems: 'center', justifyContent: 'center', gap: 10 },
+  captureChoiceActive: { borderColor: ui.violet, borderWidth: 2, backgroundColor: '#FBF9FF' },
   captureTitle: { color: ui.ink, fontSize: 13, fontWeight: '900' },
-  uploadPreview: { height: 210, borderRadius: 18, overflow: 'hidden', alignItems: 'center', justifyContent: 'center' },
+  uploadPreview: { height: 210, borderRadius: 18, overflow: 'hidden', alignItems: 'center', justifyContent: 'center', gap: 8 },
+  previewModeLabel: { color: '#FFFFFF', fontSize: 11, fontWeight: '900' },
   circleButton: { width: 42, height: 42, borderRadius: 15, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: ui.line, alignItems: 'center', justifyContent: 'center' },
   circleButtonDark: { width: 42, height: 42, borderRadius: 15, backgroundColor: 'rgba(255,255,255,0.10)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.16)', alignItems: 'center', justifyContent: 'center' },
   routeCanvas: { flex: 1, minHeight: 380, borderRadius: 28, backgroundColor: '#102A34', overflow: 'hidden', position: 'relative' },
@@ -1204,7 +1219,9 @@ const styles = StyleSheet.create({
   readyTitle: { color: '#FFFFFF', fontSize: 34, fontWeight: '900', textAlign: 'center', letterSpacing: -1 },
   readySubtitle: { color: 'rgba(255,255,255,0.72)', fontSize: 16, fontWeight: '700' },
   readyStats: { flexDirection: 'row', gap: 12, marginTop: 14, alignSelf: 'stretch' },
-  storyChrome: { flexDirection: 'row', gap: 10, alignItems: 'center' },
+  storyChrome: { flexDirection: 'row', gap: 10, alignItems: 'center', zIndex: 5 },
+  storyMenu: { position: 'absolute', right: 20, top: 76, zIndex: 20, minWidth: 150, borderRadius: 16, padding: 10, gap: 4, backgroundColor: '#21163E', borderWidth: 1, borderColor: 'rgba(255,255,255,0.14)' },
+  storyMenuItem: { color: '#FFFFFF', fontSize: 12, fontWeight: '800', paddingVertical: 9, paddingHorizontal: 8 },
   storyProgressTrack: { flex: 1, height: 4, borderRadius: 2, backgroundColor: 'rgba(255,255,255,0.14)', overflow: 'hidden' },
   storyProgressFill: { height: '100%', backgroundColor: '#FFFFFF' },
   reliveCanvas: { flex: 1, minHeight: 520, borderRadius: 30, padding: 24, justifyContent: 'space-between', overflow: 'hidden' },
@@ -1277,6 +1294,7 @@ const styles = StyleSheet.create({
   profileName: { color: ui.ink, fontSize: 26, fontWeight: '900' },
   dangerSurface: { borderColor: '#F4C8D1', backgroundColor: '#FFF7F8' },
   dangerTitle: { color: ui.danger, fontSize: 16, fontWeight: '900' },
+  dangerNote: { color: '#7F2940', fontSize: 11, lineHeight: 17, fontWeight: '700', paddingTop: 4 },
   storageBar: { height: 8, borderRadius: 4, backgroundColor: '#DCEDE5', overflow: 'hidden' },
   storageFill: { height: '100%', borderRadius: 4, backgroundColor: ui.success },
   serverDiscovery: { alignItems: 'center', gap: 10, paddingVertical: 8 },
