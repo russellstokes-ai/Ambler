@@ -652,7 +652,7 @@ function PrivacyRoute() {
             <Text style={styles.cardTitle}>Record the route</Text>
             <Text style={styles.body}>Unlock Route Replay with GPS captured during the event.</Text>
           </View>
-          <Switch value={route} onValueChange={setRoute} trackColor={{ true: ui.violet }} />
+          <Switch accessibilityLabel="Record the route" value={route} onValueChange={setRoute} trackColor={{ true: ui.violet }} />
         </View>
         <View style={styles.privacyNote}><Ionicons name="shield-checkmark-outline" size={18} color={ui.violet}/><Text style={styles.privacyText}>Sensitive start/end locations can be hidden in shared stories.</Text></View>
       </Surface>
@@ -1221,7 +1221,7 @@ function PrivacyData() {
     <PrototypePage>
       <PrototypeHeader title="Privacy & Data" subtitle="Private-first defaults, with clear exceptions." right={<ScreenBack />} />
       <Surface>
-        <View style={styles.inlineBetween}><View style={{flex:1}}><Text style={styles.rowTitle}>Hide sensitive route ends</Text><Text style={styles.rowMeta}>Redact precise start/end locations in shared stories.</Text></View><Switch value={redact} onValueChange={setRedact} trackColor={{true:ui.violet}}/></View>
+        <View style={styles.inlineBetween}><View style={{flex:1}}><Text style={styles.rowTitle}>Hide sensitive route ends</Text><Text style={styles.rowMeta}>Redact precise start/end locations in shared stories.</Text></View><Switch accessibilityLabel="Hide sensitive route ends" value={redact} onValueChange={setRedact} trackColor={{true:ui.violet}}/></View>
         <View style={styles.divider}/>
         <Pressable onPress={() => setDefaultPrivacy(defaultPrivacy === 'Invited people only' ? 'Private link' : 'Invited people only')}><IconRow icon="lock-closed-outline" title="Default event privacy" subtitle={defaultPrivacy} trailing={<Text style={styles.rowAction}>Change</Text>}/></Pressable>
         <View style={styles.divider}/>
@@ -1326,7 +1326,7 @@ function ToggleRow({title,subtitle,value,onChange}:{title:string;subtitle:string
     if (onChange) onChange(next);
     else setInternal(next);
   };
-  return <View style={styles.inlineBetween}><View style={{flex:1}}><Text style={styles.rowTitle}>{title}</Text><Text style={styles.rowMeta}>{subtitle}</Text></View><Switch value={on} onValueChange={update} trackColor={{true:ui.violet}}/></View>;
+  return <View style={styles.inlineBetween}><View style={{flex:1}}><Text style={styles.rowTitle}>{title}</Text><Text style={styles.rowMeta}>{subtitle}</Text></View><Switch accessibilityLabel={title} value={on} onValueChange={update} trackColor={{true:ui.violet}}/></View>;
 }
 
 const styles = StyleSheet.create({
