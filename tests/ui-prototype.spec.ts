@@ -65,6 +65,16 @@ test.describe('all 36 Ambler screens', () => {
       await open(page, id);
       await expect(page.getByText(marker, { exact: false }).first()).toBeVisible();
       await assertNoHorizontalOverflow(page);
+      const unnamedButtons = await page.locator('[role="button"]').evaluateAll((nodes) =>
+        nodes
+          .filter((node) => {
+            const element = node as HTMLElement;
+            const name = element.getAttribute('aria-label') || element.innerText || element.getAttribute('title') || '';
+            return !name.trim();
+          })
+          .map((node) => (node as HTMLElement).outerHTML.slice(0, 220)),
+      );
+      expect(unnamedButtons, 'unnamed buttons on ' + id).toEqual([]);
       await page.screenshot({ path: 'test-results/screens/' + testInfo.project.name + '/' + id + '.png', fullPage: true });
       expect(errors, 'browser/runtime errors on ' + id).toEqual([]);
     });
