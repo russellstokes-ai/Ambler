@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import {
+  Image,
   Pressable,
   StyleSheet,
   Switch,
@@ -40,6 +41,7 @@ import {
 } from './data';
 
 const go = (id: PrototypeScreenId) => router.push(`/ui-preview/${id}` as never);
+const amblerMark = require('../../assets/brand/ambler-mark-transparent.png');
 
 export function PrototypeScreen({ id }: { id: PrototypeScreenId }) {
   switch (id) {
@@ -196,7 +198,7 @@ function Splash() {
     <PrototypePage dark scroll={false}>
       <View style={styles.centerFill}>
         <View style={styles.logoOrb}>
-          <Ionicons name="trail-sign-outline" size={54} color="#FFFFFF" />
+          <Image source={amblerMark} style={styles.logoMark} resizeMode="contain" />
         </View>
         <Text style={styles.splashBrand}>Ambler</Text>
         <Text style={styles.splashTag}>Capture together. Relive the whole story.</Text>
@@ -207,26 +209,37 @@ function Splash() {
 }
 
 function Onboarding() {
+  const slides = [
+    { step: '01 · CAPTURE', title: 'Bring everyone’s moments together.', subtitle: 'One private event. Every angle. Photos, clips, notes and the journey itself.', icon: 'camera-outline' as const, accent: ui.aqua },
+    { step: '02 · BUILD', title: 'Turn the event into a story.', subtitle: 'Ambler curates the strongest real moments, shapes the timeline and keeps the story grounded in what actually happened.', icon: 'sparkles-outline' as const, accent: ui.pink },
+    { step: '03 · RELIVE', title: 'Replay the journey, not just the gallery.', subtitle: 'Move through the finished story, open Route Replay and revisit the moments where they happened.', icon: 'map-outline' as const, accent: '#F97316' },
+  ];
+  const [page, setPage] = useState(0);
+  const slide = slides[page]!;
   return (
     <PrototypePage>
-      <View style={styles.topActions}><Text style={styles.brandMini}>Ambler</Text><Text style={styles.linkText}>Skip</Text></View>
-      <LinearGradient colors={['#0F062C', '#5B2CFF', '#EC3FA4']} style={styles.onboardVisual}>
+      <View style={styles.topActions}>
+        <View style={styles.brandLockup}><Image source={amblerMark} style={styles.brandMarkMini}/><Text style={styles.brandMini}>Ambler</Text></View>
+        <Pressable accessibilityRole="button" hitSlop={10} onPress={() => go('auth')}><Text style={styles.linkText}>Skip</Text></Pressable>
+      </View>
+      <LinearGradient colors={['#0F062C', '#5B2CFF', page === 2 ? '#0F766E' : '#EC3FA4']} style={styles.onboardVisual}>
         <View style={[styles.floatPhoto, { left: '9%', top: '20%', transform: [{ rotate: '-8deg' }] }]}>
-          <Ionicons name="image-outline" size={30} color="#FFFFFF" />
+          <Ionicons name={page === 0 ? 'image-outline' : page === 1 ? 'albums-outline' : 'location-outline'} size={30} color="#FFFFFF" />
         </View>
         <View style={[styles.floatPhoto, { right: '9%', top: '34%', transform: [{ rotate: '9deg' }] }]}>
-          <Ionicons name="videocam-outline" size={30} color="#FFFFFF" />
+          <Ionicons name={page === 0 ? 'videocam-outline' : page === 1 ? 'sparkles-outline' : 'play-outline'} size={30} color="#FFFFFF" />
         </View>
-        <View style={styles.routeLine} />
-        <View style={styles.routeDot} />
+        <View style={[styles.routeLine, { backgroundColor: slide.accent }]} />
+        <View style={[styles.routeDot, { borderColor: slide.accent }]} />
+        <View style={styles.onboardHeroIcon}><Ionicons name={slide.icon} size={34} color="#FFFFFF"/></View>
       </LinearGradient>
       <View style={styles.copyBlock}>
-        <Text style={styles.stepKicker}>01 · CAPTURE</Text>
-        <Text style={styles.heroTitle}>Bring everyone’s moments together.</Text>
-        <Text style={styles.heroSubtitle}>One private event. Every angle. Photos, clips, notes and the journey itself.</Text>
+        <Text style={styles.stepKicker}>{slide.step}</Text>
+        <Text style={styles.heroTitle}>{slide.title}</Text>
+        <Text style={styles.heroSubtitle}>{slide.subtitle}</Text>
       </View>
-      <View style={styles.pagerDots}><View style={styles.pagerDotActive}/><View style={styles.pagerDot}/><View style={styles.pagerDot}/></View>
-      <PrimaryButton label="Continue" onPress={() => go('auth')} />
+      <View style={styles.pagerDots}>{slides.map((_, index) => <View key={index} style={index === page ? styles.pagerDotActive : styles.pagerDot}/>)}</View>
+      <PrimaryButton label={page === slides.length - 1 ? 'Get started' : 'Continue'} onPress={() => page === slides.length - 1 ? go('auth') : setPage(page + 1)} />
     </PrototypePage>
   );
 }
@@ -292,7 +305,7 @@ function Home() {
         }
         secondary={
           <View style={styles.stackGap}>
-            <SectionTitle title="Coming up" action="View all" />
+            <SectionTitle title="Coming up" action="View all" onAction={() => go('events')} />
             <Surface>
               <IconRow icon="airplane-outline" title="Saturday in Barcelona" subtitle="Starts Friday · 5 people" tone="aqua" />
             </Surface>
@@ -301,7 +314,7 @@ function Home() {
           </View>
         }
       />
-      <SectionTitle title="Recent stories" action="See library" />
+      <SectionTitle title="Recent stories" action="See library" onAction={() => go('stories')} />
       <View style={width >= 720 ? styles.storyGridWide : styles.storyGrid}>
         {mockStories.slice(0, 3).map((story) => (
           <Pressable key={story.title} style={styles.storyGridItem} onPress={() => go('relive')}>
@@ -319,23 +332,28 @@ function Home() {
 }
 
 function Events() {
+  const [filter, setFilter] = useState<'Active' | 'Upcoming' | 'Past'>('Active');
+  const visible = filter === 'Active' ? mockEvents.slice(0, 1) : filter === 'Upcoming' ? mockEvents.slice(1, 2) : mockEvents.slice(2);
   return (
     <PrototypePage>
       <PrototypeHeader title="Events" subtitle="Capture what’s happening now. Relive what happened later." />
-      <View style={styles.chipRow}><Chip label="Active" active/><Chip label="Upcoming"/><Chip label="Past"/></View>
+      <View style={styles.chipRow}>{(['Active','Upcoming','Past'] as const).map((item) => <Pressable key={item} onPress={() => setFilter(item)}><Chip label={item} active={filter === item}/></Pressable>)}</View>
       <View style={styles.listGap}>
-        {mockEvents.map((event, index) => (
-          <Pressable key={event.title} onPress={() => go(index === 0 ? 'event-hub' : 'finish-build')}>
-            <Surface>
-              <View style={styles.inlineBetween}>
-                <StatusBadge label={event.state} tone={index === 0 ? 'green' : index === 1 ? 'aqua' : 'violet'} />
-                <Ionicons name={event.icon as any} size={22} color={event.accent}/>
-              </View>
-              <Text style={styles.cardTitle} numberOfLines={2}>{event.title}</Text>
-              <Text style={styles.rowMeta}>{event.meta}</Text>
-            </Surface>
-          </Pressable>
-        ))}
+        {visible.map((event) => {
+          const index = mockEvents.indexOf(event);
+          return (
+            <Pressable key={event.title} onPress={() => go(index === 0 ? 'event-hub' : 'finish-build')}>
+              <Surface>
+                <View style={styles.inlineBetween}>
+                  <StatusBadge label={event.state} tone={index === 0 ? 'green' : index === 1 ? 'aqua' : 'violet'} />
+                  <Ionicons name={event.icon as any} size={22} color={event.accent}/>
+                </View>
+                <Text style={styles.cardTitle} numberOfLines={2}>{event.title}</Text>
+                <Text style={styles.rowMeta}>{event.meta}</Text>
+              </Surface>
+            </Pressable>
+          );
+        })}
       </View>
       <PrototypeNav active="events" />
     </PrototypePage>
@@ -344,13 +362,16 @@ function Events() {
 
 function Stories() {
   const { width } = useWindowDimensions();
+  const [filter, setFilter] = useState('All');
+  const [query, setQuery] = useState('');
+  const filteredStories = mockStories.filter((story) => story.title.toLowerCase().includes(query.toLowerCase()));
   return (
     <PrototypePage>
       <PrototypeHeader title="Stories" subtitle="Your finished Ambler library." />
-      <View style={styles.searchBox}><Ionicons name="search" size={18} color={ui.muted}/><Text style={styles.searchPlaceholder}>Search stories, places or people</Text></View>
-      <View style={styles.chipRow}><Chip label="All" active/><Chip label="Trips"/><Chip label="Celebrations"/><Chip label="Activities"/></View>
+      <View style={styles.searchBox}><Ionicons name="search" size={18} color={ui.muted}/><TextInput value={query} onChangeText={setQuery} placeholder="Search stories, places or people" placeholderTextColor={ui.muted} style={styles.searchInput}/></View>
+      <View style={styles.chipRow}>{['All','Trips','Celebrations','Activities'].map((item) => <Pressable key={item} onPress={() => setFilter(item)}><Chip label={item} active={filter === item}/></Pressable>)}</View>
       <View style={width >= 720 ? styles.storyGridWide : styles.storyGrid}>
-        {mockStories.map((story) => (
+        {filteredStories.map((story) => (
           <Pressable key={story.title} style={styles.storyGridItem} onPress={() => go('relive')}>
             <StoryArtwork title={story.title} subtitle={story.kicker} icon={story.icon as any} compact />
             <View style={styles.inlineBetween}>
@@ -401,47 +422,56 @@ function CreateBasics() {
 }
 
 function EventType() {
+  const [category, setCategory] = useState('Popular');
+  const [selected, setSelected] = useState('Hiking day');
   return (
     <PrototypePage>
       <PrototypeHeader eyebrow="Create event · 2 of 4" title="What kind of story is this?" subtitle="We’ll use this to shape pacing, chapters and route treatment." right={<ScreenBack />} />
       <ProgressSteps current={1} labels={['Basics','Type','Style','Privacy']} />
-      <View style={styles.searchBox}><Ionicons name="search" size={18} color={ui.muted}/><Text style={styles.searchPlaceholder}>Search 52 event types</Text></View>
+      <View style={styles.searchBox}><Ionicons name="search" size={18} color={ui.muted}/><TextInput placeholder="Search 52 event types" placeholderTextColor={ui.muted} style={styles.searchInput}/></View>
       <View style={styles.chipRow}>
-        {eventCategories.slice(0, 5).map(([name, icon], index) => <Chip key={name} label={name} icon={icon as any} active={index === 0}/>)}
+        {eventCategories.slice(0, 5).map(([name, icon]) => <Pressable key={name} onPress={() => setCategory(name)}><Chip label={name} icon={icon as any} active={category === name}/></Pressable>)}
       </View>
       <View style={styles.optionGrid}>
-        {popularEventTypes.map(([name, icon, subtitle], index) => (
-          <Pressable key={name} style={[styles.optionCard, index === 3 && styles.optionCardActive]}>
-            <View style={[styles.optionIcon, index === 3 && { backgroundColor: ui.violet }]}><Ionicons name={icon as any} size={24} color={index === 3 ? '#FFFFFF' : ui.violet}/></View>
-            <Text style={styles.optionTitle}>{name}</Text>
-            <Text style={styles.optionMeta}>{subtitle}</Text>
-          </Pressable>
-        ))}
+        {popularEventTypes.map(([name, icon, subtitle]) => {
+          const active = selected === name;
+          return (
+            <Pressable key={name} onPress={() => setSelected(name)} style={[styles.optionCard, active && styles.optionCardActive]}>
+              <View style={[styles.optionIcon, active && { backgroundColor: ui.violet }]}><Ionicons name={icon as any} size={24} color={active ? '#FFFFFF' : ui.violet}/></View>
+              <Text style={styles.optionTitle}>{name}</Text>
+              <Text style={styles.optionMeta}>{subtitle}</Text>
+            </Pressable>
+          );
+        })}
       </View>
-      <PrimaryButton label="Continue with Hiking day" onPress={() => go('story-style')} />
+      <PrimaryButton label={`Continue with ${selected}`} onPress={() => go('story-style')} />
     </PrototypePage>
   );
 }
 
 function StoryStyle() {
+  const [selectedTheme, setSelectedTheme] = useState('Route Replay');
   return (
     <PrototypePage>
       <PrototypeHeader eyebrow="Create event · 3 of 4" title="Choose how the story should feel." subtitle="Recommended styles are based on your event type. You can change this later." right={<ScreenBack />} />
       <ProgressSteps current={2} labels={['Basics','Type','Style','Privacy']} />
       <View style={styles.listGap}>
-        {storyThemes.map((theme, index) => (
-          <Pressable key={theme.name}>
-            <LinearGradient colors={theme.colors as [string,string,string]} style={[styles.themeCard, index === 1 && styles.themeCardSelected]}>
-              <View style={styles.inlineBetween}>
-                <View style={{ flex: 1 }}>
-                  <Text style={[styles.themeName, theme.name === 'Warm Gold' || theme.name === 'Magazine' ? { color: ui.ink } : null]}>{theme.name}</Text>
-                  <Text style={[styles.themeSubtitle, theme.name === 'Warm Gold' || theme.name === 'Magazine' ? { color: '#5F536A' } : null]}>{theme.subtitle}</Text>
+        {storyThemes.map((theme) => {
+          const active = selectedTheme === theme.name;
+          return (
+            <Pressable key={theme.name} onPress={() => setSelectedTheme(theme.name)}>
+              <LinearGradient colors={theme.colors as [string,string,string]} style={[styles.themeCard, active && styles.themeCardSelected]}>
+                <View style={styles.inlineBetween}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={[styles.themeName, theme.name === 'Warm Gold' || theme.name === 'Magazine' ? { color: ui.ink } : null]}>{theme.name}</Text>
+                    <Text style={[styles.themeSubtitle, theme.name === 'Warm Gold' || theme.name === 'Magazine' ? { color: '#5F536A' } : null]}>{theme.subtitle}</Text>
+                  </View>
+                  {active ? <View style={styles.selectedTick}><Ionicons name="checkmark" size={18} color="#FFFFFF"/></View> : null}
                 </View>
-                {index === 1 ? <View style={styles.selectedTick}><Ionicons name="checkmark" size={18} color="#FFFFFF"/></View> : null}
-              </View>
-            </LinearGradient>
-          </Pressable>
-        ))}
+              </LinearGradient>
+            </Pressable>
+          );
+        })}
       </View>
       <PrimaryButton label="Continue" onPress={() => go('privacy-route')} />
     </PrototypePage>
@@ -450,15 +480,16 @@ function StoryStyle() {
 
 function PrivacyRoute() {
   const [route, setRoute] = useState(true);
+  const [privacy, setPrivacy] = useState<'invited' | 'link'>('invited');
   return (
     <PrototypePage>
       <PrototypeHeader eyebrow="Create event · 4 of 4" title="Keep it private. Add the journey if you want." subtitle="Ambler starts private. Route data is only captured when you choose it." right={<ScreenBack />} />
       <ProgressSteps current={3} labels={['Basics','Type','Style','Privacy']} />
       <Surface>
         <Text style={styles.cardTitle}>Who can see this event?</Text>
-        <View style={styles.radioRow}><View style={styles.radioActive}><View style={styles.radioInner}/></View><View style={{flex:1}}><Text style={styles.rowTitle}>Invited people only</Text><Text style={styles.rowMeta}>Recommended · private by default</Text></View></View>
+        <Pressable onPress={() => setPrivacy('invited')} style={styles.radioRow}><View style={privacy === 'invited' ? styles.radioActive : styles.radio}>{privacy === 'invited' ? <View style={styles.radioInner}/> : null}</View><View style={{flex:1}}><Text style={styles.rowTitle}>Invited people only</Text><Text style={styles.rowMeta}>Recommended · private by default</Text></View></Pressable>
         <View style={styles.divider}/>
-        <View style={styles.radioRow}><View style={styles.radio}/><View style={{flex:1}}><Text style={styles.rowTitle}>Anyone with a private link</Text><Text style={styles.rowMeta}>Useful for larger events</Text></View></View>
+        <Pressable onPress={() => setPrivacy('link')} style={styles.radioRow}><View style={privacy === 'link' ? styles.radioActive : styles.radio}>{privacy === 'link' ? <View style={styles.radioInner}/> : null}</View><View style={{flex:1}}><Text style={styles.rowTitle}>Anyone with a private link</Text><Text style={styles.rowMeta}>Useful for larger events</Text></View></Pressable>
       </Surface>
       <Surface>
         <View style={styles.inlineBetween}>
@@ -487,7 +518,7 @@ function Invite() {
         <Text style={styles.cardTitle}>Scan to join Snowdon Weekend</Text>
         <Text style={styles.rowMeta}>Private invite · expires when the event closes</Text>
       </Surface>
-      <View style={styles.twoButtons}><SecondaryButton label="Copy link" icon="link-outline"/><SecondaryButton label="Share" icon="share-outline"/></View>
+      <View style={styles.twoButtons}><SecondaryButton style={styles.flexButton} label="Copy link" icon="link-outline"/><SecondaryButton style={styles.flexButton} label="Share" icon="share-outline" onPress={() => go('event-hub')}/></View>
       <PrimaryButton label="Open live event" onPress={() => go('event-hub')} />
     </PrototypePage>
   );
@@ -530,10 +561,11 @@ function EventHub() {
 }
 
 function Moments() {
+  const [filter, setFilter] = useState('All');
   return (
     <PrototypePage>
       <PrototypeHeader title="Moments" subtitle="The shared capture pool. The finished story comes later." right={<ScreenBack />} />
-      <View style={styles.chipRow}><Chip label="All" active/><Chip label="Photos"/><Chip label="Videos"/><Chip label="Mine"/></View>
+      <View style={styles.chipRow}>{['All','Photos','Videos','Mine'].map((item) => <Pressable key={item} onPress={() => setFilter(item)}><Chip label={item} active={filter === item}/></Pressable>)}</View>
       <View style={styles.mediaGrid}>
         {Array.from({length: 10}).map((_, index) => (
           <View key={index} style={[styles.mediaTile, index % 3 === 0 && styles.mediaTileTall]}>
@@ -572,9 +604,10 @@ function AddMoment() {
 }
 
 function RouteCapture() {
+  const [paused, setPaused] = useState(false);
   return (
     <PrototypePage dark scroll={false}>
-      <View style={styles.inlineBetween}><ScreenBackDark/><StatusBadge label="RECORDING" tone="green"/></View>
+      <View style={styles.inlineBetween}><ScreenBackDark/><StatusBadge label={paused ? "PAUSED" : "RECORDING"} tone={paused ? "gold" : "green"}/></View>
       <View style={styles.routeCanvas}>
         <View style={styles.contourOne}/><View style={styles.contourTwo}/><View style={styles.contourThree}/>
         <View style={styles.routeStrokeA}/><View style={styles.routeStrokeB}/><View style={styles.routeUserDot}/>
@@ -583,7 +616,7 @@ function RouteCapture() {
         <Stat value="2:14" label="Elapsed" dark/><Stat value="7.8 km" label="Distance" dark/><Stat value="642 m" label="Elevation" dark/>
       </View>
       <Text style={styles.routeCaptionDark}>Location stays private to this event. Shared stories can hide sensitive start/end points.</Text>
-      <View style={styles.twoButtons}><SecondaryButton label="Pause" icon="pause" dark/><PrimaryButton label="Finish route" icon="stop" onPress={() => go('event-hub')}/></View>
+      <View style={styles.twoButtons}><SecondaryButton style={styles.flexButton} label={paused ? "Resume" : "Pause"} icon={paused ? "play" : "pause"} dark onPress={() => setPaused(!paused)}/><PrimaryButton style={styles.flexButton} label="Finish route" icon="stop" onPress={() => go('event-hub')}/></View>
     </PrototypePage>
   );
 }
@@ -636,12 +669,13 @@ function GuestResult() {
         <View style={styles.divider}/>
         <View style={styles.uploadRow}><View style={[styles.uploadThumb,{backgroundColor:'#27106E'}]}><Ionicons name="image-outline" size={22} color="#FFFFFF"/></View><View style={{flex:1}}><Text style={styles.rowTitle}>IMG_2482.jpg</Text><Text style={styles.rowMeta}>Uploaded</Text></View><Ionicons name="checkmark-circle" size={22} color={ui.success}/></View>
       </Surface>
-      <View style={styles.twoButtons}><SecondaryButton label="Done"/><PrimaryButton label="Add more" icon="add"/></View>
+      <View style={styles.twoButtons}><SecondaryButton style={styles.flexButton} label="Done" onPress={() => go('guest-join')}/><PrimaryButton style={styles.flexButton} label="Add more" icon="add" onPress={() => go('guest-contribution')}/></View>
     </PrototypePage>
   );
 }
 
 function FinishBuild() {
+  const [length, setLength] = useState<'Short' | 'Standard' | 'Epic'>('Standard');
   return (
     <PrototypePage>
       <PrototypeHeader eyebrow="Capture complete" title="Ready to turn it into a story?" subtitle="Ambler will curate the real moments, route and notes into one finished experience." right={<ScreenBack />} />
@@ -651,9 +685,14 @@ function FinishBuild() {
       <View style={styles.section}>
         <SectionTitle title="Story length" />
         <View style={styles.storyLengthGrid}>
-          <Surface style={styles.lengthCard}><Text style={styles.lengthName}>Short</Text><Text style={styles.rowMeta}>5–7 pages</Text></Surface>
-          <Surface style={[styles.lengthCard, styles.lengthCardActive]}><Text style={[styles.lengthName,{color:ui.violet}]}>Standard</Text><Text style={styles.rowMeta}>Recommended · 10–14 pages</Text></Surface>
-          <Surface style={styles.lengthCard}><Text style={styles.lengthName}>Epic</Text><Text style={styles.rowMeta}>15+ pages</Text></Surface>
+          {[
+            ['Short','5–7 pages'],
+            ['Standard','Recommended · 10–14 pages'],
+            ['Epic','15+ pages'],
+          ].map(([name,meta]) => {
+            const active = length === name;
+            return <Pressable key={name} style={styles.lengthPressable} onPress={() => setLength(name as 'Short' | 'Standard' | 'Epic')}><Surface style={[styles.lengthCard, active && styles.lengthCardActive]}><Text style={[styles.lengthName,active&&{color:ui.violet}]}>{name}</Text><Text style={styles.rowMeta}>{meta}</Text></Surface></Pressable>;
+          })}
         </View>
       </View>
       <Surface tone="tint">
@@ -737,6 +776,8 @@ function Relive() {
 }
 
 function RouteReplay() {
+  const [paused, setPaused] = useState(false);
+  const [explore, setExplore] = useState(false);
   return (
     <PrototypePage dark scroll={false}>
       <View style={styles.storyChrome}><ScreenBackDark/><StatusBadge label="ROUTE REPLAY" tone="aqua"/><Pressable style={styles.circleButtonDark}><Ionicons name="expand-outline" size={19} color="#FFFFFF"/></Pressable></View>
@@ -753,13 +794,13 @@ function RouteReplay() {
         <View style={styles.routeLabel}><Text style={styles.routeLabelTitle}>Halfway ridge</Text><Text style={styles.routeLabelMeta}>6 moments · 10:42</Text></View>
       </View>
       <View style={styles.replayInfo}>
-        <View><Text style={styles.replayTitle}>Snowdon Weekend</Text><Text style={styles.replaySubtitle}>Terrain replay · summit ahead</Text></View>
+        <View><Text style={styles.replayTitle}>Snowdon Weekend</Text><Text style={styles.replaySubtitle}>{explore ? 'Explore mode · camera released' : paused ? 'Paused · summit ahead' : 'Terrain replay · summit ahead'}</Text></View>
         <View style={styles.inline}><Stat value="7.8 km" label="Distance" dark/><Stat value="642 m" label="Gain" dark/></View>
       </View>
       <View style={styles.replayControls}>
-        <Pressable style={styles.replayControl}><Ionicons name="pause" size={22} color="#FFFFFF"/></Pressable>
-        <View style={styles.scrubTrack}><View style={[styles.scrubFill,{width:'57%'}]}/><View style={[styles.scrubKnob,{left:'55%'}]}/></View>
-        <Pressable style={styles.replayControl}><Ionicons name="navigate-outline" size={20} color="#FFFFFF"/></Pressable>
+        <Pressable accessibilityRole="button" style={styles.replayControl} onPress={() => setPaused(!paused)}><Ionicons name={paused ? "play" : "pause"} size={22} color="#FFFFFF"/></Pressable>
+        <View style={styles.scrubTrack}><View style={[styles.scrubFill,{width: explore ? '57%' : '57%'}]}/><View style={[styles.scrubKnob,{left:'55%'}]}/></View>
+        <Pressable accessibilityRole="button" style={[styles.replayControl, explore && styles.replayControlActive]} onPress={() => setExplore(!explore)}><Ionicons name={explore ? "return-up-back-outline" : "navigate-outline"} size={20} color="#FFFFFF"/></Pressable>
       </View>
     </PrototypePage>
   );
@@ -804,21 +845,25 @@ function StoryEditor() {
           <View key={label} style={[styles.editorPage,index===2&&styles.editorPageActive]}><Text style={[styles.editorPageIndex,index===2&&{color:ui.violet}]}>{index+1}</Text><Text style={styles.editorPageLabel}>{label}</Text><Ionicons name="reorder-three-outline" size={20} color={ui.muted}/></View>
         ))}
       </View>
-      <View style={styles.twoButtons}><SecondaryButton label="Theme & music" onPress={() => go('theme-music')}/><PrimaryButton label="Save changes" onPress={() => go('share-export')}/></View>
+      <View style={styles.twoButtons}><SecondaryButton style={styles.flexButton} label="Theme & music" onPress={() => go('theme-music')}/><PrimaryButton style={styles.flexButton} label="Save changes" onPress={() => go('share-export')}/></View>
     </PrototypePage>
   );
 }
 
 function ThemeMusic() {
+  const [selectedTheme, setSelectedTheme] = useState('Route Replay');
+  const [playing, setPlaying] = useState(false);
   return (
     <PrototypePage>
       <PrototypeHeader title="Theme & music" subtitle="Change the mood without changing the memories." right={<ScreenBack />} />
       <SectionTitle title="Theme" />
       <View style={styles.themeMiniGrid}>
-        {storyThemes.slice(0,4).map((theme,index)=>(
-          <LinearGradient key={theme.name} colors={theme.colors as [string,string,string]} style={[styles.themeMini,index===1&&styles.themeMiniSelected]}>
-            <Text style={[styles.themeMiniText,(theme.name==='Warm Gold'||theme.name==='Magazine')&&{color:ui.ink}]}>{theme.name}</Text>
-          </LinearGradient>
+        {storyThemes.slice(0,4).map((theme)=>(
+          <Pressable key={theme.name} style={styles.themeMiniPressable} onPress={() => setSelectedTheme(theme.name)}>
+            <LinearGradient colors={theme.colors as [string,string,string]} style={[styles.themeMini,selectedTheme===theme.name&&styles.themeMiniSelected]}>
+              <Text style={[styles.themeMiniText,(theme.name==='Warm Gold'||theme.name==='Magazine')&&{color:ui.ink}]}>{theme.name}</Text>
+            </LinearGradient>
+          </Pressable>
         ))}
       </View>
       <SectionTitle title="Soundtrack" />
@@ -826,7 +871,7 @@ function ThemeMusic() {
         <View style={styles.inlineBetween}>
           <View style={styles.musicIcon}><Ionicons name="musical-notes" size={22} color={ui.violet}/></View>
           <View style={{flex:1}}><Text style={styles.rowTitle}>Open Skies</Text><Text style={styles.rowMeta}>Cinematic · uplifting · licensed</Text></View>
-          <Pressable style={styles.playButton}><Ionicons name="play" size={18} color="#FFFFFF"/></Pressable>
+          <Pressable accessibilityRole="button" style={styles.playButton} onPress={() => setPlaying(!playing)}><Ionicons name={playing ? "pause" : "play"} size={18} color="#FFFFFF"/></Pressable>
         </View>
       </Surface>
       <Surface tone="tint"><Text style={styles.body}>Only tracks with confirmed production rights are available in release builds.</Text></Surface>
@@ -836,13 +881,14 @@ function ThemeMusic() {
 }
 
 function ShareExport() {
+  const [linkActive, setLinkActive] = useState(true);
   return (
     <PrototypePage>
       <PrototypeHeader title="Share & save" subtitle="Private by default. You decide where the finished story goes." right={<ScreenBack />} />
       <Surface>
-        <View style={styles.inlineBetween}><View><Text style={styles.cardTitle}>Private story link</Text><Text style={styles.rowMeta}>Anyone with this link can view until you revoke it.</Text></View><StatusBadge label="ACTIVE" tone="green"/></View>
-        <View style={styles.linkBox}><Text style={styles.privateLink}>ambler.app/s/7KM4…</Text><Ionicons name="copy-outline" size={18} color={ui.violet}/></View>
-        <View style={styles.twoButtons}><SecondaryButton label="Revoke"/><PrimaryButton label="Share" icon="share-outline" onPress={() => go('shared-web')}/></View>
+        <View style={styles.inlineBetween}><View style={{flex:1}}><Text style={styles.cardTitle}>Private story link</Text><Text style={styles.rowMeta}>{linkActive ? 'Anyone with this link can view until you revoke it.' : 'This link no longer opens the story.'}</Text></View><StatusBadge label={linkActive ? "ACTIVE" : "REVOKED"} tone={linkActive ? "green" : "gray"}/></View>
+        <View style={[styles.linkBox,!linkActive&&{opacity:0.5}]}><Text style={styles.privateLink}>{linkActive ? 'ambler.app/s/7KM4…' : 'Link revoked'}</Text><Ionicons name={linkActive ? "copy-outline" : "close-circle-outline"} size={18} color={linkActive ? ui.violet : ui.muted}/></View>
+        <View style={styles.twoButtons}><SecondaryButton style={styles.flexButton} label={linkActive ? "Revoke" : "Create new link"} onPress={() => setLinkActive(!linkActive)}/><PrimaryButton style={styles.flexButton} label="Share" icon="share-outline" onPress={() => linkActive && go('shared-web')}/></View>
       </Surface>
       <SectionTitle title="Save a copy" />
       <Surface>
@@ -937,6 +983,7 @@ function PrivacyData() {
 }
 
 function StorageHosting() {
+  const [destination, setDestination] = useState<'server' | 'cloud' | 'device'>('server');
   return (
     <PrototypePage>
       <PrototypeHeader title="Storage & Hosting" subtitle="Use Ambler normally, or keep your stories on your own server." right={<ScreenBack />} />
@@ -948,11 +995,11 @@ function StorageHosting() {
       </Surface>
       <SectionTitle title="Default story destination" />
       <Surface>
-        <View style={styles.radioRow}><View style={styles.radioActive}><View style={styles.radioInner}/></View><View style={{flex:1}}><Text style={styles.rowTitle}>My Ambler Server</Text><Text style={styles.rowMeta}>Full story + selected original media</Text></View><Ionicons name="server-outline" size={20} color={ui.aqua}/></View>
+        <Pressable style={styles.radioRow} onPress={() => setDestination('server')}><View style={destination==='server'?styles.radioActive:styles.radio}>{destination==='server'?<View style={styles.radioInner}/>:null}</View><View style={{flex:1}}><Text style={styles.rowTitle}>My Ambler Server</Text><Text style={styles.rowMeta}>Full story + selected original media</Text></View><Ionicons name="server-outline" size={20} color={ui.aqua}/></Pressable>
         <View style={styles.divider}/>
-        <View style={styles.radioRow}><View style={styles.radio}/><View style={{flex:1}}><Text style={styles.rowTitle}>Ambler Cloud</Text><Text style={styles.rowMeta}>Managed storage</Text></View></View>
+        <Pressable style={styles.radioRow} onPress={() => setDestination('cloud')}><View style={destination==='cloud'?styles.radioActive:styles.radio}>{destination==='cloud'?<View style={styles.radioInner}/>:null}</View><View style={{flex:1}}><Text style={styles.rowTitle}>Ambler Cloud</Text><Text style={styles.rowMeta}>Managed storage</Text></View></Pressable>
         <View style={styles.divider}/>
-        <View style={styles.radioRow}><View style={styles.radio}/><View style={{flex:1}}><Text style={styles.rowTitle}>This device</Text><Text style={styles.rowMeta}>Local-only where supported</Text></View></View>
+        <Pressable style={styles.radioRow} onPress={() => setDestination('device')}><View style={destination==='device'?styles.radioActive:styles.radio}>{destination==='device'?<View style={styles.radioInner}/>:null}</View><View style={{flex:1}}><Text style={styles.rowTitle}>This device</Text><Text style={styles.rowMeta}>Local-only where supported</Text></View></Pressable>
       </Surface>
       <SecondaryButton label="Add another server" icon="add" onPress={() => go('add-server')}/>
     </PrototypePage>
@@ -974,12 +1021,14 @@ function AddServer() {
         <View style={styles.inlineBetween}><View><Text style={styles.cardTitle}>Ambler Home</Text><Text style={styles.rowMeta}>192.168.1.44 · local network</Text></View><StatusBadge label="FOUND" tone="aqua"/></View>
         <PrimaryButton label="Connect securely" onPress={() => go('server-detail')}/>
       </Surface>
-      <View style={styles.twoButtons}><SecondaryButton label="Scan QR" icon="qr-code-outline"/><SecondaryButton label="Enter address" icon="create-outline"/></View>
+      <View style={styles.twoButtons}><SecondaryButton style={styles.flexButton} label="Scan QR" icon="qr-code-outline"/><SecondaryButton style={styles.flexButton} label="Enter address" icon="create-outline"/></View>
     </PrototypePage>
   );
 }
 
 function ServerDetail() {
+  const [syncing, setSyncing] = useState(false);
+  const [tested, setTested] = useState(false);
   return (
     <PrototypePage>
       <PrototypeHeader title="Ambler Home" subtitle="Your private story library at home." right={<StatusBadge label="ONLINE" tone="green"/>} />
@@ -998,7 +1047,7 @@ function ServerDetail() {
       <Surface tone="tint">
         <IconRow icon="cloud-offline-outline" title="If your server goes offline" subtitle="New work stays on this device and syncs after the server returns." tone="aqua"/>
       </Surface>
-      <View style={styles.twoButtons}><SecondaryButton label="Test connection"/><PrimaryButton label="Sync now" icon="sync-outline"/></View>
+      <View style={styles.twoButtons}><SecondaryButton style={styles.flexButton} label={tested ? "Connection good" : "Test connection"} icon={tested ? "checkmark-circle-outline" : undefined} onPress={() => setTested(true)}/><PrimaryButton style={styles.flexButton} label={syncing ? "Syncing…" : "Sync now"} icon="sync-outline" onPress={() => setSyncing(!syncing)}/></View>
     </PrototypePage>
   );
 }
@@ -1019,7 +1068,8 @@ const styles = StyleSheet.create({
   cardTitleDark: { color: '#FFFFFF', fontSize: 17, fontWeight: '900' },
   inline: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   inlineBetween: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 },
-  twoButtons: { flexDirection: 'row', gap: 10 },
+  twoButtons: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
+  flexButton: { flexGrow: 1, flexBasis: 150 },
   divider: { height: 1, backgroundColor: ui.line },
   indexRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 13 },
   journeyGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
@@ -1033,12 +1083,16 @@ const styles = StyleSheet.create({
   linkText: { color: ui.violet, fontSize: 13, fontWeight: '900' },
   centerFill: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 },
   logoOrb: { width: 112, height: 112, borderRadius: 38, alignItems: 'center', justifyContent: 'center', backgroundColor: ui.violet, shadowColor: ui.pink, shadowOpacity: 0.3, shadowRadius: 26, elevation: 8 },
+  logoMark: { width: 72, height: 72 },
+  brandLockup: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  brandMarkMini: { width: 24, height: 24 },
   splashBrand: { color: '#FFFFFF', fontSize: 42, fontWeight: '900', letterSpacing: -1.5 },
   splashTag: { color: 'rgba(255,255,255,0.62)', fontSize: 14, fontWeight: '700', textAlign: 'center' },
   onboardVisual: { height: 310, borderRadius: 34, overflow: 'hidden', position: 'relative' },
   floatPhoto: { position: 'absolute', width: 110, height: 136, borderRadius: 18, backgroundColor: 'rgba(255,255,255,0.14)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.22)', alignItems: 'center', justifyContent: 'center' },
   routeLine: { position: 'absolute', left: '28%', right: '22%', top: '62%', height: 5, borderRadius: 3, backgroundColor: ui.aqua, transform: [{ rotate: '-16deg' }] },
   routeDot: { position: 'absolute', right: '20%', top: '52%', width: 18, height: 18, borderRadius: 9, backgroundColor: '#FFFFFF', borderWidth: 5, borderColor: ui.aqua },
+  onboardHeroIcon: { position: 'absolute', left: '42%', top: '39%', width: 58, height: 58, borderRadius: 22, backgroundColor: 'rgba(255,255,255,0.14)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.22)', alignItems: 'center', justifyContent: 'center' },
   copyBlock: { gap: 8 },
   stepKicker: { color: ui.violet, fontSize: 11, fontWeight: '900', letterSpacing: 1.6 },
   heroTitle: { color: ui.ink, fontSize: 32, lineHeight: 36, fontWeight: '900', letterSpacing: -1 },
@@ -1076,6 +1130,7 @@ const styles = StyleSheet.create({
   chipRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   searchBox: { minHeight: 46, borderRadius: 16, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: ui.line, flexDirection: 'row', alignItems: 'center', gap: 9, paddingHorizontal: 14 },
   searchPlaceholder: { color: ui.muted, fontSize: 13, fontWeight: '600' },
+  searchInput: { flex: 1, color: ui.ink, fontSize: 13, fontWeight: '600', paddingVertical: 0 },
   fieldSurface: { padding: 6 },
   optionGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
   optionCard: { width: '48%', minHeight: 138, backgroundColor: '#FFFFFF', borderRadius: 20, borderWidth: 1, borderColor: ui.line, padding: 14, gap: 7 },
@@ -1129,6 +1184,7 @@ const styles = StyleSheet.create({
   uploadRow: { flexDirection: 'row', gap: 12, alignItems: 'center' },
   uploadThumb: { width: 52, height: 52, borderRadius: 15, backgroundColor: '#0F766E', alignItems: 'center', justifyContent: 'center' },
   storyLengthGrid: { flexDirection: 'row', gap: 8 },
+  lengthPressable: { flex: 1 },
   lengthCard: { flex: 1, padding: 12, minHeight: 100 },
   lengthCardActive: { borderColor: ui.violet, borderWidth: 2, backgroundColor: '#FBF9FF' },
   lengthName: { color: ui.ink, fontSize: 15, fontWeight: '900' },
@@ -1181,6 +1237,7 @@ const styles = StyleSheet.create({
   replaySubtitle: { color: 'rgba(255,255,255,0.54)', fontSize: 10, fontWeight: '700' },
   replayControls: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   replayControl: { width: 42, height: 42, borderRadius: 15, backgroundColor: 'rgba(255,255,255,0.12)', alignItems: 'center', justifyContent: 'center' },
+  replayControlActive: { backgroundColor: ui.aqua },
   scrubTrack: { flex: 1, height: 5, borderRadius: 3, backgroundColor: 'rgba(255,255,255,0.16)', position: 'relative' },
   scrubFill: { height: '100%', borderRadius: 3, backgroundColor: '#F97316' },
   scrubKnob: { position: 'absolute', top: -5, width: 15, height: 15, borderRadius: 8, backgroundColor: '#FFFFFF' },
@@ -1201,7 +1258,8 @@ const styles = StyleSheet.create({
   editorPageIndex: { color: ui.muted, width: 20, fontSize: 11, fontWeight: '900' },
   editorPageLabel: { flex: 1, color: ui.ink, fontSize: 12, fontWeight: '800' },
   themeMiniGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
-  themeMini: { width: '48%', minHeight: 92, borderRadius: 20, padding: 14, justifyContent: 'flex-end' },
+  themeMiniPressable: { width: '48%' },
+  themeMini: { width: '100%', minHeight: 92, borderRadius: 20, padding: 14, justifyContent: 'flex-end' },
   themeMiniSelected: { borderWidth: 3, borderColor: ui.aqua },
   themeMiniText: { color: '#FFFFFF', fontSize: 14, fontWeight: '900' },
   musicIcon: { width: 46, height: 46, borderRadius: 16, backgroundColor: '#EFE9FF', alignItems: 'center', justifyContent: 'center' },
