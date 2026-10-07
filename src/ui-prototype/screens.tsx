@@ -7,6 +7,8 @@ import {
   Text,
   TextInput,
   View,
+  StyleProp,
+  ViewStyle,
   useWindowDimensions,
 } from 'react-native';
 import { router } from 'expo-router';
@@ -43,6 +45,59 @@ import {
 
 const go = (id: PrototypeScreenId) => router.push(`/ui-preview/${id}` as never);
 const amblerMark = require('../../assets/brand/ambler-mark-transparent.png');
+
+type ScenicScene = 'mountain' | 'city' | 'venue' | 'celebration';
+
+function ScenicMedia({
+  scene = 'mountain',
+  style,
+  children,
+}: {
+  scene?: ScenicScene;
+  style?: StyleProp<ViewStyle>;
+  children?: React.ReactNode;
+}) {
+  const colorsByScene: Record<ScenicScene, [string,string,string]> = {
+    mountain: ['#0C3340','#1F6F68','#7FB7A4'],
+    city: ['#161235','#34218A','#EC3FA4'],
+    venue: ['#3A1438','#7B1F66','#F97316'],
+    celebration: ['#3C1558','#9A2E82','#EC3FA4'],
+  };
+  return (
+    <LinearGradient colors={colorsByScene[scene]} start={{x:0,y:0}} end={{x:1,y:1}} style={[styles.scenicMedia,style]}>
+      <View style={styles.scenicLight}/>
+      {scene === 'mountain' ? (
+        <>
+          <View style={styles.mountainBack}/>
+          <View style={styles.mountainFront}/>
+          <View style={styles.scenicSun}/>
+          <View style={styles.mountainTrail}/>
+        </>
+      ) : null}
+      {scene === 'city' ? (
+        <View style={styles.citySkyline}>
+          {[36,58,44,72,50,64].map((height,index)=><View key={index} style={[styles.cityBuilding,{height,opacity:0.62+(index%3)*0.12}]}/>)}
+        </View>
+      ) : null}
+      {scene === 'venue' ? (
+        <>
+          <View style={styles.venueArc}/>
+          <View style={styles.venueArcInner}/>
+          <View style={styles.venueTrack}/>
+        </>
+      ) : null}
+      {scene === 'celebration' ? (
+        <>
+          <View style={[styles.confettiDot,{left:'18%',top:'24%',backgroundColor:'#FFD86B'}]}/>
+          <View style={[styles.confettiDot,{right:'16%',top:'32%',backgroundColor:ui.aqua}]}/>
+          <View style={[styles.confettiDot,{left:'34%',bottom:'20%',backgroundColor:'#FFFFFF'}]}/>
+          <View style={[styles.confettiBar,{right:'28%',bottom:'24%',backgroundColor:'#FFD86B'}]}/>
+        </>
+      ) : null}
+      {children}
+    </LinearGradient>
+  );
+}
 
 export function PrototypeScreen({ id }: { id: PrototypeScreenId }) {
   switch (id) {
@@ -625,11 +680,10 @@ function Moments() {
       <View style={styles.chipRow}>{['All','Photos','Videos','Mine'].map((item) => <Pressable key={item} onPress={() => setFilter(item)}><Chip label={item} active={filter === item}/></Pressable>)}</View>
       <View style={styles.mediaGrid}>
         {Array.from({length: 10}).map((_, index) => (
-          <View key={index} style={[styles.mediaTile, index % 3 === 0 && styles.mediaTileTall]}>
-            <LinearGradient colors={index % 2 ? ['#27106E','#EC3FA4'] : ['#0F766E','#18C7D5']} style={StyleSheet.absoluteFill}/>
-            <Ionicons name={index % 4 === 0 ? 'play' : 'image-outline'} size={24} color="#FFFFFF"/>
+          <ScenicMedia key={index} scene={(index % 4 === 0 ? 'city' : index % 3 === 0 ? 'celebration' : 'mountain') as ScenicScene} style={[styles.mediaTile, index % 3 === 0 && styles.mediaTileTall]}>
+            {index % 4 === 0 ? <View style={styles.videoPlayBadge}><Ionicons name="play" size={15} color="#FFFFFF"/></View> : null}
             <View style={styles.mediaContributor}><Text style={styles.mediaContributorText}>{['RS','GA','AT','JM'][index%4]}</Text></View>
-          </View>
+          </ScenicMedia>
         ))}
       </View>
       <PrimaryButton label="Add moment" icon="add" onPress={() => go('add-moment')}/>
@@ -649,11 +703,12 @@ function AddMoment() {
         <Pressable onPress={() => setMode('note')} style={[styles.captureChoice, mode==='note'&&styles.captureChoiceActive]}><Ionicons name="chatbubble-ellipses-outline" size={32} color={ui.warning}/><Text style={styles.captureTitle}>Add note</Text></Pressable>
       </View>
       <Surface>
-        <View style={styles.uploadPreview}>
-          <LinearGradient colors={mode==='video' ? ['#27106E','#EC3FA4'] : mode==='note' ? ['#6D4A00','#FFB020'] : ['#0F766E','#18C7D5']} style={StyleSheet.absoluteFill}/>
-          <Ionicons name={mode==='video' ? 'videocam-outline' : mode==='note' ? 'chatbubble-ellipses-outline' : 'image-outline'} size={38} color="#FFFFFF"/>
-          <Text style={styles.previewModeLabel}>{mode==='photo' ? 'Camera preview' : mode==='video' ? 'Video preview' : mode==='library' ? 'Selected media' : 'Note moment'}</Text>
-        </View>
+        <ScenicMedia scene={mode==='video' ? 'city' : mode==='note' ? 'celebration' : 'mountain'} style={styles.uploadPreview}>
+          <View style={styles.previewGlass}>
+            <Ionicons name={mode==='video' ? 'videocam-outline' : mode==='note' ? 'chatbubble-ellipses-outline' : 'camera-outline'} size={26} color="#FFFFFF"/>
+            <Text style={styles.previewModeLabel}>{mode==='photo' ? 'Camera preview' : mode==='video' ? 'Video preview' : mode==='library' ? 'Selected media' : 'Note moment'}</Text>
+          </View>
+        </ScenicMedia>
         <TextInput placeholder="Add a caption… optional" placeholderTextColor={ui.muted} style={styles.input}/>
         <View style={styles.privacyNote}><Ionicons name="location-outline" size={18} color={ui.violet}/><Text style={styles.privacyText}>Location available · include with this moment</Text></View>
       </Surface>
@@ -830,10 +885,10 @@ function Relive() {
         <View style={styles.inlineBetween}><Text style={styles.reliveChapter}>CHAPTER 4 · THE RIDGE</Text><Text style={styles.reliveTime}>10:42</Text></View>
         <Text style={styles.reliveTitle}>The ridge changed the whole day.</Text>
         <View style={styles.reliveMediaStage}>
-          <View style={styles.reliveMainPhoto}><LinearGradient colors={['#195A5B','#0F766E','#102A34']} style={StyleSheet.absoluteFill}/><Ionicons name="image-outline" size={50} color="rgba(255,255,255,0.84)"/><View style={styles.mediaCountPill}><Text style={styles.mediaCountText}>6 moments</Text></View></View>
+          <ScenicMedia scene="mountain" style={styles.reliveMainPhoto}><View style={styles.mediaCountPill}><Text style={styles.mediaCountText}>6 moments</Text></View></ScenicMedia>
           <View style={styles.reliveSideStrip}>
-            <View style={styles.reliveSidePhoto}><LinearGradient colors={['#27106E','#5B2CFF']} style={StyleSheet.absoluteFill}/><Ionicons name="image-outline" size={24} color="#FFFFFF"/></View>
-            <View style={styles.reliveSidePhoto}><LinearGradient colors={['#5A173F','#EC3FA4']} style={StyleSheet.absoluteFill}/><Ionicons name="play" size={24} color="#FFFFFF"/></View>
+            <ScenicMedia scene="mountain" style={styles.reliveSidePhoto}/>
+            <ScenicMedia scene="city" style={styles.reliveSidePhoto}><View style={styles.videoPlayBadge}><Ionicons name="play" size={14} color="#FFFFFF"/></View></ScenicMedia>
           </View>
         </View>
         <View style={styles.reliveQuoteRow}><View style={styles.quoteBar}/><Text style={styles.reliveCaption}>Everyone stopped here. Different cameras, same view.</Text></View>
@@ -889,10 +944,10 @@ function RouteMoment() {
   return (
     <PrototypePage dark scroll={false}>
       <View style={styles.storyChrome}><ScreenBackDark/><Text style={styles.routeViewerTitle}>Halfway ridge · 6 moments</Text><Pressable accessibilityRole="button" style={styles.circleButtonDark} onPress={() => setDetails(!details)}><Ionicons name="information-circle-outline" size={20} color="#FFFFFF"/></Pressable></View>
-      <LinearGradient colors={['#123B45','#0F766E','#0F062C']} style={styles.viewerMedia}>
-        <Ionicons name="play-circle-outline" size={74} color="#FFFFFF"/>
+      <ScenicMedia scene="mountain" style={styles.viewerMedia}>
+        <View style={styles.viewerPlay}><Ionicons name="play" size={27} color="#FFFFFF"/></View>
         <View style={styles.viewerContributor}><View style={styles.avatarTiny}><Text style={styles.avatarTinyText}>GA</Text></View><View><Text style={styles.viewerName}>Gabriella</Text><Text style={styles.viewerMeta}>10:42 · Halfway ridge</Text></View></View>
-      </LinearGradient>
+      </ScenicMedia>
       <Text style={styles.viewerCaption}>“Worth stopping for this view.”</Text>
       {details ? <Text style={styles.routeCaptionDark}>Captured by Gabriella · 10:42 · GPS attached · shared only inside this private event</Text> : null}
       <View style={styles.viewerDots}>{Array.from({length:6}).map((_,i)=><View key={i} style={[styles.viewerDot,i===2&&styles.viewerDotActive]}/>)}</View>
@@ -1157,6 +1212,22 @@ function ToggleRow({title,subtitle,value}:{title:string;subtitle:string;value:bo
 }
 
 const styles = StyleSheet.create({
+  scenicMedia: { overflow:'hidden',position:'relative',alignItems:'center',justifyContent:'center' },
+  scenicLight: { position:'absolute',width:160,height:160,borderRadius:80,right:-45,top:-55,backgroundColor:'rgba(255,255,255,0.10)' },
+  mountainBack: { position:'absolute',width:180,height:180,backgroundColor:'rgba(7,35,42,0.44)',left:-35,bottom:-115,transform:[{rotate:'45deg'}],borderRadius:18 },
+  mountainFront: { position:'absolute',width:210,height:210,backgroundColor:'rgba(9,52,57,0.62)',right:-60,bottom:-145,transform:[{rotate:'45deg'}],borderRadius:20 },
+  scenicSun: { position:'absolute',right:'18%',top:'17%',width:28,height:28,borderRadius:14,backgroundColor:'rgba(255,232,174,0.82)' },
+  mountainTrail: { position:'absolute',left:'29%',bottom:'23%',width:'52%',height:3,borderRadius:2,backgroundColor:'rgba(255,228,169,0.70)',transform:[{rotate:'-18deg'}] },
+  citySkyline: { position:'absolute',left:0,right:0,bottom:0,height:92,flexDirection:'row',alignItems:'flex-end',justifyContent:'space-around',paddingHorizontal:10 },
+  cityBuilding: { width:'12%',backgroundColor:'rgba(10,6,36,0.66)',borderTopLeftRadius:4,borderTopRightRadius:4 },
+  venueArc: { position:'absolute',width:190,height:190,borderRadius:95,borderWidth:16,borderColor:'rgba(255,255,255,0.13)',bottom:-94,right:-40 },
+  venueArcInner: { position:'absolute',width:120,height:120,borderRadius:60,borderWidth:7,borderColor:'rgba(255,210,90,0.26)',bottom:-58,right:-6 },
+  venueTrack: { position:'absolute',left:'16%',top:'30%',width:'68%',height:5,borderRadius:3,backgroundColor:'rgba(255,255,255,0.42)',transform:[{rotate:'-13deg'}] },
+  confettiDot: { position:'absolute',width:10,height:10,borderRadius:5 },
+  confettiBar: { position:'absolute',width:9,height:30,borderRadius:5,transform:[{rotate:'28deg'}] },
+  videoPlayBadge: { width:34,height:34,borderRadius:17,backgroundColor:'rgba(15,6,44,0.68)',borderWidth:1,borderColor:'rgba(255,255,255,0.20)',alignItems:'center',justifyContent:'center' },
+  previewGlass: { paddingHorizontal:14,paddingVertical:11,borderRadius:17,backgroundColor:'rgba(15,6,44,0.38)',borderWidth:1,borderColor:'rgba(255,255,255,0.18)',alignItems:'center',gap:5 },
+  viewerPlay: { width:64,height:64,borderRadius:32,backgroundColor:'rgba(15,6,44,0.52)',borderWidth:1,borderColor:'rgba(255,255,255,0.24)',alignItems:'center',justifyContent:'center' },
   section: { gap: 12 },
   listGap: { gap: 10 },
   stackGap: { gap: 14 },
