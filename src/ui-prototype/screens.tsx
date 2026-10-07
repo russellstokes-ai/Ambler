@@ -1043,7 +1043,7 @@ function RouteMoment() {
       <Text style={styles.viewerCaption}>“Worth stopping for this view.”</Text>
       {details ? <Text style={styles.routeCaptionDark}>Captured by Gabriella · 10:42 · GPS attached · shared only inside this private event</Text> : null}
       <View style={styles.viewerDots}>{Array.from({length:6}).map((_,i)=><View key={i} style={[styles.viewerDot,i===2&&styles.viewerDotActive]}/>)}</View>
-      <PrimaryButton label="Return to replay" inverse onPress={() => go('route-replay')}/>
+      <PrimaryButton label="Return to replay" inverse onPress={() => router.back()}/>
     </PrototypePage>
   );
 }
