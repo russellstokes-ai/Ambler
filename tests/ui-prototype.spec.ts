@@ -71,7 +71,7 @@ test.describe('all 36 Ambler screens', () => {
   }
 });
 
-test('review hub exposes quality states and five journeys', async ({ page }) => {
+test('review hub exposes quality states and five journeys', async ({ page }, testInfo) => {
   await page.goto('/ui-preview');
   await expect(page.getByTestId('ui-preview-index')).toBeVisible();
   for (const state of ['OFFLINE', 'SERVER OFFLINE', 'UPLOAD FAILED', 'LINK EXPIRED']) {
@@ -81,7 +81,7 @@ test('review hub exposes quality states and five journeys', async ({ page }) => 
     await expect(page.getByText(journey, { exact: true })).toBeVisible();
   }
   await assertNoHorizontalOverflow(page);
-  await page.screenshot({ path: 'test-results/screens/' + testInfo.project.name + '/stress.png', fullPage: true });
+  await page.screenshot({ path: 'test-results/screens/' + testInfo.project.name + '/review-hub.png', fullPage: true });
 });
 
 test('onboarding progresses Capture → Build → Relive → auth', async ({ page }) => {
@@ -241,4 +241,5 @@ test('temporary stress population renders every awkward state without overflow',
   }
 
   await assertNoHorizontalOverflow(page);
+  await page.screenshot({ path: 'test-results/screens/' + testInfo.project.name + '/stress.png', fullPage: true });
 });
