@@ -105,6 +105,36 @@ export function PrototypeIndex() {
           Use this prototype to review information hierarchy, navigation, responsive composition and product feel before major engineering.
         </Text>
       </Surface>
+      <View style={styles.section}>
+        <SectionTitle title="Test journeys" action="Start anywhere" />
+        <View style={styles.journeyGrid}>
+          <Pressable style={styles.journeyCard} onPress={() => go('home')}>
+            <View style={[styles.journeyIcon,{backgroundColor:'#EFE9FF'}]}><Ionicons name="sparkles-outline" size={21} color={ui.violet}/></View>
+            <Text style={styles.journeyTitle}>Organiser</Text>
+            <Text style={styles.journeyMeta}>Create → capture → story</Text>
+          </Pressable>
+          <Pressable style={styles.journeyCard} onPress={() => go('guest-join')}>
+            <View style={[styles.journeyIcon,{backgroundColor:'#E8FBFD'}]}><Ionicons name="people-outline" size={21} color="#087B86"/></View>
+            <Text style={styles.journeyTitle}>Guest</Text>
+            <Text style={styles.journeyMeta}>Join → contribute</Text>
+          </Pressable>
+          <Pressable style={styles.journeyCard} onPress={() => go('route-replay')}>
+            <View style={[styles.journeyIcon,{backgroundColor:'#FFF1E7'}]}><Ionicons name="map-outline" size={21} color="#C65E0B"/></View>
+            <Text style={styles.journeyTitle}>Route Replay</Text>
+            <Text style={styles.journeyMeta}>Replay → media → resume</Text>
+          </Pressable>
+          <Pressable style={styles.journeyCard} onPress={() => go('story-editor')}>
+            <View style={[styles.journeyIcon,{backgroundColor:'#FDEBF5'}]}><Ionicons name="create-outline" size={21} color="#B12F76"/></View>
+            <Text style={styles.journeyTitle}>Edit & share</Text>
+            <Text style={styles.journeyMeta}>Edit → theme → share</Text>
+          </Pressable>
+          <Pressable style={styles.journeyCard} onPress={() => go('storage-hosting')}>
+            <View style={[styles.journeyIcon,{backgroundColor:'#E9FFF4'}]}><Ionicons name="server-outline" size={21} color="#147A4D"/></View>
+            <Text style={styles.journeyTitle}>Home Server</Text>
+            <Text style={styles.journeyMeta}>Connect → store → sync</Text>
+          </Pressable>
+        </View>
+      </View>
       {sections.map((section) => (
         <View key={section} style={styles.section}>
           <SectionTitle title={section} />
@@ -992,6 +1022,11 @@ const styles = StyleSheet.create({
   twoButtons: { flexDirection: 'row', gap: 10 },
   divider: { height: 1, backgroundColor: ui.line },
   indexRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 13 },
+  journeyGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
+  journeyCard: { width: '48%', minHeight: 116, backgroundColor: '#FFFFFF', borderRadius: 20, borderWidth: 1, borderColor: ui.line, padding: 13, gap: 6 },
+  journeyIcon: { width: 38, height: 38, borderRadius: 13, alignItems: 'center', justifyContent: 'center' },
+  journeyTitle: { color: ui.ink, fontSize: 13, fontWeight: '900' },
+  journeyMeta: { color: ui.muted, fontSize: 10, lineHeight: 14, fontWeight: '600' },
   topActions: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   brandMini: { color: ui.ink, fontSize: 20, fontWeight: '900' },
   brandMiniDark: { color: '#FFFFFF', fontSize: 20, fontWeight: '900' },
