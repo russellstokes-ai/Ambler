@@ -292,7 +292,7 @@ function Splash() {
         <Text style={styles.splashBrand}>Ambler</Text>
         <Text style={styles.splashTag}>Capture together. Relive the whole story.</Text>
       </View>
-      <PrimaryButton label="Preview onboarding" onPress={() => go('onboarding')} inverse />
+      <PrimaryButton label="Enter Ambler" onPress={() => go('onboarding')} inverse />
     </PrototypePage>
   );
 }
@@ -834,7 +834,7 @@ function Generation() {
         </View>
       </View>
       <Text style={styles.routeCaptionDark}>You can leave this screen once generation is safely persisted.</Text>
-      <PrimaryButton label="Preview completed state" inverse onPress={() => go('story-ready')}/>
+      <PrimaryButton label="Open finished story" inverse onPress={() => go('story-ready')}/>
     </PrototypePage>
   );
 }
