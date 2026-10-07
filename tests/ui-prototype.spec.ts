@@ -55,7 +55,7 @@ async function assertNoHorizontalOverflow(page: Page) {
 
 test.describe('all 36 Ambler screens', () => {
   for (const [id, marker] of screens) {
-    test(id + ' renders without horizontal overflow', async ({ page }) => {
+    test(id + ' renders without horizontal overflow', async ({ page }, testInfo) => {
       const errors: string[] = [];
       page.on('pageerror', (error) => errors.push(error.message));
       page.on('console', (message) => {
@@ -65,6 +65,7 @@ test.describe('all 36 Ambler screens', () => {
       await open(page, id);
       await expect(page.getByText(marker, { exact: false }).first()).toBeVisible();
       await assertNoHorizontalOverflow(page);
+      await page.screenshot({ path: 'test-results/screens/' + testInfo.project.name + '/' + id + '.png', fullPage: true });
       expect(errors, 'browser/runtime errors on ' + id).toEqual([]);
     });
   }
@@ -80,6 +81,7 @@ test('review hub exposes quality states and five journeys', async ({ page }) => 
     await expect(page.getByText(journey, { exact: true })).toBeVisible();
   }
   await assertNoHorizontalOverflow(page);
+  await page.screenshot({ path: 'test-results/screens/' + testInfo.project.name + '/stress.png', fullPage: true });
 });
 
 test('onboarding progresses Capture → Build → Relive → auth', async ({ page }) => {
@@ -212,7 +214,7 @@ test('reduced motion preserves Route Replay information immediately', async ({ b
   await context.close();
 });
 
-test('temporary stress population renders every awkward state without overflow', async ({ page }) => {
+test('temporary stress population renders every awkward state without overflow', async ({ page }, testInfo) => {
   await page.goto('/ui-preview/stress');
   await expect(page.getByTestId('ui-stress-route')).toBeVisible();
 
