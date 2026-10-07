@@ -1,5 +1,7 @@
-import React, { PropsWithChildren, ReactNode } from 'react';
+import React, { PropsWithChildren, ReactNode, useEffect, useRef } from 'react';
 import {
+  Animated,
+  Easing,
   Pressable,
   ScrollView,
   StyleProp,
@@ -27,6 +29,11 @@ export const ui = {
   success: '#19C37D',
   warning: '#FFB020',
   danger: '#D92D4C',
+  white: '#FFFFFF',
+  lavender: '#B8A8FF',
+  mist: '#EEEAF7',
+  shadow: '#23104F',
+  orange: '#F97316',
 };
 
 export function PrototypePage({
@@ -35,16 +42,26 @@ export function PrototypePage({
   scroll = true,
   action,
 }: PropsWithChildren<{ dark?: boolean; scroll?: boolean; action?: ReactNode }>) {
+  const opacity = useRef(new Animated.Value(0)).current;
+  const translate = useRef(new Animated.Value(10)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(opacity, { toValue: 1, duration: 280, easing: Easing.out(Easing.cubic), useNativeDriver: true }),
+      Animated.timing(translate, { toValue: 0, duration: 360, easing: Easing.out(Easing.cubic), useNativeDriver: true }),
+    ]).start();
+  }, [opacity, translate]);
+
   const body = (
-    <View style={[styles.pageInner, dark && styles.pageInnerDark]}>
+    <Animated.View style={[styles.pageInner, dark && styles.pageInnerDark, { opacity, transform: [{ translateY: translate }] }]}>
       {children}
       {action ? <View style={styles.bottomAction}>{action}</View> : null}
-    </View>
+    </Animated.View>
   );
 
   return (
     <SafeAreaView style={[styles.safe, dark && styles.safeDark]}>
-      {scroll ? <ScrollView contentContainerStyle={styles.scroll}>{body}</ScrollView> : body}
+      {scroll ? <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>{body}</ScrollView> : body}
     </SafeAreaView>
   );
 }
@@ -88,9 +105,19 @@ export function PrimaryButton({
   style?: StyleProp<ViewStyle>;
 }) {
   return (
-    <Pressable accessibilityRole="button" onPress={onPress} style={({ pressed }) => [styles.primaryButton, inverse && styles.inverseButton, style, pressed && styles.pressed]}>
-      {icon ? <Ionicons name={icon} size={18} color={inverse ? ui.violet : '#FFFFFF'} /> : null}
-      <Text style={[styles.primaryButtonText, inverse && styles.inverseButtonText]}>{label}</Text>
+    <Pressable accessibilityRole="button" onPress={onPress} style={({ pressed }) => [styles.primaryButtonOuter, style, pressed && styles.pressed]}>
+      {inverse ? (
+        <View style={[styles.primaryButton, styles.inverseButton]}>
+          {icon ? <Ionicons name={icon} size={18} color={ui.violet} /> : null}
+          <Text style={[styles.primaryButtonText, styles.inverseButtonText]}>{label}</Text>
+        </View>
+      ) : (
+        <LinearGradient colors={['#6B3CFF', '#5B2CFF', '#4A24E8']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.primaryButton}>
+          <View style={styles.buttonSheen} />
+          {icon ? <Ionicons name={icon} size={18} color="#FFFFFF" /> : null}
+          <Text style={styles.primaryButtonText}>{label}</Text>
+        </LinearGradient>
+      )}
     </Pressable>
   );
 }
@@ -193,11 +220,17 @@ export function StoryArtwork({
   compact?: boolean;
 }) {
   return (
-    <LinearGradient colors={['#0F062C', '#5B2CFF', '#EC3FA4']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={[styles.storyArt, compact && styles.storyArtCompact]}>
+    <LinearGradient colors={['#0B0424', '#32177A', '#5B2CFF', '#C533A0']} locations={[0,0.35,0.68,1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={[styles.storyArt, compact && styles.storyArtCompact]}>
       <View style={styles.artHalo} />
-      <Ionicons name={icon} size={compact ? 28 : 42} color="rgba(255,255,255,0.92)" />
+      <View style={styles.artHaloTwo} />
+      <View style={styles.artRouteOne} />
+      <View style={styles.artRouteTwo} />
+      <View style={styles.artTopline}>
+        <Text style={styles.artEyebrow}>AMBLER STORY</Text>
+        <View style={styles.artIconWrap}><Ionicons name={icon} size={compact ? 20 : 26} color="#FFFFFF" /></View>
+      </View>
       <View style={styles.artCopy}>
-        <Text style={[styles.artTitle, compact && { fontSize: 16 }]} numberOfLines={2}>{title}</Text>
+        <Text style={[styles.artTitle, compact && styles.artTitleCompact]} numberOfLines={2}>{title}</Text>
         {subtitle ? <Text style={styles.artSubtitle} numberOfLines={2}>{subtitle}</Text> : null}
       </View>
     </LinearGradient>
@@ -269,37 +302,39 @@ export function IconRow({
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: ui.soft },
-  safeDark: { backgroundColor: ui.night },
+  safe: { flex: 1, backgroundColor: '#F8F6FC' },
+  safeDark: { backgroundColor: '#0B041F' },
   scroll: { flexGrow: 1 },
-  pageInner: { flex: 1, width: '100%', maxWidth: 1180, alignSelf: 'center', paddingHorizontal: 20, paddingTop: 18, paddingBottom: 34, gap: 22, backgroundColor: ui.soft },
-  pageInnerDark: { backgroundColor: ui.night },
+  pageInner: { flex: 1, width: '100%', maxWidth: 1180, alignSelf: 'center', paddingHorizontal: 20, paddingTop: 20, paddingBottom: 36, gap: 24, backgroundColor: '#F8F6FC' },
+  pageInnerDark: { backgroundColor: '#0B041F' },
   bottomAction: { marginTop: 'auto', paddingTop: 12 },
   headerRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 12 },
   headerText: { flex: 1, gap: 5 },
-  eyebrow: { color: ui.violet, fontSize: 11, fontWeight: '900', letterSpacing: 1.4, textTransform: 'uppercase' },
+  eyebrow: { color: ui.violet, fontSize: 10, fontWeight: '900', letterSpacing: 1.7, textTransform: 'uppercase' },
   eyebrowDark: { color: '#C8B7FF' },
-  h1: { color: ui.ink, fontSize: 32, lineHeight: 36, fontWeight: '900', letterSpacing: -1.1 },
-  subtitle: { color: ui.muted, fontSize: 15, lineHeight: 21, fontWeight: '600' },
+  h1: { color: ui.ink, fontSize: 34, lineHeight: 38, fontWeight: '900', letterSpacing: -1.25 },
+  subtitle: { color: '#716883', fontSize: 15, lineHeight: 22, fontWeight: '600', maxWidth: 720 },
   subtitleDark: { color: 'rgba(255,255,255,0.66)' },
   textOnDark: { color: '#FFFFFF' },
-  primaryButton: { minHeight: 52, minWidth: 44, borderRadius: 18, paddingHorizontal: 18, backgroundColor: ui.violet, flexDirection: 'row', gap: 9, alignItems: 'center', justifyContent: 'center', flexShrink: 1 },
-  primaryButtonText: { color: '#FFFFFF', fontSize: 15, fontWeight: '900' },
-  inverseButton: { backgroundColor: '#FFFFFF' },
+  primaryButtonOuter: { minHeight: 54, borderRadius: 19, flexShrink: 1, shadowColor: ui.violet, shadowOpacity: 0.24, shadowRadius: 16, shadowOffset: { width: 0, height: 8 }, elevation: 6 },
+  primaryButton: { minHeight: 54, minWidth: 44, borderRadius: 19, paddingHorizontal: 19, flexDirection: 'row', gap: 9, alignItems: 'center', justifyContent: 'center', flexShrink: 1, overflow: 'hidden' },
+  primaryButtonText: { color: '#FFFFFF', fontSize: 15, fontWeight: '900', letterSpacing: -0.1 },
+  inverseButton: { backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: 'rgba(91,44,255,0.10)' },
   inverseButtonText: { color: ui.violet },
-  secondaryButton: { minHeight: 48, minWidth: 44, borderRadius: 16, paddingHorizontal: 17, borderWidth: 1, borderColor: ui.line, backgroundColor: '#FFFFFF', flexDirection: 'row', gap: 8, alignItems: 'center', justifyContent: 'center', flexShrink: 1 },
+  buttonSheen: { position: 'absolute', top: 0, left: 14, right: 14, height: 1, backgroundColor: 'rgba(255,255,255,0.34)' },
+  secondaryButton: { minHeight: 50, minWidth: 44, borderRadius: 17, paddingHorizontal: 17, borderWidth: 1, borderColor: '#E5DFF1', backgroundColor: 'rgba(255,255,255,0.96)', flexDirection: 'row', gap: 8, alignItems: 'center', justifyContent: 'center', flexShrink: 1, shadowColor: ui.shadow, shadowOpacity: 0.04, shadowRadius: 10, shadowOffset: { width: 0, height: 4 }, elevation: 1 },
   secondaryDark: { backgroundColor: 'rgba(255,255,255,0.10)', borderColor: 'rgba(255,255,255,0.18)' },
   secondaryButtonText: { color: ui.ink, fontSize: 14, fontWeight: '800' },
-  surface: { backgroundColor: '#FFFFFF', borderRadius: 22, padding: 16, borderWidth: 1, borderColor: ui.line, gap: 12 },
+  surface: { backgroundColor: 'rgba(255,255,255,0.98)', borderRadius: 24, padding: 17, borderWidth: 1, borderColor: 'rgba(232,225,248,0.86)', gap: 12, shadowColor: ui.shadow, shadowOpacity: 0.055, shadowRadius: 18, shadowOffset: { width: 0, height: 8 }, elevation: 2 },
   tint: { backgroundColor: '#FBF9FF' },
   darkSurface: { backgroundColor: '#1B1237', borderColor: 'rgba(255,255,255,0.10)' },
   successSurface: { backgroundColor: '#ECFFF6', borderColor: '#C9F2DD' },
-  chip: { minHeight: 34, paddingHorizontal: 12, borderRadius: 17, backgroundColor: '#F0EDF5', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6 },
-  chipActive: { backgroundColor: ui.violet },
+  chip: { minHeight: 36, paddingHorizontal: 13, borderRadius: 18, backgroundColor: '#F1EDF7', borderWidth: 1, borderColor: 'transparent', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6 },
+  chipActive: { backgroundColor: ui.violet, borderColor: '#7A59FF', shadowColor: ui.violet, shadowOpacity: 0.18, shadowRadius: 8, elevation: 2 },
   chipText: { color: ui.muted, fontSize: 12, fontWeight: '800' },
   chipTextActive: { color: '#FFFFFF' },
   sectionTitleRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  sectionTitle: { color: ui.ink, fontSize: 19, fontWeight: '900', letterSpacing: -0.3 },
+  sectionTitle: { color: ui.ink, fontSize: 20, fontWeight: '900', letterSpacing: -0.45 },
   sectionAction: { color: ui.violet, fontSize: 12, fontWeight: '900' },
   pressed: { opacity: 0.82, transform: [{ scale: 0.992 }] },
   stat: { flex: 1, minWidth: 70, gap: 2 },
@@ -307,23 +342,30 @@ const styles = StyleSheet.create({
   statLabel: { color: ui.muted, fontSize: 11, fontWeight: '700' },
   badge: { paddingHorizontal: 9, paddingVertical: 6, borderRadius: 12, alignSelf: 'flex-start' },
   badgeText: { fontSize: 10, fontWeight: '900', letterSpacing: 0.2 },
-  storyArt: { minHeight: 230, borderRadius: 28, padding: 20, overflow: 'hidden', justifyContent: 'space-between' },
-  storyArtCompact: { minHeight: 150, borderRadius: 22, padding: 16 },
-  artHalo: { position: 'absolute', width: 190, height: 190, borderRadius: 95, right: -40, top: -50, backgroundColor: 'rgba(24,199,213,0.18)' },
-  artCopy: { gap: 4 },
-  artTitle: { color: '#FFFFFF', fontSize: 26, lineHeight: 29, fontWeight: '900', letterSpacing: -0.6 },
-  artSubtitle: { color: 'rgba(255,255,255,0.76)', fontSize: 13, lineHeight: 18, fontWeight: '700' },
+  storyArt: { minHeight: 238, borderRadius: 30, padding: 20, overflow: 'hidden', justifyContent: 'space-between', shadowColor: '#16083D', shadowOpacity: 0.30, shadowRadius: 22, shadowOffset: { width: 0, height: 12 }, elevation: 7 },
+  storyArtCompact: { minHeight: 158, borderRadius: 24, padding: 16 },
+  artHalo: { position: 'absolute', width: 220, height: 220, borderRadius: 110, right: -54, top: -72, backgroundColor: 'rgba(24,199,213,0.18)' },
+  artHaloTwo: { position: 'absolute', width: 150, height: 150, borderRadius: 75, left: -45, bottom: -60, backgroundColor: 'rgba(236,63,164,0.14)' },
+  artRouteOne: { position: 'absolute', width: 140, height: 2, backgroundColor: 'rgba(255,255,255,0.20)', right: 18, top: 72, transform: [{ rotate: '-18deg' }] },
+  artRouteTwo: { position: 'absolute', width: 88, height: 2, backgroundColor: 'rgba(24,199,213,0.70)', right: 40, top: 102, transform: [{ rotate: '13deg' }] },
+  artTopline: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  artEyebrow: { color: 'rgba(255,255,255,0.52)', fontSize: 8, fontWeight: '900', letterSpacing: 1.5 },
+  artIconWrap: { width: 42, height: 42, borderRadius: 15, backgroundColor: 'rgba(255,255,255,0.12)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.16)', alignItems: 'center', justifyContent: 'center' },
+  artCopy: { gap: 5 },
+  artTitle: { color: '#FFFFFF', fontSize: 28, lineHeight: 31, fontWeight: '900', letterSpacing: -0.75 },
+  artTitleCompact: { fontSize: 18, lineHeight: 21 },
+  artSubtitle: { color: 'rgba(255,255,255,0.72)', fontSize: 12, lineHeight: 17, fontWeight: '700' },
   stack: { gap: 16 },
   twoPane: { flexDirection: 'row', gap: 18, alignItems: 'stretch' },
   pane: { flex: 1, minWidth: 0 },
   progressWrap: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', gap: 4 },
   progressItem: { flex: 1, alignItems: 'center', gap: 6 },
-  progressDot: { width: 24, height: 24, borderRadius: 12, backgroundColor: '#E6E0ED', alignItems: 'center', justifyContent: 'center' },
+  progressDot: { width: 26, height: 26, borderRadius: 13, backgroundColor: '#E9E4F2', borderWidth: 1, borderColor: '#DED6EC', alignItems: 'center', justifyContent: 'center' },
   progressDotActive: { backgroundColor: ui.violet },
   progressLabel: { color: ui.muted, fontSize: 9, fontWeight: '700', textAlign: 'center' },
   progressLabelActive: { color: ui.ink },
   iconRow: { minHeight: 58, flexDirection: 'row', alignItems: 'center', gap: 12 },
-  iconBox: { width: 42, height: 42, borderRadius: 14, alignItems: 'center', justifyContent: 'center' },
+  iconBox: { width: 44, height: 44, borderRadius: 15, alignItems: 'center', justifyContent: 'center' },
   iconCopy: { flex: 1, gap: 2 },
   iconTitle: { color: ui.ink, fontSize: 14, fontWeight: '900' },
   iconSubtitle: { color: ui.muted, fontSize: 11, lineHeight: 16, fontWeight: '600' },
