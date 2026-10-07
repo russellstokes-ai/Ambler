@@ -240,6 +240,11 @@ test('temporary stress population renders every awkward state without overflow',
     await expect(page.getByText(marker, { exact: false }).first()).toBeVisible();
   }
 
+  await page.getByText('Retry story build', { exact: true }).click();
+  await expect(page.getByText('Story build retry queued', { exact: true })).toBeVisible();
+  await page.getByText('Add Ambler Server', { exact: true }).click();
+  await expect(page.getByText('Server setup opened', { exact: true })).toBeVisible();
+
   await assertNoHorizontalOverflow(page);
   await page.screenshot({ path: 'test-results/screens/' + testInfo.project.name + '/stress.png', fullPage: true });
 });
