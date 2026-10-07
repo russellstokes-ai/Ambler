@@ -291,6 +291,8 @@ test('Route Replay supports pause, explore, expand and media return', async ({ p
   await expect(page.getByTestId('ui-screen-route-moment')).toBeVisible();
   await page.getByText('Return to replay', { exact: true }).click();
   await expect(page.getByTestId('ui-screen-route-replay')).toBeVisible();
+  await expect(page.getByText('FULL ROUTE', { exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Play replay' })).toBeVisible();
 });
 
 test('editor, sharing and revoke/recreate states behave', async ({ page }) => {
@@ -474,11 +476,15 @@ test('Journey C — route capture reaches replay media and resumes', async ({ pa
   await page.getByText('Route Replay next', { exact: true }).click();
   await expect(page.getByTestId('ui-screen-route-replay')).toBeVisible();
 
+  await page.getByRole('button', { name: 'Pause replay' }).click();
+  await page.getByRole('button', { name: 'Explore map' }).click();
   await page.getByRole('button', { name: 'Open Halfway ridge media' }).click();
   await expect(page.getByTestId('ui-screen-route-moment')).toBeVisible();
   await page.getByText('Return to replay', { exact: true }).click();
   await expect(page.getByTestId('ui-screen-route-replay')).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Pause replay' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Play replay' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Resume replay' })).toBeVisible();
+  await expect(page.getByText('Explore mode · camera released', { exact: true })).toBeVisible();
 });
 
 test('Journey D — edit, theme, share and web story', async ({ page }, testInfo) => {
