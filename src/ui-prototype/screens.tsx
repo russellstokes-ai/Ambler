@@ -35,6 +35,7 @@ import {
   TwoPane,
   ui,
 } from './kit';
+import LottieAccent from './LottieAccent';
 import {
   eventCategories,
   mockEvents,
@@ -786,7 +787,7 @@ function GuestContribution() {
 function GuestResult() {
   return (
     <PrototypePage>
-      <View style={styles.successHero}><View style={styles.successIcon}><Ionicons name="checkmark" size={34} color="#FFFFFF"/></View><Text style={styles.successTitle}>Added to Snowdon Weekend</Text><Text style={styles.heroSubtitle}>2 photos and your note are safely in the event.</Text></View>
+      <View style={styles.successHero}><LottieAccent kind="completion" size={88} loop={false} /><Text style={styles.successTitle}>Added to Snowdon Weekend</Text><Text style={styles.heroSubtitle}>2 photos and your note are safely in the event.</Text></View>
       <Surface>
         <View style={styles.uploadRow}><View style={styles.uploadThumb}><Ionicons name="image-outline" size={22} color="#FFFFFF"/></View><View style={{flex:1}}><Text style={styles.rowTitle}>IMG_2481.jpg</Text><Text style={styles.rowMeta}>Uploaded · location included</Text></View><Ionicons name="checkmark-circle" size={22} color={ui.success}/></View>
         <View style={styles.divider}/>
@@ -830,7 +831,7 @@ function Generation() {
   return (
     <PrototypePage dark scroll={false}>
       <View style={styles.centerFill}>
-        <View style={styles.generationOrb}><Ionicons name="sparkles" size={42} color="#FFFFFF"/></View>
+        <View style={styles.generationLottieWrap}><LottieAccent kind="story-building" size={124} /></View>
         <Text style={styles.generationTitle}>Building Snowdon Weekend</Text>
         <Text style={styles.generationSubtitle}>Turning 99 real moments into one story.</Text>
         <View style={styles.generationList}>
@@ -1181,7 +1182,10 @@ function AddServer() {
       <PrototypeHeader eyebrow="Ambler Home Server" title="Connect your own storage." subtitle="We’ll try local discovery first. QR and manual address are always available." right={<ScreenBack />} />
       <Surface>
         <View style={styles.serverDiscovery}>
-          <View style={styles.radarOuter}><View style={styles.radarMiddle}><View style={styles.radarCore}><Ionicons name="server-outline" size={27} color="#FFFFFF"/></View></View></View>
+          <View style={styles.serverLottieWrap}>
+            <LottieAccent kind="server-discovery" size={164} />
+            <View style={styles.serverLottieIcon}><Ionicons name="server-outline" size={25} color="#FFFFFF"/></View>
+          </View>
           <Text style={styles.cardTitle}>Searching your local network…</Text>
           <Text style={styles.rowMeta}>1 Ambler server found</Text>
         </View>
@@ -1393,7 +1397,6 @@ const styles = StyleSheet.create({
   routeCaptionDark: { color: 'rgba(255,255,255,0.55)', fontSize: 10, lineHeight: 15, textAlign: 'center', fontWeight: '600' },
   guestPitch: { color: ui.ink, fontSize: 18, lineHeight: 26, fontWeight: '800', textAlign: 'center' },
   successHero: { alignItems: 'center', gap: 10, paddingVertical: 32 },
-  successIcon: { width: 72, height: 72, borderRadius: 28, backgroundColor: ui.success, alignItems: 'center', justifyContent: 'center' },
   successTitle: { color: ui.ink, fontSize: 25, fontWeight: '900', textAlign: 'center' },
   uploadRow: { flexDirection: 'row', gap: 12, alignItems: 'center' },
   uploadThumb: { width: 52, height: 52, borderRadius: 15, backgroundColor: '#0F766E', alignItems: 'center', justifyContent: 'center' },
@@ -1402,7 +1405,7 @@ const styles = StyleSheet.create({
   lengthCard: { flex: 1, padding: 13, minHeight: 104, borderRadius:20 },
   lengthCardActive: { borderColor: ui.violet, borderWidth: 2, backgroundColor: '#FBF9FF', shadowColor:ui.violet,shadowOpacity:0.12,shadowRadius:12,elevation:2 },
   lengthName: { color: ui.ink, fontSize: 15, fontWeight: '900' },
-  generationOrb: { width: 92, height: 92, borderRadius: 32, backgroundColor: ui.violet, alignItems: 'center', justifyContent: 'center', shadowColor: ui.pink, shadowOpacity: 0.3, shadowRadius: 24, elevation: 8 },
+  generationLottieWrap: { width: 132, height: 132, borderRadius: 42, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(255,255,255,0.035)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.08)' },
   generationTitle: { color: '#FFFFFF', fontSize: 26, fontWeight: '900', textAlign: 'center' },
   generationSubtitle: { color: 'rgba(255,255,255,0.60)', fontSize: 13, fontWeight: '700', textAlign: 'center' },
   generationList: { gap: 12, marginTop: 22, alignSelf: 'stretch', paddingHorizontal: 24 },
@@ -1530,9 +1533,8 @@ const styles = StyleSheet.create({
   storageBar: { height: 8, borderRadius: 4, backgroundColor: '#DCEDE5', overflow: 'hidden' },
   storageFill: { height: '100%', borderRadius: 4, backgroundColor: ui.success },
   serverDiscovery: { alignItems: 'center', gap: 10, paddingVertical: 8 },
-  radarOuter: { width: 156, height: 156, borderRadius: 78, backgroundColor: '#E9F9FB', borderWidth:1,borderColor:'#D2F1F4', alignItems: 'center', justifyContent: 'center', shadowColor:ui.aqua,shadowOpacity:0.10,shadowRadius:20,elevation:2 },
-  radarMiddle: { width: 112, height: 112, borderRadius: 56, backgroundColor: '#D6F3F6', borderWidth:1,borderColor:'#BEE9EE', alignItems: 'center', justifyContent: 'center' },
-  radarCore: { width: 64, height: 64, borderRadius: 24, backgroundColor: ui.aqua, alignItems: 'center', justifyContent: 'center', shadowColor:ui.aqua,shadowOpacity:0.28,shadowRadius:14,elevation:4 },
+  serverLottieWrap: { width: 170, height: 170, alignItems: 'center', justifyContent: 'center', position: 'relative' },
+  serverLottieIcon: { position: 'absolute', width: 50, height: 50, borderRadius: 18, backgroundColor: ui.violet, alignItems: 'center', justifyContent: 'center', shadowColor: ui.violet, shadowOpacity: 0.24, shadowRadius: 14, elevation: 4 },
   serverFound: { borderColor: '#BFEAF0', backgroundColor: '#F4FEFF' },
   serverHero: { borderRadius:28,padding:18,gap:14,overflow:'hidden',borderWidth:1,borderColor:'#CBEFE0',shadowColor:'#0F766E',shadowOpacity:0.09,shadowRadius:18,shadowOffset:{width:0,height:8},elevation:3 },
   serverHeroGlow: { position:'absolute',width:180,height:180,borderRadius:90,right:-60,top:-70,backgroundColor:'rgba(24,199,213,0.10)' },
