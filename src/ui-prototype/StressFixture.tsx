@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -15,6 +15,7 @@ import {
 import LottieAccent from './LottieAccent';
 
 export default function StressFixture() {
+  const [actionMessage, setActionMessage] = useState('');
   return (
     <ScrollView testID="ui-stress-fixture" contentContainerStyle={styles.page}>
       <Text style={styles.eyebrow}>TEMPORARY SIMULATION DATA</Text>
@@ -26,7 +27,7 @@ export default function StressFixture() {
         <Text style={styles.longTitle}>Sophie's 40th Birthday Celebration at The Orangery — Family, Friends, School Reunion and Surprise Weekend Gathering</Text>
         <Text style={styles.body}>A deliberately verbose description with enough words to force multiple lines on a compact phone and expose clipping, bad fixed heights, weak spacing, ellipsis mistakes, or buttons that drift away from the content they belong to.</Text>
         <View style={styles.chips}><Chip label="Extremely long event category label" active/><Chip label="Route + media + notes"/><Chip label="Home Server"/></View>
-        <View style={styles.actions}><SecondaryButton label="A secondary action with a long label"/><PrimaryButton label="Primary action that still must fit"/></View>
+        <View style={styles.actions}><SecondaryButton label="A secondary action with a long label" onPress={() => setActionMessage('Secondary action completed')}/><PrimaryButton label="Primary action that still must fit" onPress={() => setActionMessage('Primary action completed')}/></View>
       </Surface>
 
       <View style={styles.storyGrid}>
@@ -59,7 +60,7 @@ export default function StressFixture() {
       <LinearGradient colors={['#0B041F','#25105C']} style={styles.darkCard}>
         <LottieAccent kind="story-building" size={90}/>
         <View style={styles.darkCopy}><Text style={styles.darkTitle}>Story generation interrupted</Text><Text style={styles.darkBody}>Timeline and route stages are safely persisted. Retry resumes from the failed story-build stage.</Text></View>
-        <SecondaryButton label="Retry story build" dark/>
+        <SecondaryButton label="Retry story build" dark onPress={() => setActionMessage('Story build retry queued')}/>
       </LinearGradient>
 
       <Surface>
@@ -88,9 +89,10 @@ export default function StressFixture() {
       <Surface>
         <Text style={styles.sectionTitle}>No server configured</Text>
         <Text style={styles.body}>Ambler continues normally without a Home Server. Self-hosting stays optional.</Text>
-        <PrimaryButton label="Add Ambler Server"/>
+        <PrimaryButton label="Add Ambler Server" onPress={() => setActionMessage('Server setup opened')}/>
       </Surface>
 
+      {actionMessage ? <Surface tone="tint"><Text style={styles.rowTitle}>{actionMessage}</Text></Surface> : null}
       <View style={styles.completed}>
         <LottieAccent kind="completion" size={76} loop={false}/>
         <Text style={styles.rowTitle}>Temporary fixture reached the end</Text>
