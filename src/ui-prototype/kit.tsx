@@ -79,14 +79,16 @@ export function PrimaryButton({
   onPress,
   icon,
   inverse = false,
+  style,
 }: {
   label: string;
   onPress?: () => void;
   icon?: keyof typeof Ionicons.glyphMap;
   inverse?: boolean;
+  style?: StyleProp<ViewStyle>;
 }) {
   return (
-    <Pressable onPress={onPress} style={({ pressed }) => [styles.primaryButton, inverse && styles.inverseButton, pressed && { opacity: 0.82 }]}>
+    <Pressable accessibilityRole="button" onPress={onPress} style={({ pressed }) => [styles.primaryButton, inverse && styles.inverseButton, style, pressed && styles.pressed]}>
       {icon ? <Ionicons name={icon} size={18} color={inverse ? ui.violet : '#FFFFFF'} /> : null}
       <Text style={[styles.primaryButtonText, inverse && styles.inverseButtonText]}>{label}</Text>
     </Pressable>
@@ -98,14 +100,16 @@ export function SecondaryButton({
   onPress,
   icon,
   dark = false,
+  style,
 }: {
   label: string;
   onPress?: () => void;
   icon?: keyof typeof Ionicons.glyphMap;
   dark?: boolean;
+  style?: StyleProp<ViewStyle>;
 }) {
   return (
-    <Pressable onPress={onPress} style={({ pressed }) => [styles.secondaryButton, dark && styles.secondaryDark, pressed && { opacity: 0.8 }]}>
+    <Pressable accessibilityRole="button" onPress={onPress} style={({ pressed }) => [styles.secondaryButton, dark && styles.secondaryDark, style, pressed && styles.pressed]}>
       {icon ? <Ionicons name={icon} size={18} color={dark ? '#FFFFFF' : ui.ink} /> : null}
       <Text style={[styles.secondaryButtonText, dark && styles.textOnDark]}>{label}</Text>
     </Pressable>
@@ -137,11 +141,17 @@ export function Chip({
   );
 }
 
-export function SectionTitle({ title, action }: { title: string; action?: string }) {
+export function SectionTitle({ title, action, onAction }: { title: string; action?: string; onAction?: () => void }) {
   return (
     <View style={styles.sectionTitleRow}>
       <Text style={styles.sectionTitle}>{title}</Text>
-      {action ? <Text style={styles.sectionAction}>{action}</Text> : null}
+      {action ? (
+        onAction ? (
+          <Pressable accessibilityRole="button" hitSlop={8} onPress={onAction}>
+            <Text style={styles.sectionAction}>{action}</Text>
+          </Pressable>
+        ) : <Text style={styles.sectionAction}>{action}</Text>
+      ) : null}
     </View>
   );
 }
@@ -260,7 +270,7 @@ const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: ui.soft },
   safeDark: { backgroundColor: ui.night },
   scroll: { flexGrow: 1 },
-  pageInner: { flex: 1, paddingHorizontal: 20, paddingTop: 18, paddingBottom: 34, gap: 22, backgroundColor: ui.soft },
+  pageInner: { flex: 1, width: '100%', maxWidth: 1180, alignSelf: 'center', paddingHorizontal: 20, paddingTop: 18, paddingBottom: 34, gap: 22, backgroundColor: ui.soft },
   pageInnerDark: { backgroundColor: ui.night },
   bottomAction: { marginTop: 'auto', paddingTop: 12 },
   headerRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 12 },
@@ -271,11 +281,11 @@ const styles = StyleSheet.create({
   subtitle: { color: ui.muted, fontSize: 15, lineHeight: 21, fontWeight: '600' },
   subtitleDark: { color: 'rgba(255,255,255,0.66)' },
   textOnDark: { color: '#FFFFFF' },
-  primaryButton: { minHeight: 52, borderRadius: 18, paddingHorizontal: 18, backgroundColor: ui.violet, flexDirection: 'row', gap: 9, alignItems: 'center', justifyContent: 'center' },
+  primaryButton: { minHeight: 52, minWidth: 44, borderRadius: 18, paddingHorizontal: 18, backgroundColor: ui.violet, flexDirection: 'row', gap: 9, alignItems: 'center', justifyContent: 'center', flexShrink: 1 },
   primaryButtonText: { color: '#FFFFFF', fontSize: 15, fontWeight: '900' },
   inverseButton: { backgroundColor: '#FFFFFF' },
   inverseButtonText: { color: ui.violet },
-  secondaryButton: { minHeight: 48, borderRadius: 16, paddingHorizontal: 17, borderWidth: 1, borderColor: ui.line, backgroundColor: '#FFFFFF', flexDirection: 'row', gap: 8, alignItems: 'center', justifyContent: 'center' },
+  secondaryButton: { minHeight: 48, minWidth: 44, borderRadius: 16, paddingHorizontal: 17, borderWidth: 1, borderColor: ui.line, backgroundColor: '#FFFFFF', flexDirection: 'row', gap: 8, alignItems: 'center', justifyContent: 'center', flexShrink: 1 },
   secondaryDark: { backgroundColor: 'rgba(255,255,255,0.10)', borderColor: 'rgba(255,255,255,0.18)' },
   secondaryButtonText: { color: ui.ink, fontSize: 14, fontWeight: '800' },
   surface: { backgroundColor: '#FFFFFF', borderRadius: 22, padding: 16, borderWidth: 1, borderColor: ui.line, gap: 12 },
@@ -289,6 +299,7 @@ const styles = StyleSheet.create({
   sectionTitleRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   sectionTitle: { color: ui.ink, fontSize: 19, fontWeight: '900', letterSpacing: -0.3 },
   sectionAction: { color: ui.violet, fontSize: 12, fontWeight: '900' },
+  pressed: { opacity: 0.82, transform: [{ scale: 0.992 }] },
   stat: { flex: 1, minWidth: 70, gap: 2 },
   statValue: { color: ui.ink, fontSize: 20, fontWeight: '900' },
   statLabel: { color: ui.muted, fontSize: 11, fontWeight: '700' },
