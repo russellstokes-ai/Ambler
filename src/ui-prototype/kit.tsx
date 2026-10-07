@@ -244,12 +244,14 @@ export function IconRow({
   title,
   subtitle,
   trailing,
+  chevron = false,
   tone = 'violet',
 }: {
   icon: keyof typeof Ionicons.glyphMap;
   title: string;
   subtitle?: string;
   trailing?: ReactNode;
+  chevron?: boolean;
   tone?: 'violet' | 'aqua' | 'pink' | 'gold';
 }) {
   const bg = tone === 'aqua' ? '#E8FBFD' : tone === 'pink' ? '#FDEBF5' : tone === 'gold' ? '#FFF5DF' : '#EFE9FF';
@@ -261,7 +263,7 @@ export function IconRow({
         <Text style={styles.iconTitle}>{title}</Text>
         {subtitle ? <Text style={styles.iconSubtitle}>{subtitle}</Text> : null}
       </View>
-      {trailing ?? <Ionicons name="chevron-forward" size={18} color={ui.muted} />}
+      {trailing ?? (chevron ? <Ionicons name="chevron-forward" size={18} color={ui.muted} /> : null)}
     </View>
   );
 }
