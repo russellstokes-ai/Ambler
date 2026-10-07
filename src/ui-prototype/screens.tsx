@@ -108,6 +108,35 @@ export function PrototypeIndex() {
         </Text>
       </Surface>
       <View style={styles.section}>
+        <SectionTitle title="Quality states" action="Designed, not ignored" />
+        <View style={styles.resilienceGrid}>
+          <Surface style={styles.resilienceCard}>
+            <View style={styles.inlineBetween}><View style={[styles.stateIcon,{backgroundColor:'#FFF6DE'}]}><Ionicons name="cloud-offline-outline" size={20} color="#9C6500"/></View><StatusBadge label="OFFLINE" tone="gold"/></View>
+            <Text style={styles.rowTitle}>Your work is safe</Text>
+            <Text style={styles.rowMeta}>3 moments are saved on this device and will upload when you’re back online.</Text>
+            <Text style={styles.stateAction}>Review queued items</Text>
+          </Surface>
+          <Surface style={styles.resilienceCard}>
+            <View style={styles.inlineBetween}><View style={[styles.stateIcon,{backgroundColor:'#E8FBFD'}]}><Ionicons name="server-outline" size={20} color="#087B86"/></View><StatusBadge label="SERVER OFFLINE" tone="aqua"/></View>
+            <Text style={styles.rowTitle}>Ambler Home is unavailable</Text>
+            <Text style={styles.rowMeta}>The story stays usable here. Sync will resume after the server reconnects.</Text>
+            <Text style={styles.stateAction}>Test connection</Text>
+          </Surface>
+          <Surface style={styles.resilienceCard}>
+            <View style={styles.inlineBetween}><View style={[styles.stateIcon,{backgroundColor:'#FFF0F3'}]}><Ionicons name="alert-circle-outline" size={20} color={ui.danger}/></View><StatusBadge label="UPLOAD FAILED" tone="gray"/></View>
+            <Text style={styles.rowTitle}>One video needs another try</Text>
+            <Text style={styles.rowMeta}>The failed item stays visible. Successful uploads are not repeated.</Text>
+            <Text style={styles.stateAction}>Retry video</Text>
+          </Surface>
+          <Surface style={styles.resilienceCard}>
+            <View style={styles.inlineBetween}><View style={[styles.stateIcon,{backgroundColor:'#F0EDF5'}]}><Ionicons name="link-outline" size={20} color={ui.muted}/></View><StatusBadge label="LINK EXPIRED" tone="gray"/></View>
+            <Text style={styles.rowTitle}>This private story link has expired</Text>
+            <Text style={styles.rowMeta}>Nothing is publicly exposed. Ask the organiser for a new link.</Text>
+            <Text style={styles.stateAction}>Close</Text>
+          </Surface>
+        </View>
+      </View>
+      <View style={styles.section}>
         <SectionTitle title="Test journeys" action="Start anywhere" />
         <View style={styles.journeyGrid}>
           <Pressable style={styles.journeyCard} onPress={() => go('home')}>
@@ -187,7 +216,7 @@ function PrototypeNav({ active }: { active: 'home' | 'events' | 'stories' | 'pro
 
 function ScreenBack() {
   return (
-    <Pressable style={styles.circleButton} onPress={() => router.back()}>
+    <Pressable accessibilityRole="button" accessibilityLabel="Back" hitSlop={8} style={styles.circleButton} onPress={() => router.back()}>
       <Ionicons name="chevron-back" size={20} color={ui.ink} />
     </Pressable>
   );
@@ -625,7 +654,7 @@ function RouteCapture() {
 }
 
 function ScreenBackDark() {
-  return <Pressable style={styles.circleButtonDark} onPress={() => router.back()}><Ionicons name="chevron-back" size={20} color="#FFFFFF"/></Pressable>;
+  return <Pressable accessibilityRole="button" accessibilityLabel="Back" hitSlop={8} style={styles.circleButtonDark} onPress={() => router.back()}><Ionicons name="chevron-back" size={20} color="#FFFFFF"/></Pressable>;
 }
 
 function GuestJoin() {
@@ -1096,6 +1125,10 @@ const styles = StyleSheet.create({
   divider: { height: 1, backgroundColor: ui.line },
   indexRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 13 },
   journeyGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
+  resilienceGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
+  resilienceCard: { flexGrow: 1, flexBasis: 250, minHeight: 170 },
+  stateIcon: { width: 40, height: 40, borderRadius: 14, alignItems: 'center', justifyContent: 'center' },
+  stateAction: { color: ui.violet, fontSize: 11, fontWeight: '900', marginTop: 'auto' },
   journeyCard: { width: '48%', minHeight: 116, backgroundColor: '#FFFFFF', borderRadius: 20, borderWidth: 1, borderColor: ui.line, padding: 13, gap: 6 },
   journeyIcon: { width: 38, height: 38, borderRadius: 13, alignItems: 'center', justifyContent: 'center' },
   journeyTitle: { color: ui.ink, fontSize: 13, fontWeight: '900' },
