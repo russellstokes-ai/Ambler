@@ -1,6 +1,6 @@
 # Ambler — Product Roadmap
 
-Updated: 2026-10-05
+Updated: 2026-10-07
 
 This is the canonical forward roadmap. Historical sprint implementation detail is retained in `AMBLER_JOBS_1_5.md` and `AMBLER_JOBS_6_15.md`; this file describes what still has to be proven or completed before Ambler is treated as a finished owner-test product.
 
@@ -11,6 +11,33 @@ The repository contains the broad Capture → Build → Relive product baseline 
 Do **not** interpret that as “15/15 commercially finished”. Source presence and sprint completion are different from verified product acceptance.
 
 The current priority is verification, Route Replay V2 completion, whole-flow polish and physical-device proof.
+
+## Phase 0 — Draftbit UI lock
+
+Goal: validate Ambler's product structure visually before the remaining major engineering work.
+
+The canonical design specifications are in `docs/ui/`.
+
+Specification status:
+- [x] Sprint 0 — UI blueprint and 36-screen inventory specified
+- [x] Sprint 1 — design system and app shell specified
+- [x] Sprint 2 — onboarding/auth specified
+- [x] Sprint 3 — Home/Stories Library specified
+- [x] Sprint 4 — Create Event/Live Event Hub specified
+- [x] Sprint 5 — Capture/guest contribution specified
+- [x] Sprint 6 — Build/Relive specified
+- [x] Sprint 7 — Route Replay V2/edit/share specified
+- [x] Sprint 8 — self-hosting/settings/UI test gate specified
+- [ ] build the specified screens/interactions in Draftbit
+- [ ] populate realistic prototype data
+- [ ] complete organiser, guest, route, edit/share and self-hosting prototype journeys
+- [ ] verify compact-phone layout
+- [ ] verify fold-open layout
+- [ ] owner UI test
+- [ ] record corrections in `docs/ui/`
+- [ ] lock approved major layouts/interactions
+
+Exit gate: the Draftbit prototype can navigate the full product without dead ends, major layouts are owner-approved, and remaining feedback is refinement rather than structural redesign.
 
 ## Phase 1 — Baseline build and repository proof
 
