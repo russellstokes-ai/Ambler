@@ -421,3 +421,95 @@ test('landscape cinematic screens keep essential controls reachable', async ({ b
 
   await context.close();
 });
+
+test('Journey A — organiser completes capture to Relive', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'standard-phone');
+  await open(page, 'home');
+  await page.getByRole('button', { name: 'Create event' }).click();
+  await expect(page.getByTestId('ui-screen-create-basics')).toBeVisible();
+  await page.getByText('Choose event type', { exact: true }).click();
+  await page.getByText(/Continue with /).click();
+  await page.getByText('Continue', { exact: true }).click();
+  await page.getByText('Create event', { exact: true }).click();
+  await page.getByText('Share', { exact: true }).click();
+  await expect(page.getByTestId('ui-screen-event-hub')).toBeVisible();
+
+  await page.getByText('Add a moment', { exact: true }).click();
+  await page.getByText('Add to Snowdon Weekend', { exact: true }).click();
+  await expect(page.getByTestId('ui-screen-moments')).toBeVisible();
+  await page.getByRole('button', { name: 'Back' }).click();
+  await page.getByRole('button', { name: 'Back' }).click();
+  await expect(page.getByTestId('ui-screen-event-hub')).toBeVisible();
+
+  await page.getByText('Finish event & build story', { exact: true }).click();
+  await page.getByText('Build my story', { exact: true }).click();
+  await page.getByText('Open finished story', { exact: true }).click();
+  await page.getByText('Relive story', { exact: true }).click();
+  await expect(page.getByTestId('ui-screen-relive')).toBeVisible();
+});
+
+test('Journey B — guest joins and contributes', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'standard-phone');
+  await open(page, 'guest-join');
+  await page.getByText('Join Snowdon Weekend', { exact: true }).click();
+  await page.getByText('Video', { exact: true }).click();
+  await page.getByPlaceholder('The view from the ridge was unreal…').fill('This was the best view of the day.');
+  await page.getByText('Add to event', { exact: true }).click();
+  await expect(page.getByTestId('ui-screen-guest-result')).toBeVisible();
+  await expect(page.getByText('Added to Snowdon Weekend', { exact: true })).toBeVisible();
+});
+
+test('Journey C — route capture reaches replay media and resumes', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'standard-phone');
+  await open(page, 'event-hub');
+  await page.getByText('Route', { exact: true }).click();
+  await expect(page.getByTestId('ui-screen-route-capture')).toBeVisible();
+  await page.getByText('Pause', { exact: true }).click();
+  await page.getByText('Resume', { exact: true }).click();
+  await page.getByText('Finish route', { exact: true }).click();
+  await page.getByText('Finish event & build story', { exact: true }).click();
+  await page.getByText('Build my story', { exact: true }).click();
+  await page.getByText('Open finished story', { exact: true }).click();
+  await page.getByText('Relive story', { exact: true }).click();
+  await page.getByText('Route Replay next', { exact: true }).click();
+  await expect(page.getByTestId('ui-screen-route-replay')).toBeVisible();
+
+  await page.getByRole('button', { name: 'Open Halfway ridge media' }).click();
+  await expect(page.getByTestId('ui-screen-route-moment')).toBeVisible();
+  await page.getByText('Return to replay', { exact: true }).click();
+  await expect(page.getByTestId('ui-screen-route-replay')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Pause replay' })).toBeVisible();
+});
+
+test('Journey D — edit, theme, share and web story', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'standard-phone');
+  await open(page, 'relive');
+  await page.getByRole('button', { name: 'Story options' }).click();
+  await page.getByText('Edit story', { exact: true }).click();
+  await page.getByText('Theme & music', { exact: true }).click();
+  await page.getByText('Warm Gold', { exact: true }).click();
+  await page.getByRole('button', { name: 'Play soundtrack preview' }).click();
+  await expect(page.getByRole('button', { name: 'Pause soundtrack preview' })).toBeVisible();
+  await page.getByText('Apply to story', { exact: true }).click();
+  await page.getByText('Save changes', { exact: true }).click();
+  await expect(page.getByTestId('ui-screen-share-export')).toBeVisible();
+  await page.getByText('Share', { exact: true }).click();
+  await expect(page.getByTestId('ui-screen-shared-web')).toBeVisible();
+  await expect(page.getByText('PRIVATE STORY', { exact: true })).toBeVisible();
+});
+
+test('Journey E — self-hosting connects and syncs', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'standard-phone');
+  await open(page, 'profile');
+  await page.getByText('Storage & Hosting', { exact: true }).click();
+  await page.getByText('Add another server', { exact: true }).click();
+  await page.getByText('Enter address', { exact: true }).click();
+  await page.getByDisplayValue('http://ambler-home.local').fill('https://home.ambler.test');
+  await page.getByText('Connect address', { exact: true }).click();
+  await expect(page.getByTestId('ui-screen-server-detail')).toBeVisible();
+  await page.getByText('Test connection', { exact: true }).click();
+  await expect(page.getByText('Connection good', { exact: true })).toBeVisible();
+  await page.getByText('Sync now', { exact: true }).click();
+  await expect(page.getByText('Syncing…', { exact: true })).toBeVisible();
+});
+
