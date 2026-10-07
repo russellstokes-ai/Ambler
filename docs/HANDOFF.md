@@ -14,12 +14,13 @@ GitHub is the source of truth. Do not restart from an old VPS copy or old chat Z
 2. `docs/PRODUCT_PLAN.md`
 3. `docs/ROADMAP.md`
 4. `docs/ARCHITECTURE.md`
-5. `docs/LESSONS_FROM_ARCHIVIST.md`
-6. `docs/PRODUCT_DIRECTION.md`
-7. `docs/PRODUCT_ACCEPTANCE_CRITERIA.md`
-8. `docs/ROUTE_REPLAY_V2.md`
-9. `docs/RELEASE_CHECKLIST.md`
-10. latest git log / CI state
+5. `docs/ui/README.md`
+6. `docs/LESSONS_FROM_ARCHIVIST.md`
+7. `docs/PRODUCT_DIRECTION.md`
+8. `docs/PRODUCT_ACCEPTANCE_CRITERIA.md`
+9. `docs/ROUTE_REPLAY_V2.md`
+10. `docs/RELEASE_CHECKLIST.md`
+11. latest git log / CI state
 
 ## Product principle
 
@@ -52,13 +53,14 @@ Use the status meanings in `ROADMAP.md`:
 
 Follow `ROADMAP.md` in order:
 
-1. prove the repository builds cleanly from a fresh networked checkout
-2. re-run source/backend/story-engine/type/build verification
-3. re-audit the fine-tooth items in `CURRENT_STATE.md`
-4. complete Route Replay V2 deliberately
-5. polish the whole first-run and Relive experience
-6. run physical-device and logged-out-browser end-to-end testing
-7. only then produce the first owner-test build
+1. complete the Draftbit UI prototype from `docs/ui/` and owner-test/lock the major layouts
+2. prove the repository builds cleanly from a fresh networked checkout
+3. re-run source/backend/story-engine/type/build verification
+4. re-audit the fine-tooth items in `CURRENT_STATE.md`
+5. complete Route Replay V2 deliberately against the approved UI
+6. polish the whole first-run and Relive experience
+7. run physical-device and logged-out-browser end-to-end testing
+8. only then produce the first owner-test build
 
 ## Route Replay implementation rule
 
