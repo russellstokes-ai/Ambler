@@ -543,9 +543,9 @@ function EventHub() {
               <View style={styles.statRow}><Stat value="99" label="Moments"/><Stat value="8" label="People"/><Stat value="14" label="Notes"/></View>
             </Surface>
             <Surface>
-              <Pressable onPress={() => go('moments')}><IconRow icon="images-outline" title="Moments" subtitle="87 photos · 12 videos"/></Pressable>
+              <Pressable onPress={() => go('moments')}><IconRow icon="images-outline" title="Moments" subtitle="87 photos · 12 videos" chevron/></Pressable>
               <View style={styles.divider}/>
-              <Pressable onPress={() => go('route-capture')}><IconRow icon="map-outline" title="Route" subtitle="Recording · 7.8 km" tone="aqua"/></Pressable>
+              <Pressable onPress={() => go('route-capture')}><IconRow icon="map-outline" title="Route" subtitle="Recording · 7.8 km" tone="aqua" chevron/></Pressable>
               <View style={styles.divider}/>
               <IconRow icon="people-outline" title="People" subtitle="8 joined · invite more" tone="pink"/>
             </Surface>
@@ -831,6 +831,7 @@ function RouteMoment() {
 }
 
 function StoryEditor() {
+  const [tool, setTool] = useState<'copy' | 'cover' | 'regenerate'>('copy');
   return (
     <PrototypePage>
       <PrototypeHeader title="Edit story" subtitle="Adjust the story without turning Ambler into a video editor." right={<ScreenBack />} />
@@ -839,13 +840,21 @@ function StoryEditor() {
           <StoryArtwork title="Snowdon Weekend" subtitle="Chapter 4 · The ridge" icon="trail-sign-outline" />
         }
         secondary={
-          <Surface>
-            <IconRow icon="text-outline" title="Edit copy" subtitle="Change title or caption"/>
-            <View style={styles.divider}/>
-            <IconRow icon="image-outline" title="Choose cover" subtitle="Select another strong moment" tone="aqua"/>
-            <View style={styles.divider}/>
-            <IconRow icon="sparkles-outline" title="Regenerate this section" subtitle="Keep the rest of the story unchanged" tone="pink"/>
-          </Surface>
+          <View style={styles.stackGap}>
+            <Surface>
+              <Pressable onPress={() => setTool('copy')}><IconRow icon="text-outline" title="Edit copy" subtitle="Change title or caption" chevron/></Pressable>
+              <View style={styles.divider}/>
+              <Pressable onPress={() => setTool('cover')}><IconRow icon="image-outline" title="Choose cover" subtitle="Select another strong moment" tone="aqua" chevron/></Pressable>
+              <View style={styles.divider}/>
+              <Pressable onPress={() => setTool('regenerate')}><IconRow icon="sparkles-outline" title="Regenerate this section" subtitle="Keep the rest of the story unchanged" tone="pink" chevron/></Pressable>
+            </Surface>
+            <Surface tone="tint">
+              <Text style={styles.fieldLabel}>{tool === 'copy' ? 'Edit page copy' : tool === 'cover' ? 'Cover selection' : 'Regenerate section'}</Text>
+              {tool === 'copy' ? <TextInput value="The ridge changed the whole day." editable={false} style={styles.input}/> : null}
+              {tool === 'cover' ? <Text style={styles.body}>6 strong moments are available for this cover. Selection changes the story cover only.</Text> : null}
+              {tool === 'regenerate' ? <Text style={styles.body}>Only this section will be rebuilt. The rest of the accepted story stays untouched.</Text> : null}
+            </Surface>
+          </View>
         }
       />
       <SectionTitle title="Story order" />
@@ -891,6 +900,7 @@ function ThemeMusic() {
 
 function ShareExport() {
   const [linkActive, setLinkActive] = useState(true);
+  const [savedTo, setSavedTo] = useState<string | null>(null);
   return (
     <PrototypePage>
       <PrototypeHeader title="Share & save" subtitle="Private by default. You decide where the finished story goes." right={<ScreenBack />} />
@@ -901,11 +911,11 @@ function ShareExport() {
       </Surface>
       <SectionTitle title="Save a copy" />
       <Surface>
-        <IconRow icon="server-outline" title="Ambler Home Server" subtitle="Connected · save full story + originals" tone="aqua"/>
+        <Pressable onPress={() => setSavedTo('Home Server')}><IconRow icon="server-outline" title="Ambler Home Server" subtitle={savedTo==='Home Server' ? 'Saved · full story + originals' : 'Connected · save full story + originals'} tone="aqua" trailing={savedTo==='Home Server' ? <Ionicons name="checkmark-circle" size={20} color={ui.success}/> : <Ionicons name="download-outline" size={19} color={ui.muted}/>}/></Pressable>
         <View style={styles.divider}/>
-        <IconRow icon="document-outline" title="PDF / print" subtitle="Save a printable story"/>
+        <Pressable onPress={() => setSavedTo('PDF')}><IconRow icon="document-outline" title="PDF / print" subtitle={savedTo==='PDF' ? 'PDF prepared' : 'Save a printable story'} trailing={savedTo==='PDF' ? <Ionicons name="checkmark-circle" size={20} color={ui.success}/> : <Ionicons name="download-outline" size={19} color={ui.muted}/>}/></Pressable>
         <View style={styles.divider}/>
-        <IconRow icon="image-outline" title="Story card" subtitle="Shareable image summary" tone="pink"/>
+        <Pressable onPress={() => setSavedTo('Story card')}><IconRow icon="image-outline" title="Story card" subtitle={savedTo==='Story card' ? 'Story card prepared' : 'Shareable image summary'} tone="pink" trailing={savedTo==='Story card' ? <Ionicons name="checkmark-circle" size={20} color={ui.success}/> : <Ionicons name="download-outline" size={19} color={ui.muted}/>}/></Pressable>
       </Surface>
     </PrototypePage>
   );
@@ -936,11 +946,11 @@ function Profile() {
         <Text style={styles.rowMeta}>12 stories · 19 events</Text>
       </View>
       <Surface>
-        <Pressable onPress={() => go('settings')}><IconRow icon="settings-outline" title="Settings" subtitle="Appearance, notifications and accessibility"/></Pressable>
+        <Pressable onPress={() => go('settings')}><IconRow icon="settings-outline" title="Settings" subtitle="Appearance, notifications and accessibility" chevron/></Pressable>
         <View style={styles.divider}/>
-        <Pressable onPress={() => go('storage-hosting')}><IconRow icon="server-outline" title="Storage & Hosting" subtitle="Home Server connected" tone="aqua"/></Pressable>
+        <Pressable onPress={() => go('storage-hosting')}><IconRow icon="server-outline" title="Storage & Hosting" subtitle="Home Server connected" tone="aqua" chevron/></Pressable>
         <View style={styles.divider}/>
-        <Pressable onPress={() => go('privacy-data')}><IconRow icon="shield-checkmark-outline" title="Privacy & Data" subtitle="Routes, sharing and account data"/></Pressable>
+        <Pressable onPress={() => go('privacy-data')}><IconRow icon="shield-checkmark-outline" title="Privacy & Data" subtitle="Routes, sharing and account data" chevron/></Pressable>
       </Surface>
       <PrototypeNav active="profile" />
     </PrototypePage>
@@ -958,9 +968,9 @@ function Settings() {
         <View style={styles.divider}/>
         <IconRow icon="sparkles-outline" title="Story preferences" subtitle="Default length and autoplay"/>
         <View style={styles.divider}/>
-        <Pressable onPress={() => go('storage-hosting')}><IconRow icon="server-outline" title="Storage & Hosting" subtitle="Home Server + default storage" tone="aqua"/></Pressable>
+        <Pressable onPress={() => go('storage-hosting')}><IconRow icon="server-outline" title="Storage & Hosting" subtitle="Home Server + default storage" tone="aqua" chevron/></Pressable>
         <View style={styles.divider}/>
-        <Pressable onPress={() => go('privacy-data')}><IconRow icon="shield-outline" title="Privacy & Data" subtitle="Default privacy and account data"/></Pressable>
+        <Pressable onPress={() => go('privacy-data')}><IconRow icon="shield-outline" title="Privacy & Data" subtitle="Default privacy and account data" chevron/></Pressable>
         <View style={styles.divider}/>
         <IconRow icon="accessibility-outline" title="Accessibility" subtitle="Reduced motion and text"/>
         <View style={styles.divider}/>
