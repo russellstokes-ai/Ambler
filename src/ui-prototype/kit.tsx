@@ -14,6 +14,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useReducedMotion } from '../hooks/useReducedMotion';
 
 export const ui = {
   violet: '#5B2CFF',
@@ -35,6 +36,176 @@ export const ui = {
   shadow: '#23104F',
   orange: '#F97316',
 };
+
+export function MotionReveal({
+  children,
+  delay = 0,
+  distance = 14,
+  scaleFrom = 0.985,
+  resetKey,
+  style,
+}: PropsWithChildren<{
+  delay?: number;
+  distance?: number;
+  scaleFrom?: number;
+  resetKey?: string | number;
+  style?: StyleProp<ViewStyle>;
+}>) {
+  const reduceMotion = useReducedMotion();
+  const opacity = useRef(new Animated.Value(reduceMotion ? 1 : 0)).current;
+  const translateY = useRef(new Animated.Value(reduceMotion ? 0 : distance)).current;
+  const scale = useRef(new Animated.Value(reduceMotion ? 1 : scaleFrom)).current;
+
+  useEffect(() => {
+    opacity.stopAnimation();
+    translateY.stopAnimation();
+    scale.stopAnimation();
+
+    if (reduceMotion) {
+      opacity.setValue(1);
+      translateY.setValue(0);
+      scale.setValue(1);
+      return;
+    }
+
+    opacity.setValue(0);
+    translateY.setValue(distance);
+    scale.setValue(scaleFrom);
+
+    const animation = Animated.parallel([
+      Animated.timing(opacity, {
+        toValue: 1,
+        duration: 360,
+        delay,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }),
+      Animated.timing(translateY, {
+        toValue: 0,
+        duration: 520,
+        delay,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }),
+      Animated.timing(scale, {
+        toValue: 1,
+        duration: 560,
+        delay,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }),
+    ]);
+    animation.start();
+
+    return () => animation.stop();
+  }, [delay, distance, opacity, reduceMotion, resetKey, scale, scaleFrom, translateY]);
+
+  return (
+    <Animated.View style={[style, { opacity, transform: [{ translateY }, { scale }] }]}>
+      {children}
+    </Animated.View>
+  );
+}
+
+export function MotionDrift({
+  children,
+  style,
+}: PropsWithChildren<{ style?: StyleProp<ViewStyle> }>) {
+  const reduceMotion = useReducedMotion();
+  const drift = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (reduceMotion) {
+      drift.setValue(0.5);
+      return;
+    }
+
+    const loop = Animated.loop(
+      Animated.sequence([
+        Animated.timing(drift, {
+          toValue: 1,
+          duration: 6800,
+          easing: Easing.inOut(Easing.sin),
+          useNativeDriver: true,
+        }),
+        Animated.timing(drift, {
+          toValue: 0,
+          duration: 6800,
+          easing: Easing.inOut(Easing.sin),
+          useNativeDriver: true,
+        }),
+      ]),
+    );
+    loop.start();
+    return () => loop.stop();
+  }, [drift, reduceMotion]);
+
+  return (
+    <Animated.View
+      pointerEvents="none"
+      style={[
+        StyleSheet.absoluteFillObject,
+        style,
+        {
+          transform: [
+            { translateX: drift.interpolate({ inputRange: [0, 1], outputRange: [-3, 4] }) },
+            { translateY: drift.interpolate({ inputRange: [0, 1], outputRange: [2, -3] }) },
+            { scale: drift.interpolate({ inputRange: [0, 1], outputRange: [1.015, 1.035] }) },
+          ],
+        },
+      ]}
+    >
+      {children}
+    </Animated.View>
+  );
+}
+
+export function RouteTraceSegment({
+  style,
+  rotate = '0deg',
+  delay = 0,
+  duration = 720,
+}: {
+  style: StyleProp<ViewStyle>;
+  rotate?: string;
+  delay?: number;
+  duration?: number;
+}) {
+  const reduceMotion = useReducedMotion();
+  const progress = useRef(new Animated.Value(reduceMotion ? 1 : 0)).current;
+
+  useEffect(() => {
+    progress.stopAnimation();
+
+    if (reduceMotion) {
+      progress.setValue(1);
+      return;
+    }
+
+    progress.setValue(0);
+    const animation = Animated.timing(progress, {
+      toValue: 1,
+      duration,
+      delay,
+      easing: Easing.inOut(Easing.cubic),
+      useNativeDriver: true,
+    });
+    animation.start();
+    return () => animation.stop();
+  }, [delay, duration, progress, reduceMotion]);
+
+  return (
+    <Animated.View
+      style={[
+        style,
+        {
+          opacity: progress.interpolate({ inputRange: [0, 0.12, 1], outputRange: [0, 1, 1] }),
+          transform: [{ rotate }, { scaleX: progress }],
+        },
+      ]}
+    />
+  );
+}
 
 export function PulseDot({
   color = '#53E69C',
