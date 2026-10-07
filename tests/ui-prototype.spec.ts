@@ -297,10 +297,25 @@ test('Route Replay supports pause, explore, expand and media return', async ({ p
 
 test('editor, sharing and revoke/recreate states behave', async ({ page }) => {
   await open(page, 'story-editor');
+  await page.getByText('Edit copy', { exact: true }).click();
+  const copy = page.getByDisplayValue('The ridge changed the whole day.');
+  await copy.fill('The ridge was the moment everything opened up.');
+  await expect(page.getByDisplayValue('The ridge was the moment everything opened up.')).toBeVisible();
+
   await page.getByText('Choose cover', { exact: true }).click();
   await expect(page.getByText('Cover selection', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Choose cover Summit group' }).click();
+  await expect(page.getByText('Summit group', { exact: true }).first()).toBeVisible();
+
+  await page.getByRole('button', { name: 'Select story page Halfway ridge' }).click();
+  await expect(page.getByText('Selected: Halfway ridge · position 3 of 6', { exact: true })).toBeVisible();
+  await page.getByText('Move later', { exact: true }).click();
+  await expect(page.getByText('Selected: Halfway ridge · position 4 of 6', { exact: true })).toBeVisible();
+
   await page.getByText('Regenerate this section', { exact: true }).click();
-  await expect(page.getByText('Regenerate section', { exact: true })).toBeVisible();
+  await expect(page.getByText('Regenerate section', { exact: true }).first()).toBeVisible();
+  await page.getByText('Regenerate section', { exact: true }).last().click();
+  await expect(page.getByText('Section refreshed', { exact: true }).first()).toBeVisible();
 
   await open(page, 'theme-music');
   await page.getByText('Warm Gold', { exact: true }).click();
