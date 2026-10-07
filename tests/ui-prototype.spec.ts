@@ -200,6 +200,7 @@ test('Home Server connect, destination, connection and sync states behave', asyn
 
 test('reduced motion preserves Route Replay information immediately', async ({ browser }) => {
   const context = await browser.newContext({
+    baseURL: 'http://127.0.0.1:4173',
     viewport: { width: 430, height: 932 },
     reducedMotion: 'reduce',
   });
