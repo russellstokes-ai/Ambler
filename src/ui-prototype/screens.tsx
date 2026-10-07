@@ -374,6 +374,7 @@ function ProfileSetup() {
 
 function Home() {
   const { width } = useWindowDimensions();
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
     <PrototypePage>
       <PrototypeHeader
@@ -390,8 +391,15 @@ function Home() {
             <MotionReveal delay={980} distance={0} scaleFrom={0.72} style={styles.heroRouteDot}/>
             <View style={styles.inlineBetween}>
               <View style={styles.livePill}><PulseDot /><Text style={styles.livePillText}>LIVE NOW</Text></View>
-              <Pressable hitSlop={8}><Ionicons name="ellipsis-horizontal" size={22} color="rgba(255,255,255,0.72)"/></Pressable>
+              <Pressable accessibilityRole="button" accessibilityLabel="Open live event menu" hitSlop={8} onPress={() => setMenuOpen(!menuOpen)}><Ionicons name="ellipsis-horizontal" size={22} color="rgba(255,255,255,0.72)"/></Pressable>
             </View>
+            {menuOpen ? (
+              <View style={styles.heroQuickMenu}>
+                <Pressable onPress={() => go('event-hub')}><Text style={styles.heroQuickMenuItem}>Open event</Text></Pressable>
+                <Pressable onPress={() => go('moments')}><Text style={styles.heroQuickMenuItem}>View moments</Text></Pressable>
+                <Pressable onPress={() => go('finish-build')}><Text style={styles.heroQuickMenuItem}>Finish & build story</Text></Pressable>
+              </View>
+            ) : null}
             <View style={styles.heroMiddle}>
               <View style={styles.liveHeroIcon}><Ionicons name="trail-sign-outline" size={34} color="#FFFFFF"/></View>
               <View style={styles.contributorStack}>
@@ -1317,6 +1325,8 @@ const styles = StyleSheet.create({
   livePill: { flexDirection:'row',alignItems:'center',gap:7,paddingHorizontal:10,paddingVertical:7,borderRadius:14,backgroundColor:'rgba(6,255,150,0.12)',borderWidth:1,borderColor:'rgba(92,255,174,0.18)' },
   livePillText: { color:'#D8FFE9',fontSize:9,fontWeight:'900',letterSpacing:1.1 },
   heroMiddle: { flexDirection:'row',alignItems:'center',justifyContent:'space-between' },
+  heroQuickMenu: { position:'absolute',right:18,top:56,zIndex:20,minWidth:170,borderRadius:16,padding:8,backgroundColor:'rgba(16,7,44,0.96)',borderWidth:1,borderColor:'rgba(255,255,255,0.14)',shadowColor:'#000',shadowOpacity:0.28,shadowRadius:14,elevation:8 },
+  heroQuickMenuItem: { color:'#FFFFFF',fontSize:12,fontWeight:'800',paddingHorizontal:10,paddingVertical:9 },
   liveHeroIcon: { width:70,height:70,borderRadius:24,backgroundColor:'rgba(255,255,255,0.11)',borderWidth:1,borderColor:'rgba(255,255,255,0.16)',alignItems:'center',justifyContent:'center' },
   contributorStack: { flexDirection:'row',alignItems:'center' },
   contributorBubble: { width:34,height:34,borderRadius:13,backgroundColor:'#5B2CFF',borderWidth:2,borderColor:'rgba(255,255,255,0.92)',alignItems:'center',justifyContent:'center' },
