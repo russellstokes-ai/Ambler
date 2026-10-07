@@ -1476,6 +1476,7 @@ const styles = StyleSheet.create({
   eventHeroPeople: { color:'rgba(255,255,255,0.64)',fontSize:10,fontWeight:'800' },
   statRow: { flexDirection: 'row', gap: 10 },
   mediaGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 7 },
+  filterCount: { color: ui.muted, fontSize: 10, fontWeight: '800', letterSpacing: 0.2 },
   mediaTile: { width: '31%', aspectRatio: 1, borderRadius: 17, overflow: 'hidden', alignItems: 'center', justifyContent: 'center', borderWidth:1,borderColor:'rgba(255,255,255,0.72)', shadowColor:ui.shadow,shadowOpacity:0.08,shadowRadius:10,shadowOffset:{width:0,height:5},elevation:2 },
   mediaTileTall: { aspectRatio: 0.82 },
   mediaContributor: { position: 'absolute', left: 6, bottom: 6, width: 24, height: 24, borderRadius: 12, backgroundColor: 'rgba(15,6,44,0.74)', alignItems: 'center', justifyContent: 'center' },
