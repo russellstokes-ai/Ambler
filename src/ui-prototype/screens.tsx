@@ -728,7 +728,7 @@ function Moments() {
     <PrototypePage>
       <PrototypeHeader title="Moments" subtitle="The shared capture pool. The finished story comes later." right={<ScreenBack />} />
       <View style={styles.chipRow}>{['All','Photos','Videos','Mine'].map((item) => <Pressable key={item} onPress={() => setFilter(item)}><Chip label={item} active={filter === item}/></Pressable>)}</View>
-      <Text style={styles.filterCount}>{visibleMoments.length} {filter === 'All' ? 'moments' : filter.toLowerCase()}</Text>
+      <Text style={styles.filterCount}>{visibleMoments.length} {filter === 'All' ? 'moments' : filter === 'Mine' ? 'by you' : filter.toLowerCase()}</Text>
       <View style={styles.mediaGrid}>
         {visibleMoments.map((moment, index) => (
           <Pressable key={moment.id} accessibilityRole="button" accessibilityLabel={`Open ${moment.type} moment by ${moment.contributor}`} onPress={() => setSelectedMoment(moment.id)} style={[styles.mediaTile, index % 3 === 0 && styles.mediaTileTall]}>
