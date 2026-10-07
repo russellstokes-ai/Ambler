@@ -475,7 +475,12 @@ function Stories() {
   const { width } = useWindowDimensions();
   const [filter, setFilter] = useState('All');
   const [query, setQuery] = useState('');
-  const filteredStories = mockStories.filter((story) => story.title.toLowerCase().includes(query.toLowerCase()));
+  const filteredStories = mockStories.filter((story) => {
+    const matchesFilter = filter === 'All' || story.category === filter;
+    const needle = query.trim().toLowerCase();
+    const matchesQuery = !needle || story.title.toLowerCase().includes(needle) || story.kicker.toLowerCase().includes(needle);
+    return matchesFilter && matchesQuery;
+  });
   return (
     <PrototypePage>
       <PrototypeHeader title="Stories" subtitle="Your finished Ambler library." />
@@ -535,16 +540,29 @@ function CreateBasics() {
 function EventType() {
   const [category, setCategory] = useState('Popular');
   const [selected, setSelected] = useState('Hiking day');
+  const [query, setQuery] = useState('');
+  const visibleTypes = popularEventTypes.filter(([name, , subtitle, typeCategory]) => {
+    const categoryMatch = category === 'Popular' ? popularEventTypes.indexOf(popularEventTypes.find((item) => item[0] === name)!) < 6 : typeCategory === category;
+    const needle = query.trim().toLowerCase();
+    const queryMatch = !needle || name.toLowerCase().includes(needle) || subtitle.toLowerCase().includes(needle);
+    return categoryMatch && queryMatch;
+  });
+  const chooseCategory = (nextCategory: string) => {
+    setCategory(nextCategory);
+    setQuery('');
+    const first = nextCategory === 'Popular' ? popularEventTypes[0] : popularEventTypes.find((item) => item[3] === nextCategory);
+    if (first) setSelected(first[0]);
+  };
   return (
     <PrototypePage>
       <PrototypeHeader eyebrow="Create event · 2 of 4" title="What kind of story is this?" subtitle="We’ll use this to shape pacing, chapters and route treatment." right={<ScreenBack />} />
       <ProgressSteps current={1} labels={['Basics','Type','Style','Privacy']} />
-      <View style={styles.searchBox}><Ionicons name="search" size={18} color={ui.muted}/><TextInput placeholder="Search 52 event types" placeholderTextColor={ui.muted} style={styles.searchInput}/></View>
+      <View style={styles.searchBox}><Ionicons name="search" size={18} color={ui.muted}/><TextInput value={query} onChangeText={setQuery} placeholder="Search 52 event types" placeholderTextColor={ui.muted} style={styles.searchInput}/></View>
       <View style={styles.chipRow}>
-        {eventCategories.slice(0, 5).map(([name, icon]) => <Pressable key={name} onPress={() => setCategory(name)}><Chip label={name} icon={icon as any} active={category === name}/></Pressable>)}
+        {eventCategories.slice(0, 5).map(([name, icon]) => <Pressable key={name} onPress={() => chooseCategory(name)}><Chip label={name} icon={icon as any} active={category === name}/></Pressable>)}
       </View>
       <View style={styles.optionGrid}>
-        {popularEventTypes.map(([name, icon, subtitle]) => {
+        {visibleTypes.map(([name, icon, subtitle]) => {
           const active = selected === name;
           return (
             <Pressable key={name} onPress={() => setSelected(name)} style={[styles.optionCard, active && styles.optionCardActive]}>
@@ -555,6 +573,7 @@ function EventType() {
           );
         })}
       </View>
+      {visibleTypes.length === 0 ? <Surface tone="tint"><Text style={styles.cardTitle}>No matching event type</Text><Text style={styles.body}>Try another search or category.</Text></Surface> : null}
       <PrimaryButton label={`Continue with ${selected}`} onPress={() => go('story-style')} />
     </PrototypePage>
   );
@@ -691,18 +710,41 @@ function EventHub() {
 
 function Moments() {
   const [filter, setFilter] = useState('All');
+  const [selectedMoment, setSelectedMoment] = useState<number | null>(null);
+  const moments = Array.from({length: 10}).map((_, index) => ({
+    id: index,
+    type: index % 4 === 0 ? 'video' : 'photo',
+    contributor: ['RS','GA','AT','JM'][index % 4],
+    scene: (index % 4 === 0 ? 'city' : index % 3 === 0 ? 'celebration' : 'mountain') as ScenicScene,
+  }));
+  const visibleMoments = moments.filter((moment) => {
+    if (filter === 'Photos') return moment.type === 'photo';
+    if (filter === 'Videos') return moment.type === 'video';
+    if (filter === 'Mine') return moment.contributor === 'RS';
+    return true;
+  });
+  const selected = selectedMoment == null ? null : moments.find((moment) => moment.id === selectedMoment);
   return (
     <PrototypePage>
       <PrototypeHeader title="Moments" subtitle="The shared capture pool. The finished story comes later." right={<ScreenBack />} />
       <View style={styles.chipRow}>{['All','Photos','Videos','Mine'].map((item) => <Pressable key={item} onPress={() => setFilter(item)}><Chip label={item} active={filter === item}/></Pressable>)}</View>
+      <Text style={styles.filterCount}>{visibleMoments.length} {filter === 'All' ? 'moments' : filter.toLowerCase()}</Text>
       <View style={styles.mediaGrid}>
-        {Array.from({length: 10}).map((_, index) => (
-          <ScenicMedia key={index} scene={(index % 4 === 0 ? 'city' : index % 3 === 0 ? 'celebration' : 'mountain') as ScenicScene} style={[styles.mediaTile, index % 3 === 0 && styles.mediaTileTall]}>
-            {index % 4 === 0 ? <View style={styles.videoPlayBadge}><Ionicons name="play" size={15} color="#FFFFFF"/></View> : null}
-            <View style={styles.mediaContributor}><Text style={styles.mediaContributorText}>{['RS','GA','AT','JM'][index%4]}</Text></View>
-          </ScenicMedia>
+        {visibleMoments.map((moment, index) => (
+          <Pressable key={moment.id} accessibilityRole="button" accessibilityLabel={`Open ${moment.type} moment by ${moment.contributor}`} onPress={() => setSelectedMoment(moment.id)} style={[styles.mediaTile, index % 3 === 0 && styles.mediaTileTall]}>
+            <ScenicMedia scene={moment.scene} style={StyleSheet.absoluteFillObject}>
+              {moment.type === 'video' ? <View style={styles.videoPlayBadge}><Ionicons name="play" size={15} color="#FFFFFF"/></View> : null}
+              <View style={styles.mediaContributor}><Text style={styles.mediaContributorText}>{moment.contributor}</Text></View>
+            </ScenicMedia>
+          </Pressable>
         ))}
       </View>
+      {selected ? (
+        <Surface tone="tint">
+          <View style={styles.inlineBetween}><View><Text style={styles.cardTitle}>Moment details</Text><Text style={styles.rowMeta}>{selected.type === 'video' ? 'Video' : 'Photo'} · contributed by {selected.contributor}</Text></View><StatusBadge label={selected.type.toUpperCase()} tone={selected.type === 'video' ? 'aqua' : 'gray'}/></View>
+          <SecondaryButton label="Close moment" onPress={() => setSelectedMoment(null)}/>
+        </Surface>
+      ) : null}
       <PrimaryButton label="Add moment" icon="add" onPress={() => go('add-moment')}/>
     </PrototypePage>
   );
