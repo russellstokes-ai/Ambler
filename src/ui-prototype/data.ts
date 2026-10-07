@@ -115,6 +115,9 @@ export const mockStories = [
   { title: 'Barcelona', kicker: '48 hours, one city, five viewpoints', storage: 'Cloud', theme: 'city', icon: 'business-outline' },
   { title: 'Thorpe Park Day', kicker: 'The fast bits, the wet bits, the best bits', storage: 'Device', theme: 'venue', icon: 'ticket-outline' },
   { title: "Sophie's 40th", kicker: 'Everyone brought a different angle', storage: 'Cloud', theme: 'party', icon: 'balloon-outline' },
+  { title: 'One Quiet Afternoon', kicker: 'One photo. One small memory worth keeping.', storage: 'Device', theme: 'sparse', icon: 'sunny-outline' },
+  { title: 'Five-a-side Final', kicker: 'Video-first match story', storage: 'Cloud', theme: 'sport', icon: 'football-outline' },
+  { title: 'Walking the Thames', kicker: 'A route-led story with very little media', storage: 'Home Server', theme: 'route', icon: 'walk-outline' },
 ];
 
 export const eventCategories = [
