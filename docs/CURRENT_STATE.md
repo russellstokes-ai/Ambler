@@ -1,6 +1,6 @@
 # Ambler — Current State
 
-Updated: 2026-10-05
+Updated: 2026-10-07
 
 This file is the canonical short status for returning to Ambler after a break.
 
@@ -28,6 +28,25 @@ Use these documents together:
 - `docs/RELEASE_CHECKLIST.md` — release/deployment gates
 
 Historical sprint implementation checkpoints remain in `AMBLER_JOBS_1_5.md` and `AMBLER_JOBS_6_15.md`.
+
+## Current UI phase
+
+The next active product phase is the Draftbit UI lock before further major engineering.
+
+The full UI design specification now exists under `docs/ui/`:
+- 36 primary screens
+- compact/fold responsive rules
+- onboarding/auth
+- Home/Events/Stories
+- event creation and live Event Hub
+- capture and guest contribution
+- Build/Story Ready/Relive
+- Route Replay V2 interaction states
+- story editing/private sharing
+- optional Ambler Home Server storage/sync
+- error/offline/retry and UI test journeys
+
+The **specification is complete**, but the screens are **not yet claimed as built or owner-accepted in Draftbit**.
 
 ## What is already represented in the repository baseline
 
