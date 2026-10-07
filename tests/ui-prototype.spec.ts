@@ -211,3 +211,32 @@ test('reduced motion preserves Route Replay information immediately', async ({ b
   await expect(page.getByText('6 moments · 10:42 · 4.6 km', { exact: true })).toBeVisible({ timeout: 1_000 });
   await context.close();
 });
+
+test('temporary stress population renders every awkward state without overflow', async ({ page }) => {
+  await page.goto('/ui-preview/stress');
+  await expect(page.getByTestId('ui-stress-route')).toBeVisible();
+
+  const markers = [
+    "Sophie's 40th Birthday Celebration at The Orangery — Family, Friends, School Reunion and Surprise Weekend Gathering",
+    'One Quiet Afternoon',
+    'Five-a-side Final',
+    'Walking the Thames',
+    '187',
+    'Thumbnail unavailable',
+    'Upload failed at 64%',
+    'Story generation interrupted',
+    'No route captured',
+    'GPS accuracy too low',
+    'Private link revoked',
+    'Invite expired',
+    'RECONNECTING',
+    '980 GB used',
+    'No server configured',
+  ];
+
+  for (const marker of markers) {
+    await expect(page.getByText(marker, { exact: false }).first()).toBeVisible();
+  }
+
+  await assertNoHorizontalOverflow(page);
+});
