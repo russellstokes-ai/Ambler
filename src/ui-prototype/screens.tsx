@@ -1050,37 +1050,80 @@ function RouteMoment() {
 
 function StoryEditor() {
   const [tool, setTool] = useState<'copy' | 'cover' | 'regenerate'>('copy');
+  const [copy, setCopy] = useState('The ridge changed the whole day.');
+  const [cover, setCover] = useState('Halfway ridge');
+  const [order, setOrder] = useState(['Cover','The climb','Halfway ridge','Route Replay','Summit','After']);
+  const [selectedPage, setSelectedPage] = useState(2);
+  const [regenStatus, setRegenStatus] = useState('');
+
+  const moveSelectedPage = (direction: -1 | 1) => {
+    const next = selectedPage + direction;
+    if (next < 0 || next >= order.length) return;
+    const updated = [...order];
+    const [page] = updated.splice(selectedPage, 1);
+    updated.splice(next, 0, page);
+    setOrder(updated);
+    setSelectedPage(next);
+  };
+
   return (
     <PrototypePage>
       <PrototypeHeader title="Edit story" subtitle="Adjust the story without turning Ambler into a video editor." right={<ScreenBack />} />
       <TwoPane
         primary={
-          <StoryArtwork title="Snowdon Weekend" subtitle="Chapter 4 · The ridge" icon="trail-sign-outline" />
+          <StoryArtwork title="Snowdon Weekend" subtitle={cover + ' · Chapter 4'} icon="trail-sign-outline" />
         }
         secondary={
           <View style={styles.stackGap}>
             <Surface>
               <Pressable onPress={() => setTool('copy')}><IconRow icon="text-outline" title="Edit copy" subtitle="Change title or caption" chevron/></Pressable>
               <View style={styles.divider}/>
-              <Pressable onPress={() => setTool('cover')}><IconRow icon="image-outline" title="Choose cover" subtitle="Select another strong moment" tone="aqua" chevron/></Pressable>
+              <Pressable onPress={() => setTool('cover')}><IconRow icon="image-outline" title="Choose cover" subtitle={cover} tone="aqua" chevron/></Pressable>
               <View style={styles.divider}/>
-              <Pressable onPress={() => setTool('regenerate')}><IconRow icon="sparkles-outline" title="Regenerate this section" subtitle="Keep the rest of the story unchanged" tone="pink" chevron/></Pressable>
+              <Pressable onPress={() => setTool('regenerate')}><IconRow icon="sparkles-outline" title="Regenerate this section" subtitle={regenStatus || 'Keep the rest of the story unchanged'} tone="pink" chevron/></Pressable>
             </Surface>
             <Surface tone="tint">
               <Text style={styles.fieldLabel}>{tool === 'copy' ? 'Edit page copy' : tool === 'cover' ? 'Cover selection' : 'Regenerate section'}</Text>
-              {tool === 'copy' ? <TextInput value="The ridge changed the whole day." editable={false} style={styles.input}/> : null}
-              {tool === 'cover' ? <Text style={styles.body}>6 strong moments are available for this cover. Selection changes the story cover only.</Text> : null}
-              {tool === 'regenerate' ? <Text style={styles.body}>Only this section will be rebuilt. The rest of the accepted story stays untouched.</Text> : null}
+              {tool === 'copy' ? <TextInput value={copy} onChangeText={setCopy} multiline style={[styles.input,{minHeight:94,textAlignVertical:'top'}]}/> : null}
+              {tool === 'cover' ? (
+                <View style={styles.coverChoices}>
+                  {[
+                    ['Halfway ridge','mountain'],
+                    ['Summit group','celebration'],
+                    ['Trail start','city'],
+                  ].map(([label,scene]) => (
+                    <Pressable key={label} accessibilityRole="button" accessibilityLabel={'Choose cover ' + label} onPress={() => setCover(label)} style={[styles.coverChoice,cover===label&&styles.coverChoiceActive]}>
+                      <ScenicMedia scene={scene as ScenicScene} style={styles.coverChoiceArt}/>
+                      <Text style={[styles.coverChoiceText,cover===label&&{color:ui.violet}]}>{label}</Text>
+                    </Pressable>
+                  ))}
+                </View>
+              ) : null}
+              {tool === 'regenerate' ? (
+                <View style={styles.stackGap}>
+                  <Text style={styles.body}>Only this section will be rebuilt. The rest of the accepted story stays untouched.</Text>
+                  <PrimaryButton label={regenStatus ? "Section refreshed" : "Regenerate section"} icon={regenStatus ? "checkmark" : "sparkles"} onPress={() => setRegenStatus('Section refreshed')}/>
+                </View>
+              ) : null}
             </Surface>
           </View>
         }
       />
       <SectionTitle title="Story order" />
       <View style={styles.editorTimeline}>
-        {['Cover','The climb','Halfway ridge','Route Replay','Summit','After'].map((label,index)=>(
-          <View key={label} style={[styles.editorPage,index===2&&styles.editorPageActive]}><Text style={[styles.editorPageIndex,index===2&&{color:ui.violet}]}>{index+1}</Text><Text style={styles.editorPageLabel}>{label}</Text><Ionicons name="reorder-three-outline" size={20} color={ui.muted}/></View>
+        {order.map((label,index)=>(
+          <Pressable accessibilityRole="button" accessibilityLabel={'Select story page ' + label} onPress={() => setSelectedPage(index)} key={label} style={[styles.editorPage,index===selectedPage&&styles.editorPageActive]}>
+            <Text style={[styles.editorPageIndex,index===selectedPage&&{color:ui.violet}]}>{index+1}</Text>
+            <Text style={styles.editorPageLabel}>{label}</Text>
+            <Ionicons name="reorder-three-outline" size={20} color={index===selectedPage?ui.violet:ui.muted}/>
+          </Pressable>
         ))}
       </View>
+      <View style={styles.twoButtons}>
+        <SecondaryButton style={styles.flexButton} label="Move earlier" icon="arrow-up" onPress={() => moveSelectedPage(-1)}/>
+        <SecondaryButton style={styles.flexButton} label="Move later" icon="arrow-down" onPress={() => moveSelectedPage(1)}/>
+      </View>
+      <Text style={styles.reorderStatus}>Selected: {order[selectedPage]} · position {selectedPage + 1} of {order.length}</Text>
       <View style={styles.twoButtons}><SecondaryButton style={styles.flexButton} label="Theme & music" onPress={() => go('theme-music')}/><PrimaryButton style={styles.flexButton} label="Save changes" onPress={() => go('share-export')}/></View>
     </PrototypePage>
   );
