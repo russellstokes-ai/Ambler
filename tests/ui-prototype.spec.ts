@@ -140,7 +140,7 @@ test('Moments filters and viewer reflect the selected media set', async ({ page 
   await page.getByText('Photos', { exact: true }).click();
   await expect(page.getByText('7 photos', { exact: true })).toBeVisible();
   await page.getByText('Mine', { exact: true }).click();
-  await expect(page.getByText('3 mine', { exact: true })).toBeVisible();
+  await expect(page.getByText('3 by you', { exact: true })).toBeVisible();
 });
 
 test('event creation choices persist visibly through the prototype', async ({ page }) => {
