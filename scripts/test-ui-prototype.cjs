@@ -13,7 +13,8 @@ const motion = read('docs/UI_MOTION_STANDARD.md');
 const lottiePolicy = read('docs/LOTTIE_ASSET_POLICY.md');
 const previewRoute = read('app/ui-preview/[screen].tsx');
 
-const ids = [...data.matchAll(/\{ id: '([^']+)'/g)].map((m) => m[1]);
+const prototypeBlock = data.slice(data.indexOf('export const prototypeScreens'), data.indexOf('export const mockEvents'));
+const ids = [...prototypeBlock.matchAll(/\{ id: '([^']+)'/g)].map((m) => m[1]);
 const cases = [...screens.matchAll(/case '([^']+)'/g)].map((m) => m[1]);
 const goTargets = [...screens.matchAll(/go\('([^']+)'\)/g)].map((m) => m[1]);
 
