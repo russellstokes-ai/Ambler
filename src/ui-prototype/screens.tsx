@@ -919,7 +919,7 @@ function RouteReplay() {
   const [expanded, setExpanded] = useState(false);
   return (
     <PrototypePage dark scroll={false}>
-      <View style={styles.storyChrome}><ScreenBackDark/><StatusBadge label={expanded ? "FULL ROUTE" : "ROUTE REPLAY"} tone="aqua"/><Pressable accessibilityRole="button" style={styles.circleButtonDark} onPress={() => setExpanded(!expanded)}><Ionicons name={expanded ? "contract-outline" : "expand-outline"} size={19} color="#FFFFFF"/></Pressable></View>
+      <View style={styles.storyChrome}><ScreenBackDark/><StatusBadge label={expanded ? "FULL ROUTE" : "ROUTE REPLAY"} tone="aqua"/><Pressable accessibilityRole="button" accessibilityLabel={expanded ? "Exit full route" : "Expand route"} style={styles.circleButtonDark} onPress={() => setExpanded(!expanded)}><Ionicons name={expanded ? "contract-outline" : "expand-outline"} size={19} color="#FFFFFF"/></Pressable></View>
       <View style={styles.replayMap}>
         <LinearGradient colors={['#0B1E29','#143744','#1C5A59']} style={StyleSheet.absoluteFill}/>
         <MotionDrift>
@@ -934,7 +934,7 @@ function RouteReplay() {
         <MotionReveal delay={1380} distance={0} scaleFrom={0.74} style={styles.routeTravelDot}><PulseDot color="#F97316" size={16}/></MotionReveal>
         {routeMoments.map((moment, index) => (
           <MotionReveal key={moment.id} delay={760 + index * 180} distance={8} scaleFrom={0.82} style={[styles.routeMoment,{left:moment.x as any,top:moment.y as any}]}>
-            <Pressable onPress={() => go('route-moment')} style={styles.routeMomentPressable}>
+            <Pressable accessibilityRole="button" accessibilityLabel={`Open ${moment.title} media`} onPress={() => go('route-moment')} style={styles.routeMomentPressable}>
               <View style={styles.routeMomentThumb}><Ionicons name={moment.icon as any} size={18} color="#FFFFFF"/></View>
               {moment.count>1?<View style={styles.clusterCount}><Text style={styles.clusterCountText}>{moment.count}</Text></View>:null}
             </Pressable>
@@ -948,9 +948,9 @@ function RouteReplay() {
         <View style={styles.inline}><Stat value="7.8 km" label="Distance" dark/><Stat value="642 m" label="Gain" dark/></View>
       </View> : null}
       <View style={styles.replayControls}>
-        <Pressable accessibilityRole="button" style={styles.replayControl} onPress={() => setPaused(!paused)}><Ionicons name={paused ? "play" : "pause"} size={22} color="#FFFFFF"/></Pressable>
+        <Pressable accessibilityRole="button" accessibilityLabel={paused ? "Play replay" : "Pause replay"} style={styles.replayControl} onPress={() => setPaused(!paused)}><Ionicons name={paused ? "play" : "pause"} size={22} color="#FFFFFF"/></Pressable>
         <View style={styles.scrubTrack}><View style={[styles.scrubFill,{width: explore ? '57%' : '57%'}]}/><View style={[styles.scrubKnob,{left:'55%'}]}/></View>
-        <Pressable accessibilityRole="button" style={[styles.replayControl, explore && styles.replayControlActive]} onPress={() => setExplore(!explore)}><Ionicons name={explore ? "return-up-back-outline" : "navigate-outline"} size={20} color="#FFFFFF"/></Pressable>
+        <Pressable accessibilityRole="button" accessibilityLabel={explore ? "Resume replay" : "Explore map"} style={[styles.replayControl, explore && styles.replayControlActive]} onPress={() => setExplore(!explore)}><Ionicons name={explore ? "return-up-back-outline" : "navigate-outline"} size={20} color="#FFFFFF"/></Pressable>
       </View>
     </PrototypePage>
   );
