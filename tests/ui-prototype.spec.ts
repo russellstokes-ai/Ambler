@@ -95,6 +95,75 @@ test('onboarding progresses Capture → Build → Relive → auth', async ({ pag
   await expect(page.getByTestId('ui-screen-auth')).toBeVisible();
 });
 
+test('auth, profile setup and editable event basics behave', async ({ page }) => {
+  await open(page, 'auth');
+  await page.getByText('Continue with email', { exact: true }).click();
+  await expect(page.getByText('Enter a valid email address.', { exact: true })).toBeVisible();
+  await page.getByPlaceholder('you@example.com').fill('russell@example.com');
+  await page.getByText('Continue with email', { exact: true }).click();
+  await expect(page.getByTestId('ui-screen-profile-setup')).toBeVisible();
+
+  const name = page.getByDisplayValue('Russell');
+  await name.fill('Russell Stokes');
+  await page.getByRole('button', { name: 'Choose profile photo' }).click();
+  await expect(page.getByText('Profile photo selected · you can change both later.', { exact: true })).toBeVisible();
+  await page.getByText('Start using Ambler', { exact: true }).click();
+  await expect(page.getByTestId('ui-screen-home')).toBeVisible();
+
+  await open(page, 'create-basics');
+  await page.getByDisplayValue('Snowdon Weekend').fill("A Very Long Family Weekend Across Snowdonia With Friends, Children and Everyone's Cameras");
+  await page.getByDisplayValue('Snowdonia, Wales').fill('Betws-y-Coed, Snowdonia National Park, Wales');
+  await page.getByText('17–19 October 2026', { exact: true }).click();
+  await page.getByText('24–25 October 2026', { exact: true }).click();
+  await expect(page.getByText('24–25 October 2026', { exact: true }).first()).toBeVisible();
+  await assertNoHorizontalOverflow(page);
+  await page.getByText('Choose event type', { exact: true }).click();
+  await expect(page.getByTestId('ui-screen-event-type')).toBeVisible();
+});
+
+test('settings panels, privacy controls and share-link copy are interactive', async ({ page }) => {
+  await open(page, 'settings');
+  await page.getByText('Appearance', { exact: true }).click();
+  await page.getByText('Dark', { exact: true }).click();
+  await expect(page.getByText('Dark · dark/light', { exact: true })).toBeVisible();
+
+  await page.getByText('Notifications', { exact: true }).click();
+  await page.getByRole('switch').first().click();
+  await expect(page.getByText('Paused', { exact: true })).toBeVisible();
+
+  await page.getByText('Story preferences', { exact: true }).click();
+  await page.getByText('Epic', { exact: true }).click();
+  await expect(page.getByText('Epic · autoplay on', { exact: true })).toBeVisible();
+
+  await page.getByText('Accessibility', { exact: true }).click();
+  await page.getByRole('switch').first().click();
+  await expect(page.getByText('Custom preferences', { exact: true })).toBeVisible();
+
+  await page.getByText('About Ambler', { exact: true }).click();
+  await expect(page.getByText('Ambler 0.3.0', { exact: true })).toBeVisible();
+
+  await open(page, 'privacy-data');
+  await page.getByText('Default event privacy', { exact: true }).click();
+  await expect(page.getByText('Private link', { exact: true })).toBeVisible();
+  await page.getByText('Export my data', { exact: true }).click();
+  await expect(page.getByText('Export preparation started', { exact: true })).toBeVisible();
+  await page.getByText('Review deletion', { exact: true }).click();
+  await expect(page.getByText(/Deleting your account would remove Ambler-managed cloud data/)).toBeVisible();
+
+  await open(page, 'share-export');
+  await page.getByRole('button', { name: 'Copy private story link' }).click();
+  await expect(page.getByText('Private link copied', { exact: true })).toBeVisible();
+});
+
+test('manual Home Server address path is usable', async ({ page }) => {
+  await open(page, 'add-server');
+  await page.getByText('Enter address', { exact: true }).click();
+  const address = page.getByDisplayValue('http://ambler-home.local');
+  await address.fill('https://ambler-home.example.test');
+  await page.getByText('Connect address', { exact: true }).click();
+  await expect(page.getByTestId('ui-screen-server-detail')).toBeVisible();
+});
+
 test('event and story discovery controls update rendered content', async ({ page }) => {
   await open(page, 'events');
   await expect(page.getByText('Snowdon Weekend', { exact: true })).toBeVisible();
