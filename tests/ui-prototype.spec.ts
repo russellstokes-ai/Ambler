@@ -121,6 +121,7 @@ test('onboarding progresses Capture → Build → Relive → auth', async ({ pag
   await page.getByText('Continue', { exact: true }).click();
   await expect(page.getByText('03 · RELIVE')).toBeVisible();
   await page.getByText('Get started', { exact: true }).click();
+  console.log('NAV onboarding->auth', page.url());
   await expect(page.getByTestId('ui-screen-auth')).toBeVisible();
 });
 
@@ -130,6 +131,7 @@ test('auth, profile setup and editable event basics behave', async ({ page }) =>
   await expect(page.getByText('Enter a valid email address.', { exact: true })).toBeVisible();
   await page.getByPlaceholder('you@example.com').fill('russell@example.com');
   await page.getByText('Continue with email', { exact: true }).click();
+  console.log('NAV auth->profile-setup', page.url());
   await expect(page.getByTestId('ui-screen-profile-setup')).toBeVisible();
 
   const name = page.getByPlaceholder('Your name');
@@ -190,6 +192,7 @@ test('manual Home Server address path is usable', async ({ page }) => {
   const address = page.getByPlaceholder('https://ambler-home.local');
   await address.fill('https://ambler-home.example.test');
   await page.getByText('Connect address', { exact: true }).click();
+  console.log('NAV add-server->server-detail', page.url());
   await expect(page.getByTestId('ui-screen-server-detail')).toBeVisible();
 });
 
