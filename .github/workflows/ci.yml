@@ -68,6 +68,9 @@ jobs:
   ui-simulation:
     runs-on: ubuntu-latest
     needs: source-and-engine
+    env:
+      EXPO_PUBLIC_SUPABASE_URL: https://ambler-ui-test.supabase.co
+      EXPO_PUBLIC_SUPABASE_ANON_KEY: ambler-ui-test-anon-key
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
