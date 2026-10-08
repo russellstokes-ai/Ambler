@@ -1451,6 +1451,7 @@ const styles = StyleSheet.create({
   avatarEdit: { position: 'absolute', right: -3, bottom: -3, width: 34, height: 34, borderRadius: 17, backgroundColor: ui.violet, alignItems: 'center', justifyContent: 'center', borderWidth: 3, borderColor: ui.soft },
   avatarSmall: { width: 42, height: 42, borderRadius: 15, backgroundColor: ui.violet, alignItems: 'center', justifyContent: 'center' },
   avatarInitial: { color: '#FFFFFF', fontWeight: '900', fontSize: 15 },
+  avatarSelectedText: { color: '#FFFFFF', fontSize: 24, fontWeight: '900' },
   liveHero: { minHeight: 354, borderRadius: 32, padding: 21, justifyContent: 'space-between', overflow: 'hidden', shadowColor: '#25105C', shadowOpacity: 0.32, shadowRadius: 26, shadowOffset: {width:0,height:14}, elevation: 8 },
   heroGlowA: { position:'absolute', width:230,height:230,borderRadius:115,right:-70,top:-80,backgroundColor:'rgba(24,199,213,0.16)' },
   heroGlowB: { position:'absolute', width:180,height:180,borderRadius:90,left:-60,bottom:-80,backgroundColor:'rgba(236,63,164,0.13)' },
