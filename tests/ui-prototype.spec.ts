@@ -132,7 +132,7 @@ test('auth, profile setup and editable event basics behave', async ({ page }) =>
   await page.getByText('Continue with email', { exact: true }).click();
   await expect(page.getByTestId('ui-screen-profile-setup')).toBeVisible();
 
-  const name = page.getByDisplayValue('Russell');
+  const name = page.getByPlaceholder('Your name');
   await name.fill('Russell Stokes');
   await page.getByRole('button', { name: 'Choose profile photo' }).click();
   await expect(page.getByText('Profile photo selected · you can change both later.', { exact: true })).toBeVisible();
@@ -140,8 +140,8 @@ test('auth, profile setup and editable event basics behave', async ({ page }) =>
   await expect(page.getByTestId('ui-screen-home')).toBeVisible();
 
   await open(page, 'create-basics');
-  await page.getByDisplayValue('Snowdon Weekend').fill("A Very Long Family Weekend Across Snowdonia With Friends, Children and Everyone's Cameras");
-  await page.getByDisplayValue('Snowdonia, Wales').fill('Betws-y-Coed, Snowdonia National Park, Wales');
+  await page.getByPlaceholder('Name your event').fill("A Very Long Family Weekend Across Snowdonia With Friends, Children and Everyone's Cameras");
+  await page.getByPlaceholder('Add a place').fill('Betws-y-Coed, Snowdonia National Park, Wales');
   await page.getByText('17–19 October 2026', { exact: true }).click();
   await page.getByText('24–25 October 2026', { exact: true }).click();
   await expect(page.getByText('24–25 October 2026', { exact: true }).first()).toBeVisible();
@@ -187,7 +187,7 @@ test('settings panels, privacy controls and share-link copy are interactive', as
 test('manual Home Server address path is usable', async ({ page }) => {
   await open(page, 'add-server');
   await page.getByText('Enter address', { exact: true }).click();
-  const address = page.getByDisplayValue('http://ambler-home.local');
+  const address = page.getByPlaceholder('https://ambler-home.local');
   await address.fill('https://ambler-home.example.test');
   await page.getByText('Connect address', { exact: true }).click();
   await expect(page.getByTestId('ui-screen-server-detail')).toBeVisible();
@@ -298,9 +298,9 @@ test('Route Replay supports pause, explore, expand and media return', async ({ p
 test('editor, sharing and revoke/recreate states behave', async ({ page }) => {
   await open(page, 'story-editor');
   await page.getByText('Edit copy', { exact: true }).click();
-  const copy = page.getByDisplayValue('The ridge changed the whole day.');
+  const copy = page.getByPlaceholder('Story copy');
   await copy.fill('The ridge was the moment everything opened up.');
-  await expect(page.getByDisplayValue('The ridge was the moment everything opened up.')).toBeVisible();
+  await expect(page.getByPlaceholder('Story copy')).toBeVisible();
 
   await page.getByText('Choose cover', { exact: true }).click();
   await expect(page.getByText('Cover selection', { exact: true })).toBeVisible();
@@ -406,7 +406,7 @@ test('short-height form simulation remains usable', async ({ browser }, testInfo
   const page = await context.newPage();
   await page.goto('/ui-preview/create-basics');
   await expect(page.getByTestId('ui-screen-create-basics')).toBeVisible();
-  const location = page.getByDisplayValue('Snowdonia, Wales');
+  const location = page.getByPlaceholder('Add a place');
   await location.focus();
   await location.fill('An intentionally long place name for compact keyboard testing');
   await page.getByText('Choose event type', { exact: true }).scrollIntoViewIfNeeded();
@@ -525,7 +525,7 @@ test('Journey E — self-hosting connects and syncs', async ({ page }, testInfo)
   await page.getByText('Storage & Hosting', { exact: true }).click();
   await page.getByText('Add another server', { exact: true }).click();
   await page.getByText('Enter address', { exact: true }).click();
-  await page.getByDisplayValue('http://ambler-home.local').fill('https://home.ambler.test');
+  await page.getByPlaceholder('https://ambler-home.local').fill('https://home.ambler.test');
   await page.getByText('Connect address', { exact: true }).click();
   await expect(page.getByTestId('ui-screen-server-detail')).toBeVisible();
   await page.getByText('Test connection', { exact: true }).click();
