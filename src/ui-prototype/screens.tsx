@@ -48,7 +48,7 @@ import {
 } from './data';
 
 const go = (id: PrototypeScreenId) =>
-  router.push(`/ui-preview?screen=${encodeURIComponent(id)}` as never);
+  router.push(`/ui-preview?preview=${encodeURIComponent(id)}` as never);
 const amblerMark = require('../../assets/brand/ambler-mark-transparent.png');
 
 type ScenicScene = 'mountain' | 'city' | 'venue' | 'celebration';
