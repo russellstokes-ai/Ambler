@@ -6,9 +6,9 @@ import type { PrototypeScreenId } from '../../src/ui-prototype/data';
 import StressFixture from '../../src/ui-prototype/StressFixture';
 
 export default function UiPreviewIndex() {
-  const { screen } = useLocalSearchParams<{ screen?: string }>();
+  const { preview } = useLocalSearchParams<{ preview?: string }>();
 
-  if (screen === '__stress') {
+  if (preview === '__stress') {
     return (
       <View testID="ui-stress-route" style={{ flex: 1 }}>
         <StressFixture />
@@ -16,8 +16,8 @@ export default function UiPreviewIndex() {
     );
   }
 
-  if (screen) {
-    const id = screen as PrototypeScreenId;
+  if (preview) {
+    const id = preview as PrototypeScreenId;
     return (
       <View testID={`ui-screen-${id}`} style={{ flex: 1 }}>
         <PrototypeScreen id={id} />
