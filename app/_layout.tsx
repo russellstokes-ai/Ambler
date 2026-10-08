@@ -39,7 +39,7 @@ function RootLayoutContent() {
     const allSegments = segments as readonly string[];
     const inAuthGroup = allSegments[0] === '(auth)';
     const inOnboardingGroup = allSegments[0] === 'onboarding';
-    const inPublicGuestRoute = allSegments[0] === 'join' || allSegments[0] === 'share';
+    const inPublicGuestRoute = allSegments[0] === 'join' || allSegments[0] === 'share' || allSegments[0] === 'ui-preview';
 
     // QR invites and token-gated shared stories must work without onboarding/login.
     if (inPublicGuestRoute) {
@@ -124,6 +124,7 @@ function RootLayoutContent() {
       <Stack.Screen name="join" />
       <Stack.Screen name="share" />
       <Stack.Screen name="settings" />
+      <Stack.Screen name="ui-preview" />
     </Stack>
   );
 }

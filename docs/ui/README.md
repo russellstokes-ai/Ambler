@@ -22,6 +22,8 @@ Important status distinction:
 7. [Route Replay V2 + Edit + Share](07_ROUTE_EDIT_SHARE.md)
 8. [Self-Hosting + Settings + UI Test Checkpoint](08_HOSTING_POLISH_TEST.md)
 9. [Draftbit Implementation + Test Checklist](09_DRAFTBIT_IMPLEMENTATION_CHECKLIST.md)
+10. [First Draft Prototype Build](10_FIRST_DRAFT_BUILD.md)
+11. [First Draft Polish Audit](11_FIRST_DRAFT_POLISH_AUDIT.md)
 
 ## Target checkpoint
 
