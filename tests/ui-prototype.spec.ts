@@ -40,7 +40,7 @@ const screens = [
 ] as const;
 
 async function open(page: Page, id: string) {
-  await page.goto('/ui-preview?screen=' + encodeURIComponent(id));
+  await page.goto('/ui-preview?preview=' + encodeURIComponent(id));
   await expect(page.getByTestId('ui-screen-' + id)).toBeVisible();
 }
 
@@ -358,7 +358,7 @@ test('reduced motion preserves Route Replay information immediately', async ({ b
     reducedMotion: 'reduce',
   });
   const page = await context.newPage();
-  await page.goto('/ui-preview?screen=route-replay');
+  await page.goto('/ui-preview?preview=route-replay');
   await expect(page.getByTestId('ui-screen-route-replay')).toBeVisible();
   await expect(page.getByText('Halfway ridge', { exact: true })).toBeVisible({ timeout: 1_000 });
   await expect(page.getByText('6 moments · 10:42 · 4.6 km', { exact: true })).toBeVisible({ timeout: 1_000 });
@@ -366,7 +366,7 @@ test('reduced motion preserves Route Replay information immediately', async ({ b
 });
 
 test('temporary stress population renders every awkward state without overflow', async ({ page }, testInfo) => {
-  await page.goto('/ui-preview?screen=__stress');
+  await page.goto('/ui-preview?preview=__stress');
   await expect(page.getByTestId('ui-stress-route')).toBeVisible();
 
   const markers = [
@@ -407,7 +407,7 @@ test('short-height form simulation remains usable', async ({ browser }, testInfo
     viewport: { width: 430, height: 520 },
   });
   const page = await context.newPage();
-  await page.goto('/ui-preview?screen=create-basics');
+  await page.goto('/ui-preview?preview=create-basics');
   await expect(page.getByTestId('ui-screen-create-basics')).toBeVisible();
   const location = page.getByPlaceholder('Add a place');
   await location.focus();
@@ -427,13 +427,13 @@ test('landscape cinematic screens keep essential controls reachable', async ({ b
   });
   const page = await context.newPage();
 
-  await page.goto('/ui-preview?screen=route-replay');
+  await page.goto('/ui-preview?preview=route-replay');
   await expect(page.getByRole('button', { name: 'Pause replay' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Expand route' })).toBeVisible();
   await assertNoHorizontalOverflow(page);
   await page.screenshot({ path: 'test-results/screens/targeted/landscape-route-replay.png', fullPage: true });
 
-  await page.goto('/ui-preview?screen=story-ready');
+  await page.goto('/ui-preview?preview=story-ready');
   await expect(page.getByText('Relive story', { exact: true })).toBeVisible();
   await expect(page.getByText('Edit first', { exact: true })).toBeVisible();
   await assertNoHorizontalOverflow(page);
