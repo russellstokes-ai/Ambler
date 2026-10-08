@@ -487,7 +487,7 @@ test('Journey C — route capture reaches replay media and resumes', async ({ pa
   await page.getByText('Pause', { exact: true }).click();
   await page.getByText('Resume', { exact: true }).click();
   await page.getByText('Finish route', { exact: true }).click();
-  await page.getByText('Finish event & build story', { exact: true }).click();
+  await page.getByRole('button', { name: /Finish event & build story/ }).click();
   await page.getByText('Build my story', { exact: true }).click();
   await page.getByText('Open finished story', { exact: true }).click();
   await page.getByText('Relive story', { exact: true }).click();
