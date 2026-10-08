@@ -461,7 +461,7 @@ test('Journey A — organiser completes capture to Relive', async ({ page }, tes
   await page.getByRole('button', { name: 'Back' }).click();
   await expect(page.getByTestId('ui-screen-event-hub')).toBeVisible();
 
-  await page.getByText('Finish event & build story', { exact: true }).click();
+  await page.getByRole('button', { name: /Finish event & build story/ }).click();
   await page.getByText('Build my story', { exact: true }).click();
   await page.getByText('Open finished story', { exact: true }).click();
   await page.getByText('Relive story', { exact: true }).click();
@@ -515,7 +515,7 @@ test('Journey D — edit, theme, share and web story', async ({ page }, testInfo
   await page.getByRole('button', { name: 'Play soundtrack preview' }).click();
   await expect(page.getByRole('button', { name: 'Pause soundtrack preview' })).toBeVisible();
   await page.getByText('Apply to story', { exact: true }).click();
-  await page.getByText('Save changes', { exact: true }).click();
+  await page.getByRole('button', { name: 'Save changes' }).click();
   await expect(page.getByTestId('ui-screen-share-export')).toBeVisible();
   await page.getByText('Share', { exact: true }).click();
   await expect(page.getByTestId('ui-screen-shared-web')).toBeVisible();
