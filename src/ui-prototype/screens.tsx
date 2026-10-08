@@ -1084,7 +1084,7 @@ function StoryEditor() {
             </Surface>
             <Surface tone="tint">
               <Text style={styles.fieldLabel}>{tool === 'copy' ? 'Edit page copy' : tool === 'cover' ? 'Cover selection' : 'Regenerate section'}</Text>
-              {tool === 'copy' ? <TextInput value={copy} onChangeText={setCopy} multiline style={[styles.input,{minHeight:94,textAlignVertical:'top'}]}/> : null}
+              {tool === 'copy' ? <TextInput value={copy} onChangeText={setCopy} placeholder="Story copy" placeholderTextColor={ui.muted} multiline style={[styles.input,{minHeight:94,textAlignVertical:'top'}]}/> : null}
               {tool === 'cover' ? (
                 <View style={styles.coverChoices}>
                   {[
@@ -1331,7 +1331,7 @@ function AddServer() {
       </Surface>
       <View style={styles.twoButtons}><SecondaryButton style={styles.flexButton} label={method==='qr' ? "QR ready" : "Scan QR"} icon="qr-code-outline" onPress={() => setMethod('qr')}/><SecondaryButton style={styles.flexButton} label={method==='manual' ? "Address entry" : "Enter address"} icon="create-outline" onPress={() => setMethod('manual')}/></View>
       {method === 'qr' ? <Surface tone="tint"><Text style={styles.cardTitle}>Scan the QR shown by your Ambler Server</Text><Text style={styles.body}>The server QR contains the connection details without exposing a raw token.</Text><View style={styles.qrPlaceholder}><Ionicons name="qr-code-outline" size={58} color={ui.violet}/></View></Surface> : null}
-      {method === 'manual' ? <Surface tone="tint"><Text style={styles.cardTitle}>Enter your Ambler Server address</Text><Text style={styles.body}>Manual setup is available for advanced/network configurations.</Text><TextInput value={manualAddress} onChangeText={setManualAddress} autoCapitalize="none" style={styles.input}/><PrimaryButton label="Connect address" onPress={() => manualAddress.trim() && go('server-detail')}/></Surface> : null}
+      {method === 'manual' ? <Surface tone="tint"><Text style={styles.cardTitle}>Enter your Ambler Server address</Text><Text style={styles.body}>Manual setup is available for advanced/network configurations.</Text><TextInput value={manualAddress} onChangeText={setManualAddress} placeholder="https://ambler-home.local" placeholderTextColor={ui.muted} autoCapitalize="none" style={styles.input}/><PrimaryButton label="Connect address" onPress={() => manualAddress.trim() && go('server-detail')}/></Surface> : null}
     </PrototypePage>
   );
 }
@@ -1651,6 +1651,12 @@ const styles = StyleSheet.create({
   viewerDot: { width: 5, height: 5, borderRadius: 3, backgroundColor: 'rgba(255,255,255,0.30)' },
   viewerDotActive: { width: 18, backgroundColor: '#FFFFFF' },
   editorTimeline: { gap: 7 },
+  coverChoices: { flexDirection:'row',flexWrap:'wrap',gap:8 },
+  coverChoice: { flexGrow:1,flexBasis:100,gap:6,padding:7,borderRadius:16,borderWidth:1,borderColor:'#E4DDED',backgroundColor:'#FFFFFF' },
+  coverChoiceActive: { borderColor:ui.violet,borderWidth:2,backgroundColor:'#FBF9FF' },
+  coverChoiceArt: { height:64,borderRadius:12 },
+  coverChoiceText: { color:ui.ink,fontSize:10,fontWeight:'800' },
+  reorderStatus: { color:ui.muted,fontSize:10,fontWeight:'800',textAlign:'center' },
   editorPage: { minHeight: 54, paddingHorizontal: 13, borderRadius: 16, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E6DFEF', flexDirection: 'row', alignItems: 'center', gap: 10, shadowColor:ui.shadow,shadowOpacity:0.025,shadowRadius:8,shadowOffset:{width:0,height:3},elevation:1 },
   editorPageActive: { borderColor: ui.violet, backgroundColor: '#FBF9FF' },
   editorPageIndex: { color: ui.muted, width: 20, fontSize: 11, fontWeight: '900' },
@@ -1664,6 +1670,8 @@ const styles = StyleSheet.create({
   playButton: { width: 42, height: 42, borderRadius: 16, backgroundColor: ui.violet, alignItems: 'center', justifyContent: 'center' },
   linkBox: { minHeight: 50, borderRadius: 17, backgroundColor: '#F4F0FA', borderWidth:1,borderColor:'#E4DDED', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 14 },
   privateLink: { color: ui.ink, fontSize: 12, fontWeight: '800' },
+  rowAction: { color: ui.violet, fontSize: 10, fontWeight: '900' },
+  qrPlaceholder: { minHeight:120,borderRadius:20,backgroundColor:'#FFFFFF',borderWidth:1,borderColor:'#E6DFF0',alignItems:'center',justifyContent:'center' },
   webTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   webStoryTitle: { color: '#FFFFFF', fontSize: 31, lineHeight: 35, fontWeight: '900' },
   webStoryBody: { color: 'rgba(255,255,255,0.65)', fontSize: 14, lineHeight: 21, fontWeight: '600' },
