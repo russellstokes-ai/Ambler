@@ -107,7 +107,7 @@ test('review hub exposes quality states and five journeys', async ({ page }, tes
     await expect(page.getByText(state, { exact: true })).toBeVisible();
   }
   for (const journey of ['Organiser', 'Guest', 'Route Replay', 'Edit & share', 'Home Server']) {
-    await expect(page.getByText(journey, { exact: true })).toBeVisible();
+    await expect(page.getByText(journey, { exact: true }).first()).toBeVisible();
   }
   await assertNoHorizontalOverflow(page);
   await page.screenshot({ path: 'test-results/screens/' + testInfo.project.name + '/review-hub.png', fullPage: true });
